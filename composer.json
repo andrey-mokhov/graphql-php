@@ -17,7 +17,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Andi\\GraphQL": "src/"
+            "Andi\\GraphQL\\": "src/"
         }
     }
 }
