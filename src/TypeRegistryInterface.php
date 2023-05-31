@@ -17,4 +17,6 @@ interface TypeRegistryInterface
      * @param non-empty-string $type
      */
     public function get(string $type): Webonyx\Type;
+
+    public function register(Webonyx\Type $type, string ...$aliases): void;
 }

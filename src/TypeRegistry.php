@@ -10,12 +10,12 @@ use GraphQL\Type\Definition as Webonyx;
 class TypeRegistry implements TypeRegistryInterface
 {
     /**
-     * @var array<class-string, non-empty-string>
+     * @var array<string, string>
      */
     protected array $aliases;
 
     /**
-     * @var array<non-empty-string, Webonyx\Type>
+     * @var array<string, Webonyx\Type>
      */
     protected array $registry;
 
@@ -38,23 +38,25 @@ class TypeRegistry implements TypeRegistryInterface
         ];
     }
 
-    /**
-     * @param non-empty-string $type
-     */
     public function has(string $type): bool
     {
         return isset($this->aliases[$type]) || isset($this->registry[$type]);
     }
 
-    /**
-     * @param non-empty-string $type
-     *
-     * @return Webonyx\Type
-     * @throws NotFoundException
-     */
     public function get(string $type): Webonyx\Type
     {
         return $this->registry[$this->aliases[$type] ?? $type]
             ?? throw NotFoundException::create($type);
+    }
+
+    public function register(Webonyx\Type $type, string ...$aliases): void
+    {
+        $name = (string) $type;
+
+        $this->registry[$name] = $type;
+
+        foreach ($aliases as $alias) {
+            $this->aliases[$alias] = $name;
+        }
     }
 }

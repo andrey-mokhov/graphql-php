@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Andi\GraphQL\Definition\Type;
 
 use Andi\GraphQL\Definition\DefinitionInterface;
-use Andi\GraphQL\Definition\FieldsAwareInterface;
-use Andi\GraphQL\Definition\ResolveTypeAwareInterface;
+use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
 
-interface InterfaceTypeInterface extends DefinitionInterface, FieldsAwareInterface, ResolveTypeAwareInterface
+/**
+ * @method iterable<ObjectFieldInterface> getFields()
+ */
+interface InterfaceTypeInterface extends DefinitionInterface, FieldsAwareInterface
 {
 }

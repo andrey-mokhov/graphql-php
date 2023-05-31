@@ -6,5 +6,8 @@ namespace Andi\GraphQL\Definition\Type;
 
 interface InterfacesAwareInterface
 {
+    /**
+     * @return iterable<string>
+     */
     public function getInterfaces(): iterable;
 }

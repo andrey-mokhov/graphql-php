@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Andi\GraphQL\Definition\Type;
+namespace Andi\GraphQL\Definition\Field;
 
 interface ComplexityAwareInterface
 {
