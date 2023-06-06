@@ -59,4 +59,21 @@ class TypeRegistry implements TypeRegistryInterface
             $this->aliases[$alias] = $name;
         }
     }
+
+    public function __invoke(string $type): Webonyx\Type
+    {
+        return $this->get($type);
+    }
+
+    /**
+     * @return iterable<Webonyx\ObjectType>
+     */
+    public function getTypes(): iterable
+    {
+        foreach ($this->registry as $type) {
+            if ($type instanceof Webonyx\ObjectType && ! empty($type->getInterfaces())) {
+                yield $type;
+            }
+        }
+    }
 }

@@ -21,13 +21,17 @@ use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
 use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use Andi\GraphQL\Definition\Type\ScalarTypeInterface;
 use Andi\GraphQL\Definition\Type\UnionTypeInterface;
+use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
+use Andi\GraphQL\WebonyxType\DynamicObjectType;
 use GraphQL\Type\Definition as Webonyx;
 use Psr\Container\ContainerInterface;
 
-final class InterfaceImplementingMiddleware implements MiddlewareInterface
+final class GraphQLTypeMiddleware implements MiddlewareInterface
 {
+    public const PRIORITY = 1024;
+
     public function __construct(
         private readonly ContainerInterface $container,
     ) {
@@ -87,6 +91,10 @@ final class InterfaceImplementingMiddleware implements MiddlewareInterface
 
         if ($type instanceof ResolveFieldAwareInterface) {
             $config['resolveField'] = $type->resolveField(...);
+        }
+
+        if ($type instanceof DynamicObjectTypeInterface) {
+            return new DynamicObjectType($type, $config);
         }
 
         return new Webonyx\ObjectType($config);
@@ -176,15 +184,15 @@ final class InterfaceImplementingMiddleware implements MiddlewareInterface
 
             $typeMode = $field->getTypeMode();
 
-            if (TypeAwareInterface::ITEM_IS_REQUIRED & $typeMode) {
+            if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $typeMode)) {
                 $type = Webonyx\Type::nonNull($type);
             }
 
-            if (TypeAwareInterface::IS_LIST & $typeMode) {
+            if (TypeAwareInterface::IS_LIST === (TypeAwareInterface::IS_LIST & $typeMode)) {
                 $type = Webonyx\Type::listOf($type);
             }
 
-            if (TypeAwareInterface::IS_REQUIRED & $typeMode) {
+            if (TypeAwareInterface::IS_REQUIRED === (TypeAwareInterface::IS_REQUIRED & $typeMode)) {
                 $type = Webonyx\Type::nonNull($type);
             }
 
@@ -206,7 +214,7 @@ final class InterfaceImplementingMiddleware implements MiddlewareInterface
                 'type'        => $this->makeFieldTypeFn($argument),
             ];
 
-            if ($argument instanceof DefaultValueAwareInterface) {
+            if ($argument->hasDefaultValue() && $argument instanceof DefaultValueAwareInterface) {
                 $config['defaultValue'] = $argument->getDefaultValue();
             }
 

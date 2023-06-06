@@ -6,5 +6,5 @@ namespace Andi\GraphQL\Definition\Field;
 
 interface DeprecationReasonAwareInterface
 {
-    public function getDeprecationReason(): string;
+    public function getDeprecationReason(): ?string;
 }

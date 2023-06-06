@@ -33,7 +33,7 @@ final class TypeResolver implements PipelineInterface
      */
     public function resolve(string $class): Webonyx\Type
     {
-        $this->process($class, new CantResolveGraphQLTypeResolver());
+        return $this->process($class, new CantResolveGraphQLTypeResolver());
     }
 
     /**

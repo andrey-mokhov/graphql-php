@@ -8,9 +8,9 @@ use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use GraphQL\Type\Definition as Webonyx;
 use Psr\Container\ContainerInterface;
 
-final class NativeGraphQLTypeMiddleware implements MiddlewareInterface
+final class WebonyxGraphQLTypeMiddleware implements MiddlewareInterface
 {
-    public const PRIORITY = 1024;
+    public const PRIORITY = 2048;
 
     public function __construct(
         private readonly ContainerInterface $container,

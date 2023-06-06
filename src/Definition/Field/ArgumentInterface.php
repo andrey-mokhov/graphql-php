@@ -8,4 +8,5 @@ use Andi\GraphQL\Definition\DefinitionInterface;
 
 interface ArgumentInterface extends DefinitionInterface, TypeAwareInterface
 {
+    public function hasDefaultValue(): bool;
 }
