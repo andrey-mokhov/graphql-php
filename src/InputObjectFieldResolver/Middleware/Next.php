@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Andi\GraphQL\TypeResolver\Middleware;
+namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\Exception\NextHandlerIsEmptyException;
-use Andi\GraphQL\TypeResolver\TypeResolverInterface;
+use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use GraphQL\Type\Definition as Webonyx;
 use SplPriorityQueue;
 
-final class Next implements TypeResolverInterface
+final class Next implements InputObjectFieldResolverInterface
 {
     private SplPriorityQueue $queue;
 
     public function __construct(
         SplPriorityQueue $queue,
-        private readonly TypeResolverInterface $fallbackResolver,
+        private readonly InputObjectFieldResolverInterface $fallbackResolver,
     ) {
         $this->queue = clone $queue;
     }
 
-    public function resolve(mixed $type): Webonyx\Type
+    public function resolve(mixed $argument): Webonyx\InputObjectField
     {
         if (! isset($this->queue)) {
             throw new NextHandlerIsEmptyException('Cannot invoke pipeline resolver more than once');
@@ -29,7 +29,7 @@ final class Next implements TypeResolverInterface
         if ($this->queue->isEmpty()) {
             unset($this->queue);
 
-            return $this->fallbackResolver->resolve($type);
+            return $this->fallbackResolver->resolve($argument);
         }
 
         /** @var MiddlewareInterface $middleware */
@@ -38,6 +38,6 @@ final class Next implements TypeResolverInterface
         $next = clone $this;
         unset($this->queue);
 
-        return $middleware->process($type, $next);
+        return $middleware->process($argument, $next);
     }
 }

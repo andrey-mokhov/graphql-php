@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\Type;
 
-use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
 use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
 
 final class MutationType implements ObjectTypeInterface, DynamicObjectTypeInterface
 {
-    /** @var array<int,ObjectFieldInterface> */
     private array $fields = [];
 
     public function getName(): string
@@ -22,15 +20,12 @@ final class MutationType implements ObjectTypeInterface, DynamicObjectTypeInterf
         return null;
     }
 
-    /**
-     * @return iterable<ObjectFieldInterface>
-     */
     public function getFields(): iterable
     {
         yield from $this->fields;
     }
 
-    public function addAdditionalField(ObjectFieldInterface $field): static
+    public function addAdditionalField(mixed $field): static
     {
         $this->fields[] = $field;
 

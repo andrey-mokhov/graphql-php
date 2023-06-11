@@ -8,8 +8,8 @@ use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 
 final class CantResolveGraphQLTypeResolver implements TypeResolverInterface
 {
-    public function resolve(string $class): never
+    public function resolve(mixed $type): never
     {
-        throw new CantResolveGraphQLTypeException(sprintf('Can\'t resolve GraphQL type for: "%s"', $class));
+        throw new CantResolveGraphQLTypeException('Can\'t resolve GraphQL type');
     }
 }

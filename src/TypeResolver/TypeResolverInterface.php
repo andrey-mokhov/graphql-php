@@ -8,10 +8,5 @@ use GraphQL\Type\Definition as Webonyx;
 
 interface TypeResolverInterface
 {
-    /**
-     * @param class-string $class
-     *
-     * @return Webonyx\Type
-     */
-    public function resolve(string $class): Webonyx\Type;
+    public function resolve(mixed $type): Webonyx\Type;
 }

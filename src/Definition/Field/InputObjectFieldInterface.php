@@ -8,4 +8,5 @@ use Andi\GraphQL\Definition\DefinitionInterface;
 
 interface InputObjectFieldInterface extends DefinitionInterface, DeprecationReasonAwareInterface, TypeAwareInterface
 {
+    public function hasDefaultValue(): bool;
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\WebonyxType;
 
-use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
 use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use GraphQL\Type\Definition as Webonyx;
 
@@ -17,7 +16,7 @@ class DynamicObjectType extends Webonyx\ObjectType implements DynamicObjectTypeI
         parent::__construct($config);
     }
 
-    public function addAdditionalField(ObjectFieldInterface $field): static
+    public function addAdditionalField(mixed $field): static
     {
         $this->dynamicType->addAdditionalField($field);
 

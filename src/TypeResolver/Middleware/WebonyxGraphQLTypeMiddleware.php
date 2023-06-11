@@ -10,19 +10,17 @@ use Psr\Container\ContainerInterface;
 
 final class WebonyxGraphQLTypeMiddleware implements MiddlewareInterface
 {
-    public const PRIORITY = 2048;
+    public const PRIORITY = 3072;
 
     public function __construct(
         private readonly ContainerInterface $container,
     ) {
     }
 
-    public function process(string $class, TypeResolverInterface $typeResolver): Webonyx\Type
+    public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        if (is_subclass_of($class, Webonyx\Type::class)) {
-            return $this->container->get($class);
-        }
-
-        return $typeResolver->resolve($class);
+        return is_string($type) && is_subclass_of($type, Webonyx\Type::class)
+            ? $this->container->get($type)
+            : $typeResolver->resolve($type);
     }
 }

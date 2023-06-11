@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\TypeResolver\Middleware;
 
-use Andi\GraphQL\Definition\Field\ArgumentInterface;
-use Andi\GraphQL\Definition\Field\ArgumentsAwareInterface;
-use Andi\GraphQL\Definition\Field\ComplexityAwareInterface;
-use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
+use Andi\GraphQL\Common\LazyWebonyxInputObjectFields;
+use Andi\GraphQL\Common\LazyWebonyxObjectFields;
+use Andi\GraphQL\Common\LazyWebonyxTypeIterator;
 use Andi\GraphQL\Definition\Field\ParseValueAwareInterface;
-use Andi\GraphQL\Definition\Field\ResolveAwareInterface;
 use Andi\GraphQL\Definition\Field\ResolveFieldAwareInterface;
-use Andi\GraphQL\Definition\Field\TypeAwareInterface;
 use Andi\GraphQL\Definition\Type\EnumTypeInterface;
 use Andi\GraphQL\Definition\Type\InputObjectTypeInterface;
 use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
@@ -21,6 +18,8 @@ use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
 use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use Andi\GraphQL\Definition\Type\ScalarTypeInterface;
 use Andi\GraphQL\Definition\Type\UnionTypeInterface;
+use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
+use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
@@ -30,59 +29,61 @@ use Psr\Container\ContainerInterface;
 
 final class GraphQLTypeMiddleware implements MiddlewareInterface
 {
-    public const PRIORITY = 1024;
+    public const PRIORITY = 2048;
 
     public function __construct(
         private readonly ContainerInterface $container,
     ) {
     }
 
-    public function process(string $class, TypeResolverInterface $typeResolver): Webonyx\Type
+    public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        if (is_subclass_of($class, ObjectTypeInterface::class)) {
-            return $this->buildObjectType($this->container->get($class));
+        if (! is_string($type)) {
+            return $typeResolver->resolve($type);
         }
 
-        if (is_subclass_of($class, InputObjectTypeInterface::class)) {
-            return $this->buildInputObjectType($this->container->get($class));
+        if (is_subclass_of($type, ObjectTypeInterface::class)) {
+            return $this->buildObjectType($this->container->get($type));
         }
 
-        if (is_subclass_of($class, InterfaceTypeInterface::class)) {
-            return $this->buildInterfaceType($this->container->get($class));
+        if (is_subclass_of($type, InputObjectTypeInterface::class)) {
+            return $this->buildInputObjectType($this->container->get($type));
         }
 
-        if (is_subclass_of($class, UnionTypeInterface::class)) {
-            return $this->buildUnionType($this->container->get($class));
+        if (is_subclass_of($type, InterfaceTypeInterface::class)) {
+            return $this->buildInterfaceType($this->container->get($type));
         }
 
-        if (is_subclass_of($class, EnumTypeInterface::class)) {
-            return $this->buildEnumType($this->container->get($class));
+        if (is_subclass_of($type, UnionTypeInterface::class)) {
+            return $this->buildUnionType($this->container->get($type));
         }
 
-        if (is_subclass_of($class, ScalarTypeInterface::class)) {
-            return $this->buildScalarType($this->container->get($class));
+        if (is_subclass_of($type, EnumTypeInterface::class)) {
+            return $this->buildEnumType($this->container->get($type));
         }
 
-        return $typeResolver->resolve($class);
+        if (is_subclass_of($type, ScalarTypeInterface::class)) {
+            return $this->buildScalarType($this->container->get($type));
+        }
+
+        return $typeResolver->resolve($type);
     }
 
     private function buildObjectType(ObjectTypeInterface $type): Webonyx\ObjectType
     {
+        $objectFieldResolver = $this->container->get(ObjectFieldResolverInterface::class);
+
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => $this->makeObjectFieldsFn($type),
+            'fields'      => new LazyWebonyxObjectFields($type, $objectFieldResolver),
         ];
 
         if ($type instanceof InterfacesAwareInterface) {
-            $interfaces = $type->getInterfaces();
-            $typeRegistry = $this->container->get(TypeRegistryInterface::class);
-
-            $config['interfaces'] = static function () use ($interfaces, $typeRegistry): iterable {
-                foreach ($interfaces as $interface) {
-                    yield $typeRegistry->get($interface);
-                }
-            };
+            $config['interfaces'] = new LazyWebonyxTypeIterator(
+                $type->getInterfaces(...),
+                $this->container->get(TypeRegistryInterface::class),
+            );
         }
 
         if ($type instanceof IsTypeOfAwareInterface) {
@@ -102,27 +103,12 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
     private function buildInputObjectType(InputObjectTypeInterface $type): Webonyx\InputObjectType
     {
-        $fields = $type->getFields();
+        $fieldResolver = $this->container->get(InputObjectFieldResolverInterface::class);
 
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => function () use ($fields): iterable {
-                foreach ($fields as $field) {
-                    $config = [
-                        'name'              => $field->getName(),
-                        'description'       => $field->getDescription(),
-                        'deprecationReason' => $field->getDeprecationReason(),
-                        'type'              => $this->makeFieldTypeFn($field),
-                    ];
-
-                    if ($field instanceof DefaultValueAwareInterface) {
-                        $config['defaultValue'] = $field->getDefaultValue();
-                    }
-
-                    yield new Webonyx\InputObjectField($config);
-                }
-            },
+            'fields'      => new LazyWebonyxInputObjectFields($type, $fieldResolver),
         ];
 
         if ($type instanceof ParseValueAwareInterface) {
@@ -134,10 +120,12 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
     private function buildInterfaceType(InterfaceTypeInterface $type): Webonyx\InterfaceType
     {
+        $objectFieldResolver = $this->container->get(ObjectFieldResolverInterface::class);
+
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => $this->makeObjectFieldsFn($type),
+            'fields'      => new LazyWebonyxObjectFields($type, $objectFieldResolver),
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
@@ -147,93 +135,15 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         return new Webonyx\InterfaceType($config);
     }
 
-    private function makeObjectFieldsFn(ObjectTypeInterface | InterfaceTypeInterface $type): callable
-    {
-        return function () use ($type): iterable {
-            foreach ($type->getFields() as $field) {
-                $config = [
-                    'name'              => $field->getName(),
-                    'description'       => $field->getDescription(),
-                    'deprecationReason' => $field->getDeprecationReason(),
-                    'type'              => $this->makeFieldTypeFn($field),
-                ];
-
-                if ($field instanceof ArgumentsAwareInterface) {
-                    $config['args'] = $this->extractArguments($field->getArguments());
-                }
-
-                if ($field instanceof ResolveAwareInterface) {
-                    $config['resolve'] = $field->resolve(...);
-                }
-
-                if ($field instanceof ComplexityAwareInterface) {
-                    $config['complexity'] = $field->complexity(...);
-                }
-
-                yield new Webonyx\FieldDefinition($config);
-            }
-        };
-    }
-
-    private function makeFieldTypeFn(TypeAwareInterface $field): callable
-    {
-        $typeRegistry = $this->container->get(TypeRegistryInterface::class);
-
-        return static function () use ($field, $typeRegistry): Webonyx\Type {
-            $type = $typeRegistry->get($field->getType());
-
-            $typeMode = $field->getTypeMode();
-
-            if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $typeMode)) {
-                $type = Webonyx\Type::nonNull($type);
-            }
-
-            if (TypeAwareInterface::IS_LIST === (TypeAwareInterface::IS_LIST & $typeMode)) {
-                $type = Webonyx\Type::listOf($type);
-            }
-
-            if (TypeAwareInterface::IS_REQUIRED === (TypeAwareInterface::IS_REQUIRED & $typeMode)) {
-                $type = Webonyx\Type::nonNull($type);
-            }
-
-            return $type;
-        };
-    }
-
-    /**
-     * @param iterable<ArgumentInterface> $arguments
-     *
-     * @return iterable
-     */
-    private function extractArguments(iterable $arguments): iterable
-    {
-        foreach ($arguments as $argument) {
-            $config = [
-                'name'        => $argument->getName(),
-                'description' => $argument->getDescription(),
-                'type'        => $this->makeFieldTypeFn($argument),
-            ];
-
-            if ($argument->hasDefaultValue() && $argument instanceof DefaultValueAwareInterface) {
-                $config['defaultValue'] = $argument->getDefaultValue();
-            }
-
-            yield $config['name'] => $config;
-        }
-    }
-
     private function buildUnionType(UnionTypeInterface $type): Webonyx\UnionType
     {
-        $typeRegistry = $this->container->get(TypeRegistryInterface::class);
-
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'types'       => static function () use ($type, $typeRegistry): iterable {
-                foreach ($type->getTypes() as $name) {
-                    yield $typeRegistry->get($name);
-                }
-            },
+            'types'       => new LazyWebonyxTypeIterator(
+                $type->getTypes(...),
+                $this->container->get(TypeRegistryInterface::class),
+            ),
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {

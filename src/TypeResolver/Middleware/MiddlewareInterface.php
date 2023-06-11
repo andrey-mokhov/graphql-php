@@ -9,11 +9,5 @@ use GraphQL\Type\Definition as Webonyx;
 
 interface MiddlewareInterface
 {
-    /**
-     * @param class-string $class
-     * @param TypeResolverInterface $typeResolver
-     *
-     * @return Webonyx\Type
-     */
-    public function process(string $class, TypeResolverInterface $typeResolver): Webonyx\Type;
+    public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type;
 }

@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Andi\GraphQL\TypeResolver;
+namespace Andi\GraphQL\ArgumentResolver;
 
-use Andi\GraphQL\TypeResolver\Middleware\MiddlewareInterface;
-use Andi\GraphQL\TypeResolver\Middleware\Next;
-use Andi\GraphQL\TypeResolver\Middleware\PipelineInterface;
-use GraphQL\Type\Definition as Webonyx;
+use Andi\GraphQL\ArgumentResolver\Middleware\MiddlewareInterface;
+use Andi\GraphQL\ArgumentResolver\Middleware\Next;
+use Andi\GraphQL\ArgumentResolver\Middleware\PipelineInterface;
 use SplPriorityQueue;
 
-final class TypeResolver implements PipelineInterface
+final class ArgumentResolver implements PipelineInterface
 {
     private SplPriorityQueue $pipeline;
 
@@ -26,9 +25,9 @@ final class TypeResolver implements PipelineInterface
         $this->pipeline = clone $this->pipeline;
     }
 
-    public function resolve(mixed $type): Webonyx\Type
+    public function resolve(mixed $argument): array
     {
-        return (new Next($this->pipeline, new CantResolveGraphQLTypeResolver()))->resolve($type);
+        return (new Next($this->pipeline, new CantResolveArgumentResolver()))->resolve($argument);
     }
 
     public function pipe(MiddlewareInterface $middleware, int $priority = 0): void

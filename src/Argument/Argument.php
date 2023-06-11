@@ -34,7 +34,6 @@ class Argument extends AbstractArgument implements DefaultValueAwareInterface
         return (new ReflectionProperty($this, 'defaultValue'))->isInitialized($this);
     }
 
-
     public function getDefaultValue(): mixed
     {
         return $this->defaultValue;
