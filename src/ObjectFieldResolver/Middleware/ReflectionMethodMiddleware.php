@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
 
+use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
+use Andi\GraphQL\Attribute\Argument;
 use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyWebonyxNodeType;
 use Andi\GraphQL\Common\LazyWebonyxReflectionType;
@@ -22,6 +24,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
     public function __construct(
         private readonly ReaderInterface $reader,
         private readonly TypeRegistryInterface $typeRegistry,
+        private readonly ArgumentResolverInterface $argumentResolver,
         private readonly InvokerInterface $invoker,
     ) {
     }
@@ -94,10 +97,12 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
         );
     }
 
-    private function getFieldArguments( ReflectionMethod $method): iterable
+    private function getFieldArguments(ReflectionMethod $method): iterable
     {
         foreach ($method->getParameters() as $parameter) {
-
+            if (null !== $this->reader->firstParameterMetadata($parameter, Argument::class)) {
+                yield $this->argumentResolver->resolve($parameter);
+            }
         }
     }
 
@@ -111,7 +116,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
             mixed $context,
             Webonyx\ResolveInfo $info
         ) use ($invoker, $name): mixed {
-            return $invoker->invoke([$object, $name], ['args' => $args, 'context' => $context, 'info' => $info]);
+            return $invoker->invoke([$object, $name], ['context' => $context, 'info' => $info] + $args);
         };
     }
 

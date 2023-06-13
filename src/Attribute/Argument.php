@@ -18,10 +18,9 @@ final class Argument
         public readonly ?string $description = null,
         public readonly ?string $type = null,
         public readonly ?string $deprecationReason = null,
-        public readonly ?string $factory = null,
         mixed $defaultValue = null,
     ) {
-        if (func_num_args() === 6) {
+        if (func_num_args() === 5) {
             $this->defaultValue = $defaultValue;
         }
     }
