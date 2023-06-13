@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\WebonyxType;
 
-use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
+use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use GraphQL\Type\Definition as Webonyx;
 
-class ObjectType extends Webonyx\ObjectType implements DynamicObjectTypeInterface
+class InputObjectType extends Webonyx\InputObjectType implements DynamicObjectTypeInterface
 {
     /**
      * @var callable|iterable
@@ -19,7 +19,7 @@ class ObjectType extends Webonyx\ObjectType implements DynamicObjectTypeInterfac
 
     public function __construct(
         array $config,
-        private readonly ObjectFieldResolverInterface $objectFieldResolver,
+        private readonly InputObjectFieldResolverInterface $inputObjectFieldResolver,
     ) {
         if (isset($config['fields'])) {
             $this->nativeFields = $config['fields'];
@@ -46,13 +46,13 @@ class ObjectType extends Webonyx\ObjectType implements DynamicObjectTypeInterfac
 
             if (is_iterable($fields)) {
                 foreach ($fields as $field) {
-                    yield $this->objectFieldResolver->resolve($field);
+                    yield $this->inputObjectFieldResolver->resolve($field);
                 }
             }
         }
 
         foreach ($this->additionalFields as $field) {
-            yield $this->objectFieldResolver->resolve($field);
+            yield $this->inputObjectFieldResolver->resolve($field);
         }
     }
 }
