@@ -8,7 +8,7 @@ use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
 use Andi\GraphQL\Attribute\Argument;
 use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyWebonyxNodeType;
-use Andi\GraphQL\Common\LazyWebonyxReflectionType;
+use Andi\GraphQL\Common\LazyWebonyxTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -90,7 +90,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
             ));
         }
 
-        return new LazyWebonyxReflectionType(
+        return new LazyWebonyxTypeByReflectionType(
             $method->getReturnType(),
             $this->typeRegistry,
             $method->getDeclaringClass()->getName(),

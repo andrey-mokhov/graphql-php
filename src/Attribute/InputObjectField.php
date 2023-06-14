@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Andi\GraphQL\Attribute;
+
+use Attribute;
+use ReflectionProperty;
+use Spiral\Attributes\NamedArgumentConstructor;
+
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PROPERTY), NamedArgumentConstructor]
+final class InputObjectField
+{
+    public readonly mixed $defaultValue;
+
+    public function __construct(
+        public readonly ?string $name = null,
+        public readonly ?string $description = null,
+        public readonly ?string $type = null,
+        public readonly ?string $deprecationReason = null,
+        mixed $defaultValue = null,
+    ) {
+        if (func_num_args() === 5) {
+            $this->defaultValue = $defaultValue;
+        }
+    }
+
+    public function hasDefaultValue(): bool
+    {
+        return (new ReflectionProperty($this, 'defaultValue'))->isInitialized($this);
+    }
+}

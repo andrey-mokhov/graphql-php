@@ -12,7 +12,7 @@ use ReflectionType;
 use ReflectionUnionType;
 use UnhandledMatchError;
 
-final class LazyWebonyxReflectionType
+class LazyWebonyxTypeByReflectionType
 {
     public function __construct(
         private readonly ReflectionType $type,

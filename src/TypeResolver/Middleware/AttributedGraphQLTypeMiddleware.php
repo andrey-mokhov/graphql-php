@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Andi\GraphQL\TypeResolver\Middleware;
 
 use Andi\GraphQL\Attribute;
+use Andi\GraphQL\Common\InputObjectFactory;
 use Andi\GraphQL\Common\LazyWebonyxInputObjectFields;
 use Andi\GraphQL\Common\LazyWebonyxObjectFields;
 use Andi\GraphQL\Common\LazyWebonyxTypeIterator;
@@ -23,6 +24,7 @@ use GraphQL\Type\Definition as Webonyx;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Spiral\Attributes\ReaderInterface;
+use Spiral\Core\ResolverInterface;
 
 final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
 {
@@ -34,6 +36,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         private readonly TypeRegistryInterface $typeRegistry,
         private readonly ObjectFieldResolverInterface $objectFieldResolver,
         private readonly InputObjectFieldResolverInterface $inputObjectFieldResolver,
+        private readonly ResolverInterface $resolver,
     ) {
     }
 
@@ -119,7 +122,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         ReflectionClass $class,
         Attribute\ObjectType|Attribute\InputObjectType|null $attribute,
     ): string {
-        return $attribute?->name ?? $class->getName();
+        return $attribute?->name ?? $class->getShortName();
     }
 
     /**
@@ -137,14 +140,14 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         return $attribute?->description;
     }
 
-    private function getTypeParseValue(ReflectionClass $class, ?Attribute\InputObjectType $attribute): ?callable
+    private function getTypeParseValue(ReflectionClass $class, ?Attribute\InputObjectType $attribute): callable
     {
         if ($attribute?->parseValue) {
-            $factory = $this->container->get($attribute->parseValue);
+            return $this->container->get($attribute->parseValue);
         } elseif ($class->isSubclassOf(ParseValueAwareInterface::class)) {
-            $factory = $class->newInstanceWithoutConstructor()->parseValue(...);
+            return $class->getMethod('parseValue')->getClosure();
+        } else {
+            return new InputObjectFactory($class, $this->resolver);
         }
-
-        return $factory ?? null;
     }
 }

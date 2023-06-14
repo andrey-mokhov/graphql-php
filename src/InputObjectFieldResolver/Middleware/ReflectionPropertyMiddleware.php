@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
+namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
 
-use Andi\GraphQL\Attribute\ObjectField;
+use Andi\GraphQL\Attribute\InputObjectField;
 use Andi\GraphQL\Common\LazyWebonyxNodeType;
 use Andi\GraphQL\Common\LazyWebonyxTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
-use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
+use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 use ReflectionProperty;
@@ -16,7 +16,7 @@ use Spiral\Attributes\ReaderInterface;
 
 final class ReflectionPropertyMiddleware implements MiddlewareInterface
 {
-    public const PRIORITY = 3072;
+    public const PRIORITY = 4096;
 
     public function __construct(
         private readonly ReaderInterface $reader,
@@ -24,39 +24,38 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
     ) {
     }
 
-    public function process(mixed $field, ObjectFieldResolverInterface $fieldResolver): Webonyx\FieldDefinition
+    public function process(mixed $field, InputObjectFieldResolverInterface $fieldResolver): Webonyx\InputObjectField
     {
         if (! $field instanceof ReflectionProperty) {
             return $fieldResolver->resolve($field);
         }
 
-        $attribute = $this->reader->firstPropertyMetadata($field, ObjectField::class);
+        $attribute = $this->reader->firstPropertyMetadata($field, InputObjectField::class);
 
         $config = [
             'name'              => $attribute?->name ?? $field->getName(),
             'description'       => $this->getFieldDescription($field, $attribute),
             'type'              => $this->getFieldType($field, $attribute),
-            'resolve'           => $this->getFieldResolver($field),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
-        return new Webonyx\FieldDefinition($config);
+        return new Webonyx\InputObjectField($config);
     }
 
     /**
      * @param ReflectionProperty $property
-     * @param ObjectField|null $attribute
+     * @param InputObjectField|null $attribute
      *
      * @return string|null
      *
      * @todo Extract description from annotation when attribute is not set.
      */
-    private function getFieldDescription(ReflectionProperty $property, ?ObjectField $attribute): ?string
+    private function getFieldDescription(ReflectionProperty $property, ?InputObjectField $attribute): ?string
     {
         return $attribute?->description;
     }
 
-    private function getFieldType(ReflectionProperty $property, ?ObjectField $attribute): callable
+    private function getFieldType(ReflectionProperty $property, ?InputObjectField $attribute): callable
     {
         if (null !== $attribute?->type) {
             return new LazyWebonyxNodeType($attribute->type, $this->typeRegistry);
@@ -76,22 +75,15 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
         );
     }
 
-    private function getFieldResolver(ReflectionProperty $property): callable
-    {
-        return static function ($object) use ($property): mixed {
-            return $property->getValue($object);
-        };
-    }
-
     /**
      * @param ReflectionProperty $property
-     * @param ObjectField|null $attribute
+     * @param InputObjectField|null $attribute
      *
      * @return string|null
      *
      * @todo Extract deprecation reason from annotation when attribute is not set
      */
-    private function getFieldDeprecationReason(ReflectionProperty $property, ?ObjectField $attribute): ?string
+    private function getFieldDeprecationReason(ReflectionProperty $property, ?InputObjectField $attribute): ?string
     {
         return $attribute?->deprecationReason;
     }
