@@ -12,6 +12,8 @@ use Spiral\Core\ResolverInterface;
 
 final class InputObjectFactory
 {
+    use InputObjectFieldNameTrait;
+
     /**
      * @var array<string, ReflectionMethod|ReflectionProperty>
      */
@@ -36,7 +38,7 @@ final class InputObjectFactory
             if ($attributes = $method->getAttributes(InputObjectField::class)) {
                 $attribute = $attributes[0]->newInstance();
 
-                $name = $this->getFieldNameByMethod($method, $attribute);
+                $name = $this->getInputObjectFieldName($method, $attribute);
 
                 $map[$name] = $method;
             }
@@ -45,7 +47,12 @@ final class InputObjectFactory
         $this->map = $map;
     }
 
-    public function __invoke(array $values): mixed
+    /**
+     * @param array<string,mixed> $values
+     *
+     * @return object
+     */
+    public function __invoke(array $values): object
     {
         $instance = $this->class->newInstanceWithoutConstructor();
 
@@ -55,7 +62,7 @@ final class InputObjectFactory
 
                 if ($reflection instanceof ReflectionProperty) {
                     $reflection->setValue($instance, $value);
-                } elseif ($reflection instanceof ReflectionMethod) {
+                } else {
                     $reflection->invokeArgs($instance,$this->resolver->resolveArguments($reflection, [$value]));
                 }
             }
@@ -67,20 +74,5 @@ final class InputObjectFactory
     private function getFieldNameByProperty(ReflectionProperty $property, InputObjectField $attribute): string
     {
         return $attribute->name ?? $property->getName();
-    }
-
-    private function getFieldNameByMethod(ReflectionMethod $method, InputObjectField $attribute): string
-    {
-        if (null !== $attribute->name) {
-            return $attribute->name;
-        }
-
-        $name = $method->getName();
-
-        if (str_starts_with($name, 'set')) {
-            $name = substr($name, 3);
-        }
-
-        return lcfirst($name);
     }
 }

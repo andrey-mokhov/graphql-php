@@ -7,8 +7,8 @@ namespace Andi\GraphQL\Attribute;
 use Attribute;
 use Spiral\Attributes\NamedArgumentConstructor;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_PROPERTY), NamedArgumentConstructor]
-final class ObjectField extends AbstractDefinition
+#[Attribute(Attribute::TARGET_METHOD), NamedArgumentConstructor]
+final class InterfaceField extends AbstractDefinition
 {
     public function __construct(
         ?string $name = null,

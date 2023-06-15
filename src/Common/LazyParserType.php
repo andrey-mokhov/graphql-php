@@ -15,7 +15,7 @@ use GraphQL\Language\AST\TypeNode;
 use GraphQL\Language\Parser;
 use GraphQL\Type\Definition as Webonyx;
 
-final class LazyWebonyxNodeType
+final class LazyParserType
 {
     public function __construct(
         private readonly string $type,

@@ -6,9 +6,9 @@ namespace Andi\GraphQL\ArgumentResolver\Middleware;
 
 use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
 use Andi\GraphQL\Attribute\Argument;
-use Andi\GraphQL\Common\LazyWebonyxNodeType;
-use Andi\GraphQL\Common\LazyWebonyxTypeByReflectionParameter;
-use Andi\GraphQL\Common\LazyWebonyxTypeByReflectionType;
+use Andi\GraphQL\Common\LazyParserType;
+use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
+use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\TypeRegistryInterface;
 use ReflectionParameter;
@@ -69,7 +69,7 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
     private function getArgumentType(ReflectionParameter $parameter, ?Argument $attribute): callable
     {
         if (null !== $attribute?->type) {
-            return new LazyWebonyxNodeType($attribute->type, $this->typeRegistry);
+            return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 
         if (! $parameter->hasType()) {
@@ -79,7 +79,7 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
             ));
         }
 
-        return new LazyWebonyxTypeByReflectionParameter($parameter, $this->typeRegistry);
+        return new LazyTypeByReflectionParameter($parameter, $this->typeRegistry);
     }
 
     /**

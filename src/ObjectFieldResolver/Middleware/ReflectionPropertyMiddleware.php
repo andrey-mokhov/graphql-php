@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\Attribute\ObjectField;
-use Andi\GraphQL\Common\LazyWebonyxNodeType;
-use Andi\GraphQL\Common\LazyWebonyxTypeByReflectionType;
+use Andi\GraphQL\Common\LazyParserType;
+use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -59,7 +59,7 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
     private function getFieldType(ReflectionProperty $property, ?ObjectField $attribute): callable
     {
         if (null !== $attribute?->type) {
-            return new LazyWebonyxNodeType($attribute->type, $this->typeRegistry);
+            return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 
         if (! $property->hasType()) {
@@ -69,7 +69,7 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
             ));
         }
 
-        return new LazyWebonyxTypeByReflectionType(
+        return new LazyTypeByReflectionType(
             $property->getType(),
             $this->typeRegistry,
             $property->getDeclaringClass()->getName(),

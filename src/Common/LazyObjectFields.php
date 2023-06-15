@@ -7,7 +7,7 @@ namespace Andi\GraphQL\Common;
 use Andi\GraphQL\Definition\Type\FieldsAwareInterface;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 
-final class LazyWebonyxObjectFields
+final class LazyObjectFields
 {
     public function __construct(
         private readonly FieldsAwareInterface $fields,

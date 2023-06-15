@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Andi\GraphQL\ArgumentResolver\Middleware;
 
 use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
-use Andi\GraphQL\Common\LazyWebonyxType;
+use Andi\GraphQL\Common\LazyType;
 use Andi\GraphQL\Definition\Field\ArgumentInterface;
 use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -28,7 +28,7 @@ final class ArgumentMiddleware implements MiddlewareInterface
         $config = [
             'name'        => $argument->getName(),
             'description' => $argument->getDescription(),
-            'type'        => new LazyWebonyxType($argument, $this->typeRegistry),
+            'type'        => new LazyType($argument, $this->typeRegistry),
         ];
 
         if ($argument instanceof DefaultValueAwareInterface && $argument->hasDefaultValue()) {

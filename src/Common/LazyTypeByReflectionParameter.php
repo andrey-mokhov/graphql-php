@@ -8,7 +8,7 @@ use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 use ReflectionParameter;
 
-final class LazyWebonyxTypeByReflectionParameter extends LazyWebonyxTypeByReflectionType
+final class LazyTypeByReflectionParameter extends LazyTypeByReflectionType
 {
     public function __construct(
         private readonly ReflectionParameter $parameter,

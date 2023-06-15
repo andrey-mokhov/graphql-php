@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\Attribute\InputObjectField;
-use Andi\GraphQL\Common\LazyWebonyxNodeType;
-use Andi\GraphQL\Common\LazyWebonyxTypeByReflectionType;
+use Andi\GraphQL\Common\LazyParserType;
+use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -39,6 +39,10 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
+        if ($this->hasDefaultValue($field, $attribute)) {
+            $config['defaultValue'] = $this->getDefaultValue($field, $attribute);
+        }
+
         return new Webonyx\InputObjectField($config);
     }
 
@@ -58,7 +62,7 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
     private function getFieldType(ReflectionProperty $property, ?InputObjectField $attribute): callable
     {
         if (null !== $attribute?->type) {
-            return new LazyWebonyxNodeType($attribute->type, $this->typeRegistry);
+            return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 
         if (! $property->hasType()) {
@@ -68,7 +72,7 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
             ));
         }
 
-        return new LazyWebonyxTypeByReflectionType(
+        return new LazyTypeByReflectionType(
             $property->getType(),
             $this->typeRegistry,
             $property->getDeclaringClass()->getName(),
@@ -86,5 +90,19 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
     private function getFieldDeprecationReason(ReflectionProperty $property, ?InputObjectField $attribute): ?string
     {
         return $attribute?->deprecationReason;
+    }
+
+    private function hasDefaultValue(ReflectionProperty $property, ?InputObjectField $attribute): bool
+    {
+        return $attribute?->hasDefaultValue() || $property->hasDefaultValue();
+    }
+
+    private function getDefaultValue(ReflectionProperty $property, ?InputObjectField $attribute): mixed
+    {
+        if ($attribute?->hasDefaultValue()) {
+            return $attribute->defaultValue;
+        }
+
+        return $property->getDefaultValue();
     }
 }
