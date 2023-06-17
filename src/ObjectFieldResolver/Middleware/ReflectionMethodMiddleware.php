@@ -110,6 +110,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
     {
         $invoker = $this->invoker;
         $name = $method->getName();
+
         return static function (
             $object,
             array $args,

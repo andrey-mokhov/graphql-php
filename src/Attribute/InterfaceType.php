@@ -13,13 +13,12 @@ final class InterfaceType extends AbstractType
     /**
      * @param string|null       $name
      * @param string|null       $description
-     * @param class-string|null $typeResolver Class must have method:
-     *                                        __invoke($value, $context, ResolveInfo $info): Webonyx\Type
+     * @param class-string|null $resolveType Class must have method: __invoke(mixed $value, mixed $context, ResolveInfo $info): ?Webonyx\ObjectType
      */
     public function __construct(
-        ?string $name = null,
-        ?string $description = null,
-        public readonly ?string $typeResolver = null,
+        ?string                 $name = null,
+        ?string                 $description = null,
+        public readonly ?string $resolveType = null,
     ) {
         parent::__construct($name, $description);
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Andi\GraphQL\TypeResolver\Middleware;
 
 use Andi\GraphQL\Attribute;
+use Andi\GraphQL\Common\DefinitionAwareTrait;
 use Andi\GraphQL\Common\InputObjectFactory;
 use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
@@ -16,6 +17,7 @@ use Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface;
 use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
+use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use Andi\GraphQL\WebonyxType\InputObjectType;
@@ -31,6 +33,8 @@ use Spiral\Core\ResolverInterface;
 
 final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
 {
+    use DefinitionAwareTrait;
+
     public const PRIORITY = 1024;
 
     public function __construct(
@@ -54,7 +58,6 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
             $webonyxType = match ($attribute->getName()) {
                 Attribute\ObjectType::class      => $this->buildObjectType($type),
                 Attribute\InputObjectType::class => $this->buildInputObjectType($type),
-                Attribute\EnumType::class        => $this->buildEnumType($type),
                 Attribute\InterfaceType::class   => $this->buildInterfaceType($type),
                 default                          => null,
             };
@@ -101,7 +104,12 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
             $config['resolveField'] = $instance->resolveField(...);
         }
 
-        return new ObjectType($config, $this->objectFieldResolver);
+        $type = new ObjectType($config, $this->objectFieldResolver);
+
+        $this->registerAdditionalFieldByMethods($type, $class, Attribute\ObjectField::class);
+        $this->registerAdditionalFieldByProperties($type, $class, Attribute\ObjectField::class);
+
+        return $type;
     }
 
     private function buildInputObjectType(ReflectionClass $class): Webonyx\InputObjectType
@@ -120,77 +128,77 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
             $config['fields'] = new LazyInputObjectFields($instance, $this->inputObjectFieldResolver);
         }
 
-        return new InputObjectType($config, $this->inputObjectFieldResolver);
-    }
+        $type = new InputObjectType($config, $this->inputObjectFieldResolver);
 
-    /**
-     * @param ReflectionEnum $class
-     *
-     * @return Webonyx\EnumType
-     *
-     * @todo Extract description & deprecationReason from annotation
-     */
-    private function buildEnumType(ReflectionEnum $class): Webonyx\EnumType
-    {
-        $attribute = $this->reader->firstClassMetadata($class, Attribute\EnumType::class);
+        $this->registerAdditionalFieldByMethods($type, $class, Attribute\InputObjectField::class);
+        $this->registerAdditionalFieldByProperties($type, $class, Attribute\InputObjectField::class);
 
-        $config = [
-            'name'        => $this->getTypeName($class, $attribute),
-            'description' => $this->getTypeDescription($class, $attribute),
-            'values'      => [],
-        ];
-
-        foreach ($class->getCases() as $case) {
-            $config['values'][$case->getName()] = [
-                'value' => $case->getValue(),
-            ];
-        }
-
-        return new Webonyx\EnumType($config);
+        return $type;
     }
 
     private function buildInterfaceType(ReflectionClass $class): Webonyx\InterfaceType
     {
-        $attribute = $this->reader->firstClassMetadata($class, Attribute\ObjectType::class);
+        $attribute = $this->reader->firstClassMetadata($class, Attribute\InterfaceType::class);
 
         $config = [
             'name'        => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
         ];
 
-        return new InterfaceType($config, $this->objectFieldResolver);
-    }
+        if (null !== $attribute?->resolveType) {
+            $config['resolveType'] = $this->container->get($attribute->resolveType);
+        }
 
-    private function getTypeName(
-        ReflectionClass $class,
-        Attribute\AbstractType|null $attribute,
-    ): string {
-        return $attribute?->name ?? $class->getShortName();
-    }
+        $type = new InterfaceType($config, $this->objectFieldResolver);
 
-    /**
-     * @param ReflectionClass $class
-     * @param Attribute\AbstractType|null $attribute
-     *
-     * @return string|null
-     *
-     * @todo Extract description from annotation when attribute is not set
-     */
-    private function getTypeDescription(
-        ReflectionClass $class,
-        ?Attribute\AbstractType $attribute,
-    ): ?string {
-        return $attribute?->description;
+        $this->registerAdditionalFieldByMethods($type, $class, Attribute\InterfaceField::class);
+
+        return $type;
     }
 
     private function getTypeParseValue(ReflectionClass $class, ?Attribute\InputObjectType $attribute): callable
     {
         if (null !== $attribute?->factory) {
             return $this->container->get($attribute->factory);
-        } elseif ($class->isSubclassOf(ParseValueAwareInterface::class)) {
+        }
+
+        if ($class->isSubclassOf(ParseValueAwareInterface::class)) {
             return $class->getMethod('parseValue')->getClosure();
-        } else {
-            return new InputObjectFactory($class, $this->resolver);
+        }
+
+        return new InputObjectFactory($class, $this->resolver);
+    }
+
+    /**
+     * @param DynamicObjectTypeInterface $type
+     * @param ReflectionClass $class
+     * @param class-string $targetAttribute
+     */
+    private function registerAdditionalFieldByMethods(
+        DynamicObjectTypeInterface $type,
+        ReflectionClass $class,
+        string $targetAttribute,
+    ): void {
+        foreach ($class->getMethods() as $method) {
+            if (null !== $this->reader->firstFunctionMetadata($method, $targetAttribute)) {
+                $type->addAdditionalField($method);
+            }
+        }
+    }
+    /**
+     * @param DynamicObjectTypeInterface $type
+     * @param ReflectionClass $class
+     * @param class-string $targetAttribute
+     */
+    private function registerAdditionalFieldByProperties(
+        DynamicObjectTypeInterface $type,
+        ReflectionClass $class,
+        string $targetAttribute,
+    ): void {
+        foreach ($class->getProperties() as $property) {
+            if (null !== $this->reader->firstPropertyMetadata($property, $targetAttribute)) {
+                $type->addAdditionalField($property);
+            }
         }
     }
 }

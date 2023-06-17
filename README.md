@@ -3,7 +3,7 @@
 features todo list
 - [ ] Type resolver
   - [ ] UnionType resolver
-  - [ ] InterfaceType resolver
+  - [x] InterfaceType resolver
   - [x] EnumType resolver
   - [x] ScalarType resolver
   - [x] ObjectType resolver
