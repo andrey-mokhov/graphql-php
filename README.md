@@ -14,8 +14,6 @@ release 0.1
 - [x] Attribute `AdditionalField` for any service methods - add additional field to `ObjectType`, `InterfaceType`
 - [ ] scalar DateTime type
 - [ ] scalar Date type
-- [ ] Enum loader
-- [ ] Interface loader
 
 release 1.0
 - [ ] Abstract classes for base definitions
@@ -25,7 +23,6 @@ release 1.0
   - [ ] UnionType
   - [ ] EnumType
   - [x] ScalarType
-- [ ] Clear memory after GraphQL schema initialization
 - [ ] implementation technical debt
 - [ ] Unit tests
 - [ ] documentation and examples
