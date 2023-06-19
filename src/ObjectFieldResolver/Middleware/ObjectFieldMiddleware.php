@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
-use Andi\GraphQL\Common\LazyWebonyxType;
+use Andi\GraphQL\Common\LazyType;
 use Andi\GraphQL\Definition\Field\ArgumentsAwareInterface;
 use Andi\GraphQL\Definition\Field\ComplexityAwareInterface;
 use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
@@ -26,7 +26,7 @@ final class ObjectFieldMiddleware implements MiddlewareInterface
 
     public function process(mixed $field, ObjectFieldResolverInterface $fieldResolver): Webonyx\FieldDefinition
     {
-        if (! is_object($field) || ! $field instanceof ObjectFieldInterface) {
+        if (! $field instanceof ObjectFieldInterface) {
             return $fieldResolver->resolve($field);
         }
 
@@ -34,7 +34,7 @@ final class ObjectFieldMiddleware implements MiddlewareInterface
             'name'              => $field->getName(),
             'description'       => $field->getDescription(),
             'deprecationReason' => $field->getDeprecationReason(),
-            'type'              => new LazyWebonyxType($field, $this->typeRegistry),
+            'type'              => new LazyType($field, $this->typeRegistry),
         ];
 
         if ($field instanceof ArgumentsAwareInterface) {

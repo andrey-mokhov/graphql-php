@@ -6,7 +6,7 @@ namespace Andi\GraphQL\Common;
 
 use Andi\GraphQL\TypeRegistryInterface;
 
-final class LazyWebonyxTypeIterator
+final class LazyTypeIterator
 {
     /**
      * @var callable

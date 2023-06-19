@@ -9,9 +9,9 @@ interface ParseValueAwareInterface
     /**
      * Converts incoming values from their array representation to something else (e.g. a value object).
      *
-     * @param array<non-empty-string, mixed> $value
+     * @param array<non-empty-string, mixed> $values
      *
      * @return mixed
      */
-    public function parseValue(array $value): mixed;
+    public static function parseValue(array $values): mixed;
 }

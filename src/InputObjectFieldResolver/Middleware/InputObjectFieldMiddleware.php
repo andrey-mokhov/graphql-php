@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
 
-use Andi\GraphQL\Common\LazyWebonyxType;
+use Andi\GraphQL\Common\LazyType;
 use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
 use Andi\GraphQL\Definition\Field\InputObjectFieldInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
@@ -30,7 +30,7 @@ final class InputObjectFieldMiddleware implements MiddlewareInterface
             'name'              => $field->getName(),
             'description'       => $field->getDescription(),
             'deprecationReason' => $field->getDeprecationReason(),
-            'type'              => new LazyWebonyxType($field, $this->typeRegistry),
+            'type'              => new LazyType($field, $this->typeRegistry),
         ];
 
         if ($field instanceof DefaultValueAwareInterface && $field->hasDefaultValue()) {

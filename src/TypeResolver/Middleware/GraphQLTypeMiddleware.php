@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\TypeResolver\Middleware;
 
-use Andi\GraphQL\Common\LazyWebonyxInputObjectFields;
-use Andi\GraphQL\Common\LazyWebonyxObjectFields;
-use Andi\GraphQL\Common\LazyWebonyxTypeIterator;
+use Andi\GraphQL\Common\LazyInputObjectFields;
+use Andi\GraphQL\Common\LazyObjectFields;
+use Andi\GraphQL\Common\LazyTypeIterator;
 use Andi\GraphQL\Definition\Field\ParseValueAwareInterface;
-use Andi\GraphQL\Definition\Field\ResolveFieldAwareInterface;
 use Andi\GraphQL\Definition\Type\EnumTypeInterface;
 use Andi\GraphQL\Definition\Type\InputObjectTypeInterface;
 use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
 use Andi\GraphQL\Definition\Type\InterfaceTypeInterface;
 use Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface;
 use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
+use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
 use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use Andi\GraphQL\Definition\Type\ScalarTypeInterface;
+use Andi\GraphQL\Definition\Type\TypeInterface;
 use Andi\GraphQL\Definition\Type\UnionTypeInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
@@ -38,7 +39,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        if (! is_string($type)) {
+        if (! is_string($type) || ! is_subclass_of($type, TypeInterface::class)) {
             return $typeResolver->resolve($type);
         }
 
@@ -76,11 +77,11 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => new LazyWebonyxObjectFields($type, $objectFieldResolver),
+            'fields'      => new LazyObjectFields($type, $objectFieldResolver),
         ];
 
         if ($type instanceof InterfacesAwareInterface) {
-            $config['interfaces'] = new LazyWebonyxTypeIterator(
+            $config['interfaces'] = new LazyTypeIterator(
                 $type->getInterfaces(...),
                 $this->container->get(TypeRegistryInterface::class),
             );
@@ -108,7 +109,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => new LazyWebonyxInputObjectFields($type, $fieldResolver),
+            'fields'      => new LazyInputObjectFields($type, $fieldResolver),
         ];
 
         if ($type instanceof ParseValueAwareInterface) {
@@ -125,7 +126,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => new LazyWebonyxObjectFields($type, $objectFieldResolver),
+            'fields'      => new LazyObjectFields($type, $objectFieldResolver),
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
@@ -137,13 +138,12 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
     private function buildUnionType(UnionTypeInterface $type): Webonyx\UnionType
     {
+        $typeRegistry = $this->container->get(TypeRegistryInterface::class);
+
         $config = [
             'name'        => $type->getName(),
             'description' => $type->getDescription(),
-            'types'       => new LazyWebonyxTypeIterator(
-                $type->getTypes(...),
-                $this->container->get(TypeRegistryInterface::class),
-            ),
+            'types'       => new LazyTypeIterator($type->getTypes(...), $typeRegistry),
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {

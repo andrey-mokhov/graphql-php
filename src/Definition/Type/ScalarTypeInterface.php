@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\Definition\Type;
 
-use Andi\GraphQL\Definition\DefinitionInterface;
 use GraphQL\Language\AST\Node;
 
-interface ScalarTypeInterface extends DefinitionInterface
+interface ScalarTypeInterface extends TypeInterface
 {
     public function serialize(mixed $value): mixed;
 

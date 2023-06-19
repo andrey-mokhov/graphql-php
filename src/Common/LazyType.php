@@ -8,7 +8,7 @@ use Andi\GraphQL\Definition\Field\TypeAwareInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 
-final class LazyWebonyxType
+final class LazyType
 {
     public function __construct(
         private readonly TypeAwareInterface $type,
