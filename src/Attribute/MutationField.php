@@ -8,6 +8,6 @@ use Attribute;
 use Spiral\Attributes\NamedArgumentConstructor;
 
 #[Attribute(Attribute::TARGET_METHOD), NamedArgumentConstructor]
-final class InterfaceField extends AbstractField
+final class MutationField extends AbstractField
 {
 }

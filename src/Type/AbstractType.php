@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\Type;
 
-use Andi\GraphQL\Definition\DefinitionInterface;
+use Andi\GraphQL\Definition\Type\TypeInterface;
 
-abstract class AbstractType implements DefinitionInterface
+abstract class AbstractType implements TypeInterface
 {
     protected string $name;
 

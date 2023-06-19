@@ -7,6 +7,7 @@ namespace Andi\GraphQL\TypeResolver\Middleware;
 use Andi\GraphQL\Attribute;
 use Andi\GraphQL\Common\DefinitionAwareTrait;
 use Andi\GraphQL\Common\InputObjectFactory;
+use Andi\GraphQL\Common\ResolveType;
 use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
 use Andi\GraphQL\Common\LazyTypeIterator;
@@ -27,7 +28,6 @@ use GraphQL\Type\Definition as Webonyx;
 use Psr\Container\ContainerInterface;
 use ReflectionAttribute;
 use ReflectionClass;
-use ReflectionEnum;
 use Spiral\Attributes\ReaderInterface;
 use Spiral\Core\ResolverInterface;
 
@@ -143,11 +143,8 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $config = [
             'name'        => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
+            'resolveType' => $this->container->get($attribute?->resolveType ?? ResolveType::class),
         ];
-
-        if (null !== $attribute?->resolveType) {
-            $config['resolveType'] = $this->container->get($attribute->resolveType);
-        }
 
         $type = new InterfaceType($config, $this->objectFieldResolver);
 

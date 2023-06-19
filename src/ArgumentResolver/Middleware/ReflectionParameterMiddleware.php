@@ -8,7 +8,6 @@ use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
 use Andi\GraphQL\Attribute\Argument;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
-use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\TypeRegistryInterface;
 use ReflectionParameter;

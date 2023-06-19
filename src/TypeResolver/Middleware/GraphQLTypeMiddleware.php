@@ -17,6 +17,7 @@ use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
 use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
 use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use Andi\GraphQL\Definition\Type\ScalarTypeInterface;
+use Andi\GraphQL\Definition\Type\TypeInterface;
 use Andi\GraphQL\Definition\Type\UnionTypeInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
@@ -38,7 +39,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        if (! is_string($type)) {
+        if (! is_string($type) || ! is_subclass_of($type, TypeInterface::class)) {
             return $typeResolver->resolve($type);
         }
 

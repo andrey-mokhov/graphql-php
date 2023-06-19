@@ -14,7 +14,7 @@ use GraphQL\Type\Definition as Webonyx;
 use ReflectionProperty;
 use Spiral\Attributes\ReaderInterface;
 
-final class ReflectionPropertyMiddleware implements MiddlewareInterface
+final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInterface
 {
     public const PRIORITY = 3072;
 

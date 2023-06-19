@@ -9,7 +9,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition as Webonyx;
 use ReflectionClass;
 
-final class InterfaceResolveType
+final class ResolveType
 {
     public function __construct(
         private readonly TypeRegistryInterface $typeRegistry,

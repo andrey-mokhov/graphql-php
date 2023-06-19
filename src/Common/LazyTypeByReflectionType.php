@@ -63,10 +63,53 @@ class LazyTypeByReflectionType
 
     /**
      * @return Webonyx\Type
-     *
-     * @todo Declare method for ReflectionUnionType
      */
     private function getTypeFromReflectionUnionType(): Webonyx\Type
     {
+        /** @var ReflectionType $type */
+        $names = [];
+        $types = [];
+        $allowsNull = false;
+        foreach ($this->type->getTypes() as $type) {
+            if ($type->isBuiltin()) {
+                $allowsNull = 'null' === $type->getName()
+                    || throw new CantResolveGraphQLTypeException('UnionType must contains only ObjectTypes');
+
+                continue;
+            }
+
+            $name = $type->getName();
+            if ($this->typeRegistry->has($name)) {
+                $gqlType = $this->typeRegistry->get($name);
+
+                if (! $gqlType instanceof Webonyx\Type) {
+                    throw new CantResolveGraphQLTypeException('UnionType must contains only ObjectTypes');
+                }
+
+                $names[] = (string) $gqlType;
+                $types[] = $name;
+            } else {
+                throw new CantResolveGraphQLTypeException(sprintf('Undefined ObjectType "%s" for UnionType', $name));
+            }
+        }
+
+        sort($names);
+        $name = implode('', $names) . 'UnionType';
+
+        if ($this->typeRegistry->has($name)) {
+            return $this->typeRegistry->get($name);
+        }
+
+        $unionType = new Webonyx\UnionType([
+            'name'        => $name,
+            'types'       => new LazyTypeIterator(fn() => $types, $this->typeRegistry),
+            'resolveType' => new ResolveType($this->typeRegistry),
+        ]);
+
+        $this->typeRegistry->register($unionType);
+
+        return $this->type->allowsNull() || $allowsNull
+            ? $unionType
+            : Webonyx\Type::nonNull($unionType);
     }
 }

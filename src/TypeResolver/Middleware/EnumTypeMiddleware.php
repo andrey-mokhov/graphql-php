@@ -15,7 +15,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
 {
     use DefinitionAwareTrait;
 
-    public const PRIORITY = 4096;
+    public const PRIORITY = AttributedGraphQLTypeMiddleware::PRIORITY + 256;
 
     public function __construct(
         private readonly ReaderInterface $reader,
