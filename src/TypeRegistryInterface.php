@@ -8,8 +8,6 @@ use GraphQL\Type\Definition as Webonyx;
 
 interface TypeRegistryInterface
 {
-    public function __invoke(string $type): Webonyx\Type;
-
     public function has(string $type): bool;
 
     public function get(string $type): Webonyx\Type;

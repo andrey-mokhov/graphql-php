@@ -11,7 +11,7 @@ use GraphQL\Type\Definition as Webonyx;
 class ObjectType extends Webonyx\ObjectType implements DynamicObjectTypeInterface
 {
     /**
-     * @var callable|iterable
+     * @var callable():iterable|iterable|null
      */
     private readonly mixed $nativeFields;
 

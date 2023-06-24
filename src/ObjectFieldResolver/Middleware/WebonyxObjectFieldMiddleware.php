@@ -13,7 +13,7 @@ final class WebonyxObjectFieldMiddleware implements MiddlewareInterface
 
     public function process(mixed $field, ObjectFieldResolverInterface $fieldResolver): Webonyx\FieldDefinition
     {
-        return is_object($field) && $field instanceof Webonyx\FieldDefinition
+        return $field instanceof Webonyx\FieldDefinition
             ? $field
             : $fieldResolver->resolve($field);
     }
