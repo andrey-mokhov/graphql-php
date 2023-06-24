@@ -33,7 +33,7 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
         $attribute = $this->reader->firstPropertyMetadata($field, ObjectField::class);
 
         $config = [
-            'name'              => $attribute?->name ?? $field->getName(),
+            'name'              => $this->getName($field, $attribute),
             'description'       => $this->getFieldDescription($field, $attribute),
             'type'              => $this->getFieldType($field, $attribute),
             'resolve'           => $this->getFieldResolver($field),
@@ -41,6 +41,12 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
         ];
 
         return new Webonyx\FieldDefinition($config);
+    }
+
+    private function getName(ReflectionProperty $property, ?ObjectField $attribute): string
+    {
+        return $attribute?->name
+            ?? $property->getName();
     }
 
     /**

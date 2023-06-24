@@ -102,7 +102,7 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
     private function getArgumentDefaultValue(ReflectionParameter $parameter, ?Argument $attribute): mixed
     {
         if ($attribute?->hasDefaultValue()) {
-            return  $attribute->defaultValue;
+            return $attribute->defaultValue;
         }
 
         return $parameter->getDefaultValue();

@@ -7,7 +7,6 @@ namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
 use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
 use Andi\GraphQL\Attribute\AbstractField;
 use Andi\GraphQL\Attribute\Argument;
-use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
@@ -20,7 +19,7 @@ use Spiral\Attributes\ReaderInterface;
 abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareInterface
 {
     /**
-     * @var class-string
+     * @var class-string<AbstractField>
      */
     protected string $targetAttribute;
 
@@ -47,12 +46,10 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
             'name'              => $this->getFieldName($field, $attribute),
             'description'       => $this->getFieldDescription($field, $attribute),
             'type'              => $this->getFieldType($field, $attribute),
-            'args'              => $this->getFieldArguments($field),
-            'resolve'           => $this->getFieldResolver($field),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
-        return new Webonyx\FieldDefinition($config);
+        return $this->buildField($config, $field);
     }
 
     private function getFieldName(ReflectionMethod $method, AbstractField $attribute): ?string
@@ -72,7 +69,7 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
     /**
      * @param ReflectionMethod $method
-     * @param ObjectField $attribute
+     * @param AbstractField $attribute
      *
      * @return string|null
      *
@@ -103,20 +100,26 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         );
     }
 
-    private function getFieldArguments(ReflectionMethod $method): iterable
+    protected function getFieldArguments(ReflectionMethod $method): \Generator
     {
+        $map = [];
         foreach ($method->getParameters() as $parameter) {
             if (null !== $this->reader->firstParameterMetadata($parameter, Argument::class)) {
-                yield $this->argumentResolver->resolve($parameter);
+                $argument = $this->argumentResolver->resolve($parameter);
+                $map[$argument['name']] = $parameter->getName();
+
+                yield $argument;
             }
         }
+
+        return $map;
     }
 
-    abstract protected function getFieldResolver(ReflectionMethod $method): callable;
+    abstract protected function buildField(array $config, ReflectionMethod $method): Webonyx\FieldDefinition;
 
     /**
      * @param ReflectionMethod $method
-     * @param ObjectField $attribute
+     * @param AbstractField $attribute
      *
      * @return string|null
      *

@@ -12,8 +12,8 @@ release 0.1
 - [x] Atribute `QueryField` for any service methods
 - [x] Attribute `MutationField` for any service methods
 - [x] Attribute `AdditionalField` for any service methods - add additional field to `ObjectType`, `InterfaceType`
-- [ ] scalar DateTime type
-- [ ] scalar Date type
+- [x] scalar DateTime type
+- [x] scalar Date type
 
 release 1.0
 - [ ] Abstract classes for base definitions
@@ -24,8 +24,12 @@ release 1.0
   - [ ] EnumType
   - [x] ScalarType
 - [ ] implementation technical debt
+- [ ] UploadFile type
 - [ ] Unit tests
 - [ ] documentation and examples
 
 release 1.1
 - [ ] Mockup types and fields
+
+release 1.2
+- [ ] inputs validate

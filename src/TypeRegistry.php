@@ -60,11 +60,6 @@ class TypeRegistry implements TypeRegistryInterface
         }
     }
 
-    public function __invoke(string $type): Webonyx\Type
-    {
-        return $this->get($type);
-    }
-
     /**
      * @return iterable<Webonyx\ObjectType>
      */
