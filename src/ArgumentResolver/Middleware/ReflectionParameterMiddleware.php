@@ -10,6 +10,8 @@ use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\TypeRegistryInterface;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionParameter;
 use Spiral\Attributes\ReaderInterface;
 
@@ -57,12 +59,23 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
      * @param Argument|null $attribute
      *
      * @return string|null
-     *
-     * @todo Extract description from annotation when attribute is not set
      */
     private function getArgumentDescription(ReflectionParameter $parameter, ?Argument $attribute): ?string
     {
-        return $attribute?->description;
+        if ($attribute?->description) {
+            return $attribute->description;
+        }
+
+        if ($docComment = $parameter->getDeclaringFunction()->getDocComment()) {
+            $docBlock = DocBlockFactory::createInstance(['psalm-param' => Param::class])->create($docComment);
+            foreach ($docBlock->getTags() as $tag) {
+                if ($tag instanceof Param && $tag->getVariableName() === $parameter->getName()) {
+                    return (string) $tag->getDescription() ?: null;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function getArgumentType(ReflectionParameter $parameter, ?Argument $attribute): callable
@@ -86,8 +99,6 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
      * @param Argument|null $attribute
      *
      * @return string|null
-     *
-     * @todo Extract deprecation reason from annotation when attribute is not set
      */
     private function getArgumentDeprecationReason(ReflectionParameter $parameter, ?Argument $attribute): ?string
     {

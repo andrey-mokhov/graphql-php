@@ -12,11 +12,12 @@ use Andi\GraphQL\ArgumentResolver\Middleware\Next;
 use Andi\GraphQL\Exception\CantResolveArgumentException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ArgumentResolver::class)]
-#[CoversClass(Next::class)]
-#[CoversClass(CantResolveArgumentResolver::class)]
+#[UsesClass(Next::class)]
+#[UsesClass(CantResolveArgumentResolver::class)]
 class ArgumentResolverTest extends TestCase
 {
     use MockeryPHPUnitIntegration;

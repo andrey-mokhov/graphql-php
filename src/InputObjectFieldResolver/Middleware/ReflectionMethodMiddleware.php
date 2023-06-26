@@ -12,6 +12,8 @@ use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionMethod;
 use ReflectionParameter;
 use Spiral\Attributes\ReaderInterface;
@@ -57,12 +59,18 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
      * @param InputObjectField|null $attribute
      *
      * @return string|null
-     *
-     * @todo Extract description from annotation when attribute is not set.
      */
     private function getFieldDescription(ReflectionMethod $method, ?InputObjectField $attribute): ?string
     {
-        return $attribute?->description;
+        if ($attribute?->description) {
+            return $attribute->description;
+        }
+
+        if ($docComment = $method->getDocComment()) {
+            return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
+        }
+
+        return null;
     }
 
     private function getFieldType(ReflectionMethod $method, ?InputObjectField $attribute): callable
@@ -91,12 +99,23 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
      * @param InputObjectField|null $attribute
      *
      * @return string|null
-     *
-     * @todo Extract deprecation reason from annotation when attribute is not set
      */
     private function getFieldDeprecationReason(ReflectionMethod $method, ?InputObjectField $attribute): ?string
     {
-        return $attribute?->deprecationReason;
+        if ($attribute?->deprecationReason) {
+            return $attribute->deprecationReason;
+        }
+
+        if ($docComment = $method->getDocComment()) {
+            $docBlock = DocBlockFactory::createInstance()->create($docComment);
+            foreach ($docBlock->getTags() as $tag) {
+                if ($tag instanceof Deprecated) {
+                    return (string) $tag->getDescription() ?: null;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function hasDefaultValue(ReflectionParameter $parameter, ?InputObjectField $attribute): bool

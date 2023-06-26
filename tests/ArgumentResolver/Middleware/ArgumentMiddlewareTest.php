@@ -54,6 +54,9 @@ class ArgumentMiddlewareTest extends TestCase
         if (isset($config['type']) && is_callable($config['type'])) {
             $config['type'] = call_user_func($config['type']);
         }
+        if ($config['type'] instanceof Webonyx\WrappingType) {
+            $config['type'] = $config['type']->getWrappedType();
+        }
 
         foreach ($expected as $name => $value) {
             self::assertArrayHasKey($name, $config);

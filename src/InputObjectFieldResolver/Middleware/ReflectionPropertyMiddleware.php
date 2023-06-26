@@ -11,6 +11,8 @@ use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionProperty;
 use Spiral\Attributes\ReaderInterface;
 
@@ -33,7 +35,7 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstPropertyMetadata($field, InputObjectField::class);
 
         $config = [
-            'name'              => $attribute?->name ?? $field->getName(),
+            'name'              => $this->getFieldName($field, $attribute),
             'description'       => $this->getFieldDescription($field, $attribute),
             'type'              => $this->getFieldType($field, $attribute),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
@@ -46,17 +48,29 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
         return new Webonyx\InputObjectField($config);
     }
 
+    private function getFieldName(ReflectionProperty $property, ?InputObjectField $attribute): string
+    {
+        return $attribute?->name
+            ?? $property->getName();
+    }
+
     /**
      * @param ReflectionProperty $property
      * @param InputObjectField|null $attribute
      *
      * @return string|null
-     *
-     * @todo Extract description from annotation when attribute is not set.
      */
     private function getFieldDescription(ReflectionProperty $property, ?InputObjectField $attribute): ?string
     {
-        return $attribute?->description;
+        if ($attribute?->description) {
+            return $attribute->description;
+        }
+
+        if ($docComment = $property->getDocComment()) {
+            return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
+        }
+
+        return null;
     }
 
     private function getFieldType(ReflectionProperty $property, ?InputObjectField $attribute): callable
@@ -84,12 +98,24 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
      * @param InputObjectField|null $attribute
      *
      * @return string|null
-     *
-     * @todo Extract deprecation reason from annotation when attribute is not set
      */
     private function getFieldDeprecationReason(ReflectionProperty $property, ?InputObjectField $attribute): ?string
     {
-        return $attribute?->deprecationReason;
+        if ($attribute?->deprecationReason) {
+            return $attribute->deprecationReason;
+        }
+
+        if ($docComment = $property->getDocComment()) {
+            $docBlock = DocBlockFactory::createInstance(['property-deprecated' => Deprecated::class])
+                ->create($docComment);
+            foreach ($docBlock->getTags() as $tag) {
+                if ($tag instanceof Deprecated) {
+                    return (string) $tag->getDescription() ?: null;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function hasDefaultValue(ReflectionProperty $property, ?InputObjectField $attribute): bool
