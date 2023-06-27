@@ -75,7 +75,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
 
     private function getFieldType(ReflectionMethod $method, ?InputObjectField $attribute): callable
     {
-        if (null !== $attribute?->type) {
+        if ($attribute?->type) {
             return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 
@@ -90,6 +90,14 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
         }
 
         $parameter = $parameters[0];
+
+        if (! $parameter->hasType()) {
+            throw new CantResolveGraphQLTypeException(sprintf(
+                'Can\'t resolve GraphQL type "%s" for field "%s". Parameter has no type.',
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+            ));
+        }
 
         return new LazyTypeByReflectionParameter($parameter, $this->typeRegistry);
     }

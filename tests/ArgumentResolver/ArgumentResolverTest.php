@@ -9,6 +9,7 @@ use Andi\GraphQL\ArgumentResolver\ArgumentResolverInterface;
 use Andi\GraphQL\ArgumentResolver\CantResolveArgumentResolver;
 use Andi\GraphQL\ArgumentResolver\Middleware\MiddlewareInterface;
 use Andi\GraphQL\ArgumentResolver\Middleware\Next;
+use Andi\GraphQL\ArgumentResolver\Middleware\PipelineInterface;
 use Andi\GraphQL\Exception\CantResolveArgumentException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -27,6 +28,7 @@ class ArgumentResolverTest extends TestCase
         $resolver = new ArgumentResolver();
 
         self::assertInstanceOf(ArgumentResolverInterface::class, $resolver);
+        self::assertInstanceOf(PipelineInterface::class, $resolver);
     }
 
     public function testEmptyPipeline(): void

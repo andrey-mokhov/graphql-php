@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Andi\Tests\GraphQL\InputObjectFieldResolver\Middleware;
+namespace Andi\Tests\GraphQL\ObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\Exception\NextHandlerIsEmptyException;
-use Andi\GraphQL\InputObjectFieldResolver\CantResolveInputObjectFieldResolver;
-use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
-use Andi\GraphQL\InputObjectFieldResolver\Middleware\Next;
+use Andi\GraphQL\ObjectFieldResolver\CantResolveObjectFieldResolver;
+use Andi\GraphQL\ObjectFieldResolver\Middleware\Next;
+use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use GraphQL\Type\Definition as Webonyx;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,20 +20,20 @@ class NextTest extends TestCase
 
     public function testInstanceOf(): void
     {
-        $next = new Next(new \SplPriorityQueue(), new CantResolveInputObjectFieldResolver());
+        $next = new Next(new \SplPriorityQueue(), new CantResolveObjectFieldResolver());
 
-        self::assertInstanceOf(InputObjectFieldResolverInterface::class, $next);
+        self::assertInstanceOf(ObjectFieldResolverInterface::class, $next);
     }
 
     public function testRaiseException(): void
     {
-        $middleware = \Mockery::mock(InputObjectFieldResolverInterface::class);
-        $middleware->shouldReceive('process')->once()->andReturn(new Webonyx\InputObjectField(['name' => 'foo']));
+        $middleware = \Mockery::mock(ObjectFieldResolverInterface::class);
+        $middleware->shouldReceive('process')->once()->andReturn(new Webonyx\FieldDefinition(['name' => 'foo']));
 
         $queue = new \SplPriorityQueue();
         $queue->insert($middleware, 0);
 
-        $next = new Next($queue, new CantResolveInputObjectFieldResolver());
+        $next = new Next($queue, new CantResolveObjectFieldResolver());
         self::assertSame('foo', $next->resolve(null)->name);
 
         $this->expectException(NextHandlerIsEmptyException::class);
@@ -42,8 +42,8 @@ class NextTest extends TestCase
 
     public function testCallFallbackResolverWhenQueueIsEmpty(): void
     {
-        $resolver = \Mockery::mock(InputObjectFieldResolverInterface::class);
-        $resolver->shouldReceive('resolve')->once()->andReturn(new Webonyx\InputObjectField(['name' => 'foo']));
+        $resolver = \Mockery::mock(ObjectFieldResolverInterface::class);
+        $resolver->shouldReceive('resolve')->once()->andReturn(new Webonyx\FieldDefinition(['name' => 'foo']));
 
         $next = new Next(new \SplPriorityQueue(), $resolver);
 

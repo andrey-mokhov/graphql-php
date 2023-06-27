@@ -9,7 +9,7 @@ release 0.1
   - [x] ObjectType resolver
   - [x] InputObjectType resolver
 - [x] Dynamic UnionType
-- [x] Atribute `QueryField` for any service methods
+- [x] Attribute `QueryField` for any service methods
 - [x] Attribute `MutationField` for any service methods
 - [x] Attribute `AdditionalField` for any service methods - add additional field to `ObjectType`, `InterfaceType`
 - [x] scalar DateTime type

@@ -64,7 +64,7 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
 
     private function getFieldType(ReflectionProperty $property, ?ObjectField $attribute): callable
     {
-        if (null !== $attribute?->type) {
+        if ($attribute?->type) {
             return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 

@@ -10,6 +10,7 @@ use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolver;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\InputObjectFieldResolver\Middleware\MiddlewareInterface;
 use Andi\GraphQL\InputObjectFieldResolver\Middleware\Next;
+use Andi\GraphQL\InputObjectFieldResolver\Middleware\PipelineInterface;
 use GraphQL\Type\Definition as Webonyx;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -28,6 +29,7 @@ class InputObjectFieldResolverTest extends TestCase
         $resolver = new InputObjectFieldResolver();
 
         self::assertInstanceOf(InputObjectFieldResolverInterface::class, $resolver);
+        self::assertInstanceOf(PipelineInterface::class, $resolver);
     }
 
     public function testEmptyPipeline(): void

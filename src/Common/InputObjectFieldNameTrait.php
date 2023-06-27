@@ -11,7 +11,7 @@ trait InputObjectFieldNameTrait
 {
     private function getInputObjectFieldName(ReflectionMethod $method, ?InputObjectField $attribute): string
     {
-        if (null !== $attribute?->name) {
+        if ($attribute?->name) {
             return $attribute->name;
         }
 

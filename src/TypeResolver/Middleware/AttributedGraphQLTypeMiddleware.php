@@ -155,7 +155,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
 
     private function getTypeParseValue(ReflectionClass $class, ?Attribute\InputObjectType $attribute): callable
     {
-        if (null !== $attribute?->factory) {
+        if ($attribute?->factory) {
             return $this->container->get($attribute->factory);
         }
 
