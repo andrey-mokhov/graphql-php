@@ -8,6 +8,8 @@ use Andi\GraphQL\Attribute;
 use Andi\GraphQL\Common\DefinitionAwareTrait;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use GraphQL\Type\Definition as Webonyx;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionEnum;
 use Spiral\Attributes\ReaderInterface;
 
@@ -31,14 +33,6 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         return $this->buildEnumType($type, $this->reader->firstClassMetadata($type, Attribute\EnumType::class));
     }
 
-    /**
-     * @param ReflectionEnum $class
-     * @param Attribute\EnumType|null $attribute
-     *
-     * @return Webonyx\EnumType
-     *
-     * @todo Extract description & deprecationReason from case annotation
-     */
     private function buildEnumType(ReflectionEnum $class, ?Attribute\EnumType $attribute): Webonyx\EnumType
     {
         $config = [
@@ -50,11 +44,34 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         foreach ($class->getCases() as $case) {
             $config['values'][$case->getName()] = [
                 'value' => $case->getValue(),
-                // 'description'       => todo
-                // 'deprecationReason' => todo
+                'description' => $this->getCaseDescription($case),
+                'deprecationReason' => $this->getCaseDeprecationReason($case),
             ];
         }
 
         return new Webonyx\EnumType($config);
+    }
+
+    private function getCaseDescription(\ReflectionEnumUnitCase $case): ?string
+    {
+        if ($docComment = $case->getDocComment()) {
+            return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
+        }
+
+        return null;
+    }
+
+    private function getCaseDeprecationReason(\ReflectionEnumUnitCase $case): ?string
+    {
+        if ($docComment = $case->getDocComment()) {
+            $docBlock = DocBlockFactory::createInstance()->create($docComment);
+            foreach ($docBlock->getTags() as $tag) {
+                if ($tag instanceof Deprecated) {
+                    return (string) $tag->getDescription() ?: null;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -17,7 +17,7 @@ release 0.1
 
 release 1.0
 - [ ] Unit tests
-- [ ] implementation technical debt
+- [x] implementation technical debt
 - [ ] Abstract classes for base definitions
   - [ ] ObjectType
   - [ ] InputObjectType
