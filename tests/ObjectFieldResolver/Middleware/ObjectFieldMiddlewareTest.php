@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(LazyType::class)]
 #[UsesClass(ArgumentConfigurationMiddleware::class)]
 #[UsesClass(Next::class)]
-class ObjectFieldMiddlewareTest extends TestCase
+final class ObjectFieldMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

@@ -9,17 +9,17 @@ use Andi\GraphQL\ArgumentResolver\Middleware\Next;
 use Andi\GraphQL\ArgumentResolver\Middleware\ReflectionParameterMiddleware;
 use Andi\GraphQL\Attribute\AbstractDefinition;
 use Andi\GraphQL\Attribute\AbstractField;
+use Andi\GraphQL\Attribute\AdditionalField;
 use Andi\GraphQL\Attribute\Argument;
-use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
-use Andi\GraphQL\Field;
+use Andi\GraphQL\Field\OuterObjectField;
 use Andi\GraphQL\ObjectFieldResolver\Middleware\AbstractFieldByReflectionMethodMiddleware;
-use Andi\GraphQL\ObjectFieldResolver\Middleware\AbstractObjectFieldByReflectionMethodMiddleware;
+use Andi\GraphQL\ObjectFieldResolver\Middleware\AbstractOuterObjectFieldByReflectionMethodMiddleware;
+use Andi\GraphQL\ObjectFieldResolver\Middleware\AdditionalFieldByReflectionMethodMiddleware;
 use Andi\GraphQL\ObjectFieldResolver\Middleware\MiddlewareInterface;
-use Andi\GraphQL\ObjectFieldResolver\Middleware\ObjectFieldByReflectionMethodMiddleware;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistry;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -33,25 +33,25 @@ use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Attributes\ReaderInterface;
 use Spiral\Core\InvokerInterface;
 
-#[CoversClass(AbstractObjectFieldByReflectionMethodMiddleware::class)]
+#[CoversClass(AbstractOuterObjectFieldByReflectionMethodMiddleware::class)]
 #[CoversClass(AbstractFieldByReflectionMethodMiddleware::class)]
 #[UsesClass(ArgumentResolver::class)]
 #[UsesClass(ReflectionParameterMiddleware::class)]
 #[UsesClass(TypeRegistry::class)]
 #[UsesClass(AbstractDefinition::class)]
 #[UsesClass(AbstractField::class)]
+#[UsesClass(AdditionalField::class)]
 #[UsesClass(LazyParserType::class)]
 #[UsesClass(LazyTypeByReflectionType::class)]
 #[UsesClass(LazyTypeByReflectionParameter::class)]
-#[UsesClass(ObjectField::class)]
-#[UsesClass(Field\ObjectField::class)]
+#[UsesClass(OuterObjectField::class)]
 #[UsesClass(Next::class)]
 #[UsesClass(Argument::class)]
-final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
+final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    private ObjectFieldByReflectionMethodMiddleware $middleware;
+    private AdditionalFieldByReflectionMethodMiddleware $middleware;
 
     private TypeRegistryInterface $typeRegistry;
 
@@ -67,7 +67,7 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         $argumentResolver = new ArgumentResolver();
         $argumentResolver->pipe(new ReflectionParameterMiddleware($this->reader, $this->typeRegistry));
 
-        $this->middleware = new ObjectFieldByReflectionMethodMiddleware(
+        $this->middleware = new AdditionalFieldByReflectionMethodMiddleware(
             $this->reader,
             $this->typeRegistry,
             $argumentResolver,
@@ -159,7 +159,7 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
                 'type' => Webonyx\Type::string(),
             ],
             'object' => new class {
-                #[ObjectField]
+                #[AdditionalField(targetType: 'Query')]
                 public function foo(): string {
                     return 'qew';
                 }
@@ -185,7 +185,7 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
                  *
                  * @deprecated Foo is deprecated.
                  */
-                #[ObjectField]
+                #[AdditionalField(targetType: 'Query')]
                 public function getFoo(#[Argument] string $str, #[Argument] bool $flag): int {
                     return 1;
                 }
@@ -200,7 +200,13 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
                 'type' => Webonyx\Type::id(),
             ],
             'object' => new class {
-                #[ObjectField(name: 'bar', description: 'Bar description', type: 'ID', deprecationReason: 'reason')]
+                #[AdditionalField(
+                    targetType: 'Query',
+                    name: 'bar',
+                    description: 'Bar description',
+                    type: 'ID',
+                    deprecationReason: 'reason',
+                )]
                 public function getFoo(): int {
                     return 1;
                 }
@@ -210,7 +216,7 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         yield 'raise-exception' => [
             'expected' => [],
             'object' => new class {
-                #[ObjectField]
+                #[AdditionalField(targetType: 'Query')]
                 public function foo() {}
             },
             'exception' => CantResolveGraphQLTypeException::class,

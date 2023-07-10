@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace Andi\Tests\GraphQL\ObjectFieldResolver\Middleware;
 
-use Andi\GraphQL\ArgumentResolver\ArgumentResolver;
-use Andi\GraphQL\ArgumentResolver\Middleware\Next;
-use Andi\GraphQL\ArgumentResolver\Middleware\ReflectionParameterMiddleware;
 use Andi\GraphQL\Attribute\AbstractDefinition;
 use Andi\GraphQL\Attribute\AbstractField;
-use Andi\GraphQL\Attribute\Argument;
 use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyParserType;
-use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
-use Andi\GraphQL\Field;
-use Andi\GraphQL\ObjectFieldResolver\Middleware\AbstractFieldByReflectionMethodMiddleware;
-use Andi\GraphQL\ObjectFieldResolver\Middleware\AbstractObjectFieldByReflectionMethodMiddleware;
 use Andi\GraphQL\ObjectFieldResolver\Middleware\MiddlewareInterface;
-use Andi\GraphQL\ObjectFieldResolver\Middleware\ObjectFieldByReflectionMethodMiddleware;
+use Andi\GraphQL\ObjectFieldResolver\Middleware\ObjectFieldByReflectionPropertyMiddleware;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistry;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -31,49 +23,32 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Attributes\ReaderInterface;
-use Spiral\Core\InvokerInterface;
 
-#[CoversClass(AbstractObjectFieldByReflectionMethodMiddleware::class)]
-#[CoversClass(AbstractFieldByReflectionMethodMiddleware::class)]
-#[UsesClass(ArgumentResolver::class)]
-#[UsesClass(ReflectionParameterMiddleware::class)]
+#[CoversClass(ObjectFieldByReflectionPropertyMiddleware::class)]
 #[UsesClass(TypeRegistry::class)]
 #[UsesClass(AbstractDefinition::class)]
 #[UsesClass(AbstractField::class)]
 #[UsesClass(LazyParserType::class)]
 #[UsesClass(LazyTypeByReflectionType::class)]
-#[UsesClass(LazyTypeByReflectionParameter::class)]
-#[UsesClass(ObjectField::class)]
-#[UsesClass(Field\ObjectField::class)]
-#[UsesClass(Next::class)]
-#[UsesClass(Argument::class)]
-final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
+final class ObjectFieldByReflectionPropertyMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    private ObjectFieldByReflectionMethodMiddleware $middleware;
+    private ObjectFieldByReflectionPropertyMiddleware $middleware;
 
     private TypeRegistryInterface $typeRegistry;
 
     private ReaderInterface $reader;
-
-    private InvokerInterface $invoker;
 
     protected function setUp(): void
     {
         $this->reader = new NativeAttributeReader();
         $this->typeRegistry = new TypeRegistry();
 
-        $argumentResolver = new ArgumentResolver();
-        $argumentResolver->pipe(new ReflectionParameterMiddleware($this->reader, $this->typeRegistry));
-
-        $this->middleware = new ObjectFieldByReflectionMethodMiddleware(
+        $this->middleware = new ObjectFieldByReflectionPropertyMiddleware(
             $this->reader,
             $this->typeRegistry,
-            $argumentResolver,
-            $this->invoker = \Mockery::mock(InvokerInterface::class),
         );
-
     }
 
     public function testInstanceOf(): void
@@ -89,33 +64,17 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         $this->middleware->process(null, $nextResolver);
     }
 
-    public function testCallNextResolverWhenMethodWithoutAttribute(): void
-    {
-        $nextResolver = \Mockery::mock(ObjectFieldResolverInterface::class);
-        $nextResolver->shouldReceive('resolve')->once()->andReturn(new Webonyx\FieldDefinition(['name' => 'foo']));
-
-        $object = new class {
-            public function foo() {}
-        };
-
-        $classReflection = new \ReflectionClass($object);
-        $field = null;
-        foreach ($classReflection->getMethods() as $field) {
-            break;
-        }
-
-        $this->middleware->process($field, $nextResolver);
-    }
-
     #[DataProvider('getDataForProcess')]
     public function testProcess(array $expected, object $object, string $exception = null): void
     {
         $nextResolver = \Mockery::mock(ObjectFieldResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->never();
 
+        $info = \Mockery::mock(Webonyx\ResolveInfo::class);
+
         $field = null;
         $reflectionClass = new \ReflectionClass($object);
-        foreach ($reflectionClass->getMethods() as $field) {
+        foreach ($reflectionClass->getProperties() as $field) {
             break;
         }
 
@@ -137,17 +96,9 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         }
         self::assertSame($expected['type'], $type);
 
-        if (isset($expected['arguments'])) {
-            foreach ($expected['arguments'] as $name => $type) {
-                $argument = $objectField->getArg($name);
-
-                $argumentType = $argument->getType();
-                if ($argumentType instanceof Webonyx\WrappingType) {
-                    $argumentType = $argumentType->getWrappedType();
-                }
-
-                self::assertSame($type, $argumentType);
-            }
+        if (isset($expected['resolve'])) {
+            self::assertIsCallable($objectField->resolveFn);
+            self::assertSame($expected['resolve'], call_user_func($objectField->resolveFn, $object, [], null, $info));
         }
     }
 
@@ -156,62 +107,64 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         yield 'foo' => [
             'expected' => [
                 'name' => 'foo',
-                'type' => Webonyx\Type::string(),
+                'type' => Webonyx\Type::boolean(),
+                'resolve' => false,
             ],
             'object' => new class {
-                #[ObjectField]
-                public function foo(): string {
-                    return 'qew';
-                }
+                public bool $foo = false;
             },
         ];
 
-        yield 'foo-without-attribute-data' => [
+        yield 'foo-with-docblock' => [
             'expected' => [
                 'name' => 'foo',
                 'description' => 'Foo description.',
                 'deprecationReason' => 'Foo is deprecated.',
                 'type' => Webonyx\Type::int(),
-                'arguments' => [
-                    'str' => Webonyx\Type::string(),
-                    'flag' => Webonyx\Type::boolean(),
-                ],
+                'resolve' => 12,
             ],
             'object' => new class {
                 /**
                  * Foo description.
                  *
-                 * @return int
+                 * @var int
                  *
                  * @deprecated Foo is deprecated.
                  */
-                #[ObjectField]
-                public function getFoo(#[Argument] string $str, #[Argument] bool $flag): int {
-                    return 1;
-                }
+                public int $foo = 12;
             },
         ];
 
         yield 'bar-with-attribute' => [
             'expected' => [
                 'name' => 'bar',
-                'description' => 'Bar description',
-                'deprecationReason' => 'reason',
+                'description' => 'bar description',
+                'deprecationReason' => 'bar is deprecated',
                 'type' => Webonyx\Type::id(),
+                'resolve' => 'qwerty',
             ],
             'object' => new class {
-                #[ObjectField(name: 'bar', description: 'Bar description', type: 'ID', deprecationReason: 'reason')]
-                public function getFoo(): int {
-                    return 1;
-                }
+                /**
+                 * Foo description.
+                 *
+                 * @var string
+                 *
+                 * @deprecated Foo is deprecated.
+                 */
+                #[ObjectField(
+                    name: 'bar',
+                    description: 'bar description',
+                    type: 'ID',
+                    deprecationReason: 'bar is deprecated',
+                )]
+                private string $foo = 'qwerty';
             },
         ];
 
         yield 'raise-exception' => [
             'expected' => [],
             'object' => new class {
-                #[ObjectField]
-                public function foo() {}
+                private $foo;
             },
             'exception' => CantResolveGraphQLTypeException::class,
         ];

@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CantResolveObjectFieldResolver::class)]
-class CantResolveObjectFieldResolverTest extends TestCase
+final class CantResolveObjectFieldResolverTest extends TestCase
 {
     public function testInstanceOf(): void
     {
