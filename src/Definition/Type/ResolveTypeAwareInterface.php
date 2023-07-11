@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\Definition\Type;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition as Webonyx;
 
 interface ResolveTypeAwareInterface
 {
-    public function resolveType(mixed $value, mixed $context, ResolveInfo $info): string;
+    public function resolveType(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?string;
 }

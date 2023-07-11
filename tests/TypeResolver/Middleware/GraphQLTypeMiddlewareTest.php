@@ -6,17 +6,25 @@ namespace Andi\Tests\GraphQL\TypeResolver\Middleware;
 
 use Andi\GraphQL\ArgumentResolver\ArgumentResolver;
 use Andi\GraphQL\ArgumentResolver\Middleware\ArgumentConfigurationMiddleware;
+use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
 use Andi\GraphQL\Common\LazyType;
+use Andi\GraphQL\Common\LazyTypeIterator;
+use Andi\GraphQL\Common\LazyTypeResolver;
+use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolver;
+use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
+use Andi\GraphQL\InputObjectFieldResolver\Middleware as InputObjectFieldResolverMiddleware;
 use Andi\GraphQL\ObjectFieldResolver\Middleware\Next;
 use Andi\GraphQL\ObjectFieldResolver\Middleware\ObjectFieldMiddleware;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolver;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
+use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use Andi\GraphQL\TypeRegistry;
 use Andi\GraphQL\TypeRegistryInterface;
 use Andi\GraphQL\TypeResolver\Middleware\GraphQLTypeMiddleware;
 use Andi\GraphQL\TypeResolver\Middleware\MiddlewareInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
+use Andi\GraphQL\WebonyxType\DynamicObjectType;
 use Andi\Tests\GraphQL\Fixture;
 use GraphQL\Type\Definition as Webonyx;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -34,7 +42,14 @@ use Spiral\Core\Container;
 #[UsesClass(ObjectFieldResolver::class)]
 #[UsesClass(LazyObjectFields::class)]
 #[UsesClass(LazyType::class)]
+#[UsesClass(LazyTypeIterator::class)]
 #[UsesClass(Next::class)]
+#[UsesClass(DynamicObjectType::class)]
+#[UsesClass(LazyInputObjectFields::class)]
+#[UsesClass(InputObjectFieldResolver::class)]
+#[UsesClass(InputObjectFieldResolverMiddleware\InputObjectFieldMiddleware::class)]
+#[UsesClass(InputObjectFieldResolverMiddleware\Next::class)]
+#[UsesClass(LazyTypeResolver::class)]
 final class GraphQLTypeMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -47,8 +62,20 @@ final class GraphQLTypeMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeRegistry = new TypeRegistry();
         $this->container = new Container();
+        $this->typeRegistry = new TypeRegistry();
+        $this->typeRegistry->register(new Webonyx\InterfaceType([
+            'name' => 'FooInterface',
+            'fields' => [
+                'foo' => Webonyx\Type::string(),
+            ],
+        ]));
+        $this->typeRegistry->register(new Webonyx\ObjectType([
+            'name' => 'FooObjectType',
+            'fields' => [
+                'foo' => Webonyx\Type::string(),
+            ],
+        ]));
 
         $argumentResolver = new ArgumentResolver();
         $argumentResolver->pipe(new ArgumentConfigurationMiddleware());
@@ -56,9 +83,12 @@ final class GraphQLTypeMiddlewareTest extends TestCase
         $objectFieldResolver = new ObjectFieldResolver();
         $objectFieldResolver->pipe(new ObjectFieldMiddleware($this->typeRegistry, $argumentResolver));
 
+        $inputObjectFieldResolver = new InputObjectFieldResolver();
+        $inputObjectFieldResolver->pipe(new InputObjectFieldResolverMiddleware\InputObjectFieldMiddleware($this->typeRegistry));
+
         $this->container->bind(ObjectFieldResolverInterface::class, $objectFieldResolver);
         $this->container->bind(TypeRegistryInterface::class, $this->typeRegistry);
-        $this->container->bind(TypeRegistry::class, $this->typeRegistry);
+        $this->container->bind(InputObjectFieldResolverInterface::class, $inputObjectFieldResolver);
 
         $this->middleware = new GraphQLTypeMiddleware($this->container);
     }
@@ -76,13 +106,22 @@ final class GraphQLTypeMiddlewareTest extends TestCase
         $this->middleware->process(null, $nextResolver);
     }
 
+    public function testCallNextResolverWhenNotImplementedObject(): void
+    {
+        $nextResolver = \Mockery::mock(TypeResolverInterface::class);
+        $nextResolver->shouldReceive('resolve')->once()->andReturn(Webonyx\Type::id());
+
+        $this->middleware->process(Fixture\UnknownType::class, $nextResolver);
+    }
+
     #[DataProvider('getDataForProcess')]
     public function testProcess(array $expected, string $class, string $exception = null): void
     {
         $nextResolver = \Mockery::mock(TypeResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->never();
+        $info = \Mockery::mock(Webonyx\ResolveInfo::class);
 
-        /** @var Webonyx\ObjectType $type */
+        /** @var Webonyx\ObjectType|Webonyx\InputObjectType|Webonyx\InterfaceType|Webonyx\UnionType|Webonyx\EnumType $type */
         $type = $this->middleware->process($class, $nextResolver);
 
         self::assertInstanceOf($expected['instanceOf'], $type);
@@ -100,20 +139,141 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 self::assertSame($expectedFieldType, $fieldType);
             }
         }
+
+        if (isset($expected['interfaces'])) {
+            $interfaces = $type->getInterfaces();
+            foreach ($expected['interfaces'] as $interface) {
+                self::assertTrue(in_array($this->typeRegistry->get($interface), $interfaces, true));
+            }
+        }
+
+        if (isset($expected['isTypeOf'])) {
+            self::assertSame($expected['isTypeOf'], $type->isTypeOf(null, null, $info));
+        }
+
+        if (isset($expected['resolveField'])) {
+            self::assertIsCallable($type->resolveFieldFn);
+            self::assertSame($expected['resolveField'], call_user_func($type->resolveFieldFn, null, [], null, $info));
+        }
+
+        if ($type instanceof DynamicObjectTypeInterface) {
+            self::assertSame($type, $type->addAdditionalField(null));
+        }
+
+        // InputObjectType
+        if (isset($expected['parseValue'])) {
+            self::assertSame($expected['parseValue'], $type->parseValue([]));
+        }
+
+        if (isset($expected['resolveType'])) {
+            $resolvedType = $this->typeRegistry->get($expected['resolveType']);
+            self::assertSame($resolvedType, $type->resolveType(null, $this->typeRegistry, $info));
+        }
+
+        // UnionType
+        if (isset($expected['types'])) {
+            $types = $type->getTypes();
+            foreach ($expected['types'] as $name) {
+                self::assertTrue(in_array($this->typeRegistry->get($name), $types, true));
+            }
+        }
+
+        // EnumType
+        if (isset($expected['values'])) {
+            foreach ($expected['values'] as $name => $value) {
+                self::assertSame($value, $type->getValue($name)?->value);
+            }
+        }
     }
 
     public static function getDataForProcess(): iterable
     {
-        yield 'foo' => [
+        yield 'ObjectType' => [
             'expected' => [
                 'instanceOf' => Webonyx\ObjectType::class,
-                'name' => 'foo',
-                'description' => 'foo description',
+                'name' => 'ObjectType',
+                'description' => 'ObjectType description',
                 'fields' => [
                     'field' => Webonyx\Type::id(),
                 ],
+                'interfaces' => ['FooInterface'],
+                'isTypeOf' => false,
+                'resolveField' => 'object-type',
             ],
             'class' => Fixture\ObjectType::class,
+        ];
+
+        yield 'DynamicObjectType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\ObjectType::class,
+                'name' => 'DynamicObjectType',
+                'description' => 'DynamicObjectType description',
+                'fields' => [
+                    'field' => Webonyx\Type::id(),
+                ],
+                'interfaces' => ['FooInterface'],
+                'isTypeOf' => false,
+                'resolveField' => 'object-type',
+            ],
+            'class' => Fixture\DynamicObjectType::class,
+        ];
+
+        yield 'InputObjectType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\InputObjectType::class,
+                'name' => 'InputObjectType',
+                'description' => 'InputObjectType description',
+                'fields' => [
+                    'field' => Webonyx\Type::id(),
+                ],
+                'parseValue' => 'parsed',
+            ],
+            'class' => Fixture\InputObjectType::class,
+        ];
+
+        yield 'InterfaceType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\InterfaceType::class,
+                'name' => 'InterfaceType',
+                'description' => 'InterfaceType description',
+                'fields' => [
+                    'field' => Webonyx\Type::id(),
+                ],
+                'resolveType' => 'FooObjectType',
+            ],
+            'class' => Fixture\InterfaceType::class,
+        ];
+
+        yield 'UnionType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\UnionType::class,
+                'name' => 'UnionType',
+                'description' => 'UnionType description',
+                'types' => ['FooObjectType'],
+                'resolveType' => 'FooObjectType',
+            ],
+            'class' => Fixture\UnionType::class,
+        ];
+
+        yield 'EnumType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\EnumType::class,
+                'name' => 'EnumType',
+                'description' => 'EnumType description',
+                'values' => [
+                    'name' => 'value',
+                ],
+            ],
+            'class' => Fixture\EnumType::class,
+        ];
+
+        yield 'ScalarType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\ScalarType::class,
+                'name' => 'ScalarType',
+                'description' => 'ScalarType description',
+            ],
+            'class' => Fixture\ScalarType::class,
         ];
     }
 }

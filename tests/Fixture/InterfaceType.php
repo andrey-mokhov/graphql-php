@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Andi\Tests\GraphQL\Fixture;
 
 use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
-use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
-use Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface;
-use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
-use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
+use Andi\GraphQL\Definition\Type\InterfaceTypeInterface;
+use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use GraphQL\Type\Definition as Webonyx;
 use GraphQL\Type\Definition\ResolveInfo;
 
@@ -16,20 +14,16 @@ use GraphQL\Type\Definition\ResolveInfo;
  * @internal
  * @psalm-internal Andi\Tests
  */
-class ObjectType implements
-    ObjectTypeInterface,
-    InterfacesAwareInterface,
-    IsTypeOfAwareInterface,
-    ResolveFieldAwareInterface
+class InterfaceType implements InterfaceTypeInterface, ResolveTypeAwareInterface
 {
     public function getName(): string
     {
-        return 'ObjectType';
+        return 'InterfaceType';
     }
 
     public function getDescription(): ?string
     {
-        return 'ObjectType description';
+        return 'InterfaceType description';
     }
 
     public function getFields(): iterable
@@ -53,7 +47,7 @@ class ObjectType implements
 
             public function getType(): string
             {
-                return Webonyx\Type::ID;
+                return Webonyx\IDType::class;
             }
 
             public function getTypeMode(): int
@@ -63,18 +57,8 @@ class ObjectType implements
         };
     }
 
-    public function getInterfaces(): iterable
+    public function resolveType(mixed $value, mixed $context, ResolveInfo $info): ?string
     {
-        yield 'FooInterface';
-    }
-
-    public function isTypeOf(mixed $value, mixed $context, ResolveInfo $info): bool
-    {
-        return false;
-    }
-
-    public function resolveField(mixed $value, array $args, mixed $context, ResolveInfo $info): mixed
-    {
-        return 'object-type';
+        return 'FooObjectType';
     }
 }

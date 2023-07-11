@@ -7,6 +7,7 @@ namespace Andi\GraphQL\TypeResolver\Middleware;
 use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
 use Andi\GraphQL\Common\LazyTypeIterator;
+use Andi\GraphQL\Common\LazyTypeResolver;
 use Andi\GraphQL\Definition\Field\ParseValueAwareInterface;
 use Andi\GraphQL\Definition\Type\EnumTypeInterface;
 use Andi\GraphQL\Definition\Type\InputObjectTypeInterface;
@@ -130,7 +131,8 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
-            $config['resolveType'] = $type->resolveType(...);
+            $typeRegistry = $this->container->get(TypeRegistryInterface::class);
+            $config['resolveType'] = new LazyTypeResolver($type->resolveType(...), $typeRegistry);
         }
 
         return new Webonyx\InterfaceType($config);
@@ -147,7 +149,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
-            $config['resolveType'] = $type->resolveType(...);
+            $config['resolveType'] = new LazyTypeResolver($type->resolveType(...), $typeRegistry);
         }
 
         return new Webonyx\UnionType($config);
