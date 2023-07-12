@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Andi\Tests\GraphQL\Fixture;
+namespace Andi\Tests\GraphQL\Fixture\Native;
 
-use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
-use Andi\GraphQL\Definition\Type\InterfaceTypeInterface;
-use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
+use Andi\GraphQL\Definition\Field\InputObjectFieldInterface;
+use Andi\GraphQL\Definition\Field\ParseValueAwareInterface;
+use Andi\GraphQL\Definition\Type\InputObjectTypeInterface;
 use GraphQL\Type\Definition as Webonyx;
-use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * @internal
  * @psalm-internal Andi\Tests
  */
-class InterfaceType implements InterfaceTypeInterface, ResolveTypeAwareInterface
+class InputObjectType implements InputObjectTypeInterface, ParseValueAwareInterface
 {
+
     public function getName(): string
     {
-        return 'InterfaceType';
+        return 'InputObjectType';
     }
 
     public function getDescription(): ?string
     {
-        return 'InterfaceType description';
+        return 'InputObjectType description';
     }
 
     public function getFields(): iterable
     {
-        yield new class implements ObjectFieldInterface {
+        yield new class implements InputObjectFieldInterface {
 
             public function getName(): string
             {
@@ -45,6 +45,11 @@ class InterfaceType implements InterfaceTypeInterface, ResolveTypeAwareInterface
                 return null;
             }
 
+            public function hasDefaultValue(): bool
+            {
+                return false;
+            }
+
             public function getType(): string
             {
                 return Webonyx\IDType::class;
@@ -57,8 +62,8 @@ class InterfaceType implements InterfaceTypeInterface, ResolveTypeAwareInterface
         };
     }
 
-    public function resolveType(mixed $value, mixed $context, ResolveInfo $info): ?string
+    public static function parseValue(array $values): mixed
     {
-        return 'FooObjectType';
+        return 'parsed';
     }
 }

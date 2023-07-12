@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Andi\Tests\GraphQL\Fixture;
+namespace Andi\Tests\GraphQL\Fixture\Native;
 
 use Andi\GraphQL\Definition\Type\ScalarTypeInterface;
 use GraphQL\Language\AST\Node;

@@ -25,7 +25,7 @@ use Andi\GraphQL\TypeResolver\Middleware\GraphQLTypeMiddleware;
 use Andi\GraphQL\TypeResolver\Middleware\MiddlewareInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use Andi\GraphQL\WebonyxType\DynamicObjectType;
-use Andi\Tests\GraphQL\Fixture;
+use Andi\Tests\GraphQL\Fixture\Native;
 use GraphQL\Type\Definition as Webonyx;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -111,7 +111,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
         $nextResolver = \Mockery::mock(TypeResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->once()->andReturn(Webonyx\Type::id());
 
-        $this->middleware->process(Fixture\UnknownType::class, $nextResolver);
+        $this->middleware->process(Native\UnknownType::class, $nextResolver);
     }
 
     #[DataProvider('getDataForProcess')]
@@ -200,7 +200,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 'isTypeOf' => false,
                 'resolveField' => 'object-type',
             ],
-            'class' => Fixture\ObjectType::class,
+            'class' => Native\ObjectType::class,
         ];
 
         yield 'DynamicObjectType' => [
@@ -215,7 +215,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 'isTypeOf' => false,
                 'resolveField' => 'object-type',
             ],
-            'class' => Fixture\DynamicObjectType::class,
+            'class' => Native\DynamicObjectType::class,
         ];
 
         yield 'InputObjectType' => [
@@ -228,7 +228,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 ],
                 'parseValue' => 'parsed',
             ],
-            'class' => Fixture\InputObjectType::class,
+            'class' => Native\InputObjectType::class,
         ];
 
         yield 'InterfaceType' => [
@@ -241,7 +241,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 ],
                 'resolveType' => 'FooObjectType',
             ],
-            'class' => Fixture\InterfaceType::class,
+            'class' => Native\InterfaceType::class,
         ];
 
         yield 'UnionType' => [
@@ -252,7 +252,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 'types' => ['FooObjectType'],
                 'resolveType' => 'FooObjectType',
             ],
-            'class' => Fixture\UnionType::class,
+            'class' => Native\UnionType::class,
         ];
 
         yield 'EnumType' => [
@@ -264,7 +264,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                     'name' => 'value',
                 ],
             ],
-            'class' => Fixture\EnumType::class,
+            'class' => Native\EnumType::class,
         ];
 
         yield 'ScalarType' => [
@@ -273,7 +273,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'ScalarType',
                 'description' => 'ScalarType description',
             ],
-            'class' => Fixture\ScalarType::class,
+            'class' => Native\ScalarType::class,
         ];
     }
 }
