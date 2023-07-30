@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Andi\GraphQL\Definition\Field;
+namespace Andi\GraphQL\Definition\Type;
 
 interface ParseValueAwareInterface
 {

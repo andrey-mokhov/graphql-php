@@ -8,6 +8,9 @@ use Andi\GraphQL\Attribute\EnumType;
 
 /**
  * Low priority description.
+ *
+ * @internal
+ * @psalm-internal Andi\Tests
  */
 #[EnumType(name: 'HiPriorityEnum', description: 'Hi priority description')]
 enum PriorityEnum

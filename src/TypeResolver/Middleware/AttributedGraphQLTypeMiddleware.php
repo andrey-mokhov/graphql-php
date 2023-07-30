@@ -7,15 +7,17 @@ namespace Andi\GraphQL\TypeResolver\Middleware;
 use Andi\GraphQL\Attribute;
 use Andi\GraphQL\Common\DefinitionAwareTrait;
 use Andi\GraphQL\Common\InputObjectFactory;
+use Andi\GraphQL\Common\LazyTypeResolver;
 use Andi\GraphQL\Common\ResolveType;
 use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
 use Andi\GraphQL\Common\LazyTypeIterator;
-use Andi\GraphQL\Definition\Field\ParseValueAwareInterface;
 use Andi\GraphQL\Definition\Type\FieldsAwareInterface;
 use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
 use Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface;
+use Andi\GraphQL\Definition\Type\ParseValueAwareInterface;
 use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
+use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\Type\DynamicObjectTypeInterface;
@@ -143,7 +145,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $config = [
             'name'        => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
-            'resolveType' => $this->container->get($attribute?->resolveType ?? ResolveType::class),
+            'resolveType' => $this->getResolveTypeFn($class, $attribute),
         ];
 
         $type = new InterfaceType($config, $this->objectFieldResolver);
@@ -151,6 +153,18 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $this->registerAdditionalFieldByMethods($type, $class, Attribute\InterfaceField::class);
 
         return $type;
+    }
+
+    private function getResolveTypeFn(ReflectionClass $class, ?Attribute\InterfaceType $attribute): callable
+    {
+        if (! $class->isInterface() && $class->isSubclassOf(ResolveTypeAwareInterface::class)) {
+            return new LazyTypeResolver($class->getMethod('resolveType')->getClosure(), $this->typeRegistry);
+        }
+
+        return new LazyTypeResolver(
+            $this->container->get($attribute?->resolveType ?? ResolveType::class),
+            $this->typeRegistry,
+        );
     }
 
     private function getTypeParseValue(ReflectionClass $class, ?Attribute\InputObjectType $attribute): callable

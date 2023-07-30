@@ -29,7 +29,7 @@ class UnionType implements UnionTypeInterface, ResolveTypeAwareInterface
         yield 'FooObjectType';
     }
 
-    public function resolveType(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?string
+    public static function resolveType(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?string
     {
         return 'FooObjectType';
     }

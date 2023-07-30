@@ -8,5 +8,5 @@ use GraphQL\Type\Definition as Webonyx;
 
 interface ResolveTypeAwareInterface
 {
-    public function resolveType(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?string;
+    public static function resolveType(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?string;
 }

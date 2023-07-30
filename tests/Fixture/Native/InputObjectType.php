@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Andi\Tests\GraphQL\Fixture\Native;
 
 use Andi\GraphQL\Definition\Field\InputObjectFieldInterface;
-use Andi\GraphQL\Definition\Field\ParseValueAwareInterface;
 use Andi\GraphQL\Definition\Type\InputObjectTypeInterface;
+use Andi\GraphQL\Definition\Type\ParseValueAwareInterface;
 use GraphQL\Type\Definition as Webonyx;
 
 /**

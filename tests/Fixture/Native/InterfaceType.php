@@ -57,7 +57,7 @@ class InterfaceType implements InterfaceTypeInterface, ResolveTypeAwareInterface
         };
     }
 
-    public function resolveType(mixed $value, mixed $context, ResolveInfo $info): ?string
+    public static function resolveType(mixed $value, mixed $context, ResolveInfo $info): ?string
     {
         return 'FooObjectType';
     }
