@@ -27,7 +27,7 @@ use Spiral\Attributes\ReaderInterface;
 #[UsesClass(InputObjectField::class)]
 #[UsesClass(LazyParserType::class)]
 #[UsesClass(NotFoundException::class)]
-class ReflectionPropertyMiddlewareTest extends TestCase
+final class ReflectionPropertyMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

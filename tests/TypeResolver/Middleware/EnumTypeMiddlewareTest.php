@@ -21,7 +21,7 @@ use Spiral\Attributes\Internal\NativeAttributeReader;
 
 #[CoversClass(EnumTypeMiddleware::class)]
 #[UsesClass(AbstractDefinition::class)]
-class EnumTypeMiddlewareTest extends TestCase
+final class EnumTypeMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Next::class)]
-class NextTest extends TestCase
+final class NextTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

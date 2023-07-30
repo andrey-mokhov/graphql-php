@@ -29,7 +29,7 @@ use Spiral\Attributes\ReaderInterface;
 #[UsesClass(LazyTypeByReflectionType::class)]
 #[UsesClass(LazyParserType::class)]
 #[UsesClass(InputObjectField::class)]
-class ReflectionMethodMiddlewareTest extends TestCase
+final class ReflectionMethodMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

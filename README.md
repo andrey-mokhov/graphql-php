@@ -17,6 +17,7 @@ release 0.1
 
 release 1.0
 - [ ] Unit tests
+- [ ] Functional tests
 - [x] implementation technical debt
 - [ ] Abstract classes for base definitions
   - [ ] ObjectType

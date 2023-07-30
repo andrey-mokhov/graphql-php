@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(WebonyxInputObjectFieldMiddleware::class)]
-class WebonyxInputObjectFieldMiddlewareTest extends TestCase
+final class WebonyxInputObjectFieldMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

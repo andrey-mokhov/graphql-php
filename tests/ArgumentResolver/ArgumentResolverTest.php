@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ArgumentResolver::class)]
 #[UsesClass(Next::class)]
 #[UsesClass(CantResolveArgumentResolver::class)]
-class ArgumentResolverTest extends TestCase
+final class ArgumentResolverTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

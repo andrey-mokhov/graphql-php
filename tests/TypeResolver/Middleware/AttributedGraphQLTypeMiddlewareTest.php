@@ -85,7 +85,7 @@ use Spiral\Core\Container;
 #[UsesClass(Attribute\InputObjectField::class)]
 #[UsesClass(InputObjectFactory::class)]
 #[UsesClass(InputObjectType::class)]
-class AttributedGraphQLTypeMiddlewareTest extends TestCase
+final class AttributedGraphQLTypeMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

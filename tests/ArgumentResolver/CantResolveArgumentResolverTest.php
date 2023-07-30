@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CantResolveArgumentResolver::class)]
-class CantResolveArgumentResolverTest extends TestCase
+final class CantResolveArgumentResolverTest extends TestCase
 {
     public function testInstanceOf(): void
     {

@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ArgumentConfigurationMiddleware::class)]
-class ArgumentConfigurationMiddlewareTest extends TestCase
+final class ArgumentConfigurationMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

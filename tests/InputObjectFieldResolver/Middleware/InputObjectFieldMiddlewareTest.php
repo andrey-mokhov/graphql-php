@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(InputObjectFieldMiddleware::class)]
 #[UsesClass(TypeRegistry::class)]
 #[UsesClass(LazyType::class)]
-class InputObjectFieldMiddlewareTest extends TestCase
+final class InputObjectFieldMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

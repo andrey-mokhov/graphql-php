@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(InputObjectFieldResolver::class)]
 #[UsesClass(CantResolveInputObjectFieldResolver::class)]
 #[UsesClass(Next::class)]
-class InputObjectFieldResolverTest extends TestCase
+final class InputObjectFieldResolverTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

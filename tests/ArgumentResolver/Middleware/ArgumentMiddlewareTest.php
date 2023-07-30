@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ArgumentMiddleware::class)]
 #[UsesClass(TypeRegistry::class)]
 #[UsesClass(LazyType::class)]
-class ArgumentMiddlewareTest extends TestCase
+final class ArgumentMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
