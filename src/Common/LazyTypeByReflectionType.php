@@ -39,10 +39,10 @@ class LazyTypeByReflectionType
         if ($this->type->isBuiltin()) {
             try {
                 $type = match ($this->type->getName()) {
-                    'int'    => $this->typeRegistry->get(Webonyx\IntType::class),
+                    'int' => $this->typeRegistry->get(Webonyx\IntType::class),
                     'string' => $this->typeRegistry->get(Webonyx\StringType::class),
-                    'bool'   => $this->typeRegistry->get(Webonyx\BooleanType::class),
-                    'float'  => $this->typeRegistry->get(Webonyx\FloatType::class),
+                    'bool', 'true', 'false'   => $this->typeRegistry->get(Webonyx\BooleanType::class),
+                    'float' => $this->typeRegistry->get(Webonyx\FloatType::class),
                 };
             } catch (UnhandledMatchError $exception) {
                 $message = 'Can\'t resolve GraphQL type from ReflectionType';
@@ -82,7 +82,7 @@ class LazyTypeByReflectionType
             if ($this->typeRegistry->has($name)) {
                 $gqlType = $this->typeRegistry->get($name);
 
-                if (! $gqlType instanceof Webonyx\Type) {
+                if (! $gqlType instanceof Webonyx\ObjectType) {
                     throw new CantResolveGraphQLTypeException('UnionType must contains only ObjectTypes');
                 }
 
@@ -97,7 +97,11 @@ class LazyTypeByReflectionType
         $name = implode('', $names) . 'UnionType';
 
         if ($this->typeRegistry->has($name)) {
-            return $this->typeRegistry->get($name);
+            $existsType = $this->typeRegistry->get($name);
+
+            return $this->type->allowsNull() || $allowsNull
+                ? $existsType
+                : Webonyx\Type::nonNull($existsType);
         }
 
         $unionType = new Webonyx\UnionType([
