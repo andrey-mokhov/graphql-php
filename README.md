@@ -16,7 +16,7 @@ release 0.1
 - [x] scalar Date type
 
 release 1.0
-- [ ] Unit tests
+- [x] Unit tests
 - [ ] Functional tests
 - [x] implementation technical debt
 - [ ] Abstract classes for base definitions
