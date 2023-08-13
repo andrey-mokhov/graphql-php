@@ -20,7 +20,7 @@ class Argument extends AbstractArgument implements DefaultValueAwareInterface
         ?string $description = null,
         mixed $defaultValue = null,
     ) {
-        if (null !== $description) {
+        if ($description) {
             $this->description = $description;
         }
 

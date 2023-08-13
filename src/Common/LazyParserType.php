@@ -25,6 +25,10 @@ final class LazyParserType
 
     public function __invoke(): Webonyx\Type
     {
+        if ($this->typeRegistry->has($this->type)) {
+            return $this->typeRegistry->get($this->type);
+        }
+
         return $this->getType(Parser::parseType($this->type));
     }
 

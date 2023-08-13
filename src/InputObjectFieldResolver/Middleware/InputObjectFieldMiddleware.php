@@ -22,7 +22,7 @@ final class InputObjectFieldMiddleware implements MiddlewareInterface
 
     public function process(mixed $field, InputObjectFieldResolverInterface $fieldResolver): Webonyx\InputObjectField
     {
-        if (! is_object($field) || ! $field instanceof InputObjectFieldInterface) {
+        if (! $field instanceof InputObjectFieldInterface) {
             return $fieldResolver->resolve($field);
         }
 

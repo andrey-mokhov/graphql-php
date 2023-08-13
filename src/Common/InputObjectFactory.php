@@ -63,7 +63,7 @@ final class InputObjectFactory
                 if ($reflection instanceof ReflectionProperty) {
                     $reflection->setValue($instance, $value);
                 } else {
-                    $reflection->invokeArgs($instance,$this->resolver->resolveArguments($reflection, [$value]));
+                    $reflection->invokeArgs($instance, $this->resolver->resolveArguments($reflection, [$value]));
                 }
             }
         }

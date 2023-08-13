@@ -9,13 +9,16 @@ release 0.1
   - [x] ObjectType resolver
   - [x] InputObjectType resolver
 - [x] Dynamic UnionType
-- [x] Atribute `QueryField` for any service methods
+- [x] Attribute `QueryField` for any service methods
 - [x] Attribute `MutationField` for any service methods
 - [x] Attribute `AdditionalField` for any service methods - add additional field to `ObjectType`, `InterfaceType`
 - [x] scalar DateTime type
 - [x] scalar Date type
 
 release 1.0
+- [ ] Unit tests
+- [ ] Functional tests
+- [x] implementation technical debt
 - [ ] Abstract classes for base definitions
   - [ ] ObjectType
   - [ ] InputObjectType
@@ -23,10 +26,8 @@ release 1.0
   - [ ] UnionType
   - [ ] EnumType
   - [x] ScalarType
-- [ ] implementation technical debt
-- [ ] UploadFile type
-- [ ] Unit tests
 - [ ] documentation and examples
+- [x] UploadFile type (see https://github.com/Ecodev/graphql-upload)
 
 release 1.1
 - [ ] Mockup types and fields

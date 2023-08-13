@@ -13,6 +13,8 @@ use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionMethod;
 use Spiral\Attributes\ReaderInterface;
 
@@ -54,7 +56,7 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
     private function getFieldName(ReflectionMethod $method, AbstractField $attribute): ?string
     {
-        if (null !== $attribute->name) {
+        if ($attribute->name) {
             return $attribute->name;
         }
 
@@ -67,22 +69,23 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         return lcfirst($name);
     }
 
-    /**
-     * @param ReflectionMethod $method
-     * @param AbstractField $attribute
-     *
-     * @return string|null
-     *
-     * @todo Extract description from annotation when attribute is not set.
-     */
     private function getFieldDescription(ReflectionMethod $method, AbstractField $attribute): ?string
     {
-        return $attribute->description;
+        if ($attribute->description) {
+            return $attribute->description;
+        }
+
+        if ($docComment = $method->getDocComment()) {
+            return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
+        }
+
+        return null;
+
     }
 
     private function getFieldType(ReflectionMethod $method, AbstractField $attribute): callable
     {
-        if (null !== $attribute->type) {
+        if ($attribute->type) {
             return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 
@@ -117,16 +120,21 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
     abstract protected function buildField(array $config, ReflectionMethod $method): Webonyx\FieldDefinition;
 
-    /**
-     * @param ReflectionMethod $method
-     * @param AbstractField $attribute
-     *
-     * @return string|null
-     *
-     * @todo Extract deprecation reason from annotation when attribute is not set
-     */
     private function getFieldDeprecationReason(ReflectionMethod $method, AbstractField $attribute): ?string
     {
-        return $attribute->deprecationReason;
+        if ($attribute->deprecationReason) {
+            return $attribute->deprecationReason;
+        }
+
+        if ($docComment = $method->getDocComment()) {
+            $docBlock = DocBlockFactory::createInstance()->create($docComment);
+            foreach ($docBlock->getTags() as $tag) {
+                if ($tag instanceof Deprecated) {
+                    return (string) $tag->getDescription() ?: null;
+                }
+            }
+        }
+
+        return null;
     }
 }

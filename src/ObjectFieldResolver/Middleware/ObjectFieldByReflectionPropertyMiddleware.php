@@ -11,6 +11,8 @@ use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionProperty;
 use Spiral\Attributes\ReaderInterface;
 
@@ -49,22 +51,22 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
             ?? $property->getName();
     }
 
-    /**
-     * @param ReflectionProperty $property
-     * @param ObjectField|null $attribute
-     *
-     * @return string|null
-     *
-     * @todo Extract description from annotation when attribute is not set.
-     */
     private function getFieldDescription(ReflectionProperty $property, ?ObjectField $attribute): ?string
     {
-        return $attribute?->description;
+        if ($attribute?->description) {
+            return $attribute->description;
+        }
+
+        if ($docComment = $property->getDocComment()) {
+            return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
+        }
+
+        return null;
     }
 
     private function getFieldType(ReflectionProperty $property, ?ObjectField $attribute): callable
     {
-        if (null !== $attribute?->type) {
+        if ($attribute?->type) {
             return new LazyParserType($attribute->type, $this->typeRegistry);
         }
 
@@ -89,16 +91,22 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
         };
     }
 
-    /**
-     * @param ReflectionProperty $property
-     * @param ObjectField|null $attribute
-     *
-     * @return string|null
-     *
-     * @todo Extract deprecation reason from annotation when attribute is not set
-     */
     private function getFieldDeprecationReason(ReflectionProperty $property, ?ObjectField $attribute): ?string
     {
-        return $attribute?->deprecationReason;
+        if ($attribute?->deprecationReason) {
+            return $attribute->deprecationReason;
+        }
+
+        if ($docComment = $property->getDocComment()) {
+            $docBlock = DocBlockFactory::createInstance(['property-deprecated' => Deprecated::class])
+                ->create($docComment);
+            foreach ($docBlock->getTags() as $tag) {
+                if ($tag instanceof Deprecated) {
+                    return (string) $tag->getDescription() ?: null;
+                }
+            }
+        }
+
+        return null;
     }
 }
