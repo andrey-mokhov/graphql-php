@@ -9,7 +9,7 @@ use Andi\GraphQL\TypeRegistryInterface;
 final class LazyTypeIterator
 {
     /**
-     * @var callable
+     * @var pure-callable(): iterable
      */
     private readonly mixed $types;
 
