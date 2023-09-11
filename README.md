@@ -1,5 +1,8 @@
 # GraphQL library
 
+Russian [documentations](docs/ru/index.md)
+
+# roadmap
 release 0.1
 - [x] Type resolver
   - [x] UnionType resolver
