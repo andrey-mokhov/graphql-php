@@ -1,5 +1,5 @@
 {
-    "name": "andi/graphql-php",
+    "name": "andi-lab/graphql-php",
     "description": "GraphQL library for PHP",
     "type": "library",
     "require": {
