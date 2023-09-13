@@ -10,7 +10,6 @@ use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use GraphQL\Type\Definition as Webonyx;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use phpDocumentor\Reflection\DocBlockFactory;
-use ReflectionEnum;
 use Spiral\Attributes\ReaderInterface;
 
 final class EnumTypeMiddleware implements MiddlewareInterface
@@ -26,14 +25,18 @@ final class EnumTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        if (! $type instanceof ReflectionEnum) {
-            return $typeResolver->resolve($type);
+        $enum = is_string($type) && enum_exists($type)
+            ? new \ReflectionEnum($type)
+            : $type;
+
+        if ($type instanceof \ReflectionEnum) {
+            return $this->buildEnumType($enum, $this->reader->firstClassMetadata($enum, Attribute\EnumType::class));
         }
 
-        return $this->buildEnumType($type, $this->reader->firstClassMetadata($type, Attribute\EnumType::class));
+        return $typeResolver->resolve($type);
     }
 
-    private function buildEnumType(ReflectionEnum $class, ?Attribute\EnumType $attribute): Webonyx\EnumType
+    private function buildEnumType(\ReflectionEnum $class, ?Attribute\EnumType $attribute): Webonyx\EnumType
     {
         $config = [
             'name'        => $this->getTypeName($class, $attribute),
