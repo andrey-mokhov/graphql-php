@@ -6,6 +6,7 @@ namespace Andi\GraphQL\Definition\Field;
 
 interface TypeAwareInterface
 {
+    final public const NONE             = 0;
     final public const IS_REQUIRED      = 0b0001;
     final public const IS_LIST          = 0b0010;
     final public const ITEM_IS_REQUIRED = 0b0110;

@@ -9,13 +9,19 @@ use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
 
 abstract class AbstractArgument implements ArgumentInterface
 {
-    protected readonly string $name;
+    private readonly string $description;
 
-    protected readonly string $description;
+    public function __construct(
+        private readonly string $name,
+        private readonly string $type,
+        private readonly int $typeMode = 0,
+        ?string $description = null,
+    ) {
+        if (null !== $description) {
+            $this->description = $description;
+        }
+    }
 
-    protected readonly string $type;
-
-    protected readonly int $typeMode;
 
     public function getName(): string
     {

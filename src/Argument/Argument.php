@@ -5,28 +5,36 @@ declare(strict_types=1);
 namespace Andi\GraphQL\Argument;
 
 use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
+use Andi\GraphQL\Definition\Field\DeprecationReasonAwareInterface;
 use ReflectionProperty;
 
-class Argument extends AbstractArgument implements DefaultValueAwareInterface
+class Argument extends AbstractArgument implements DefaultValueAwareInterface, DeprecationReasonAwareInterface
 {
-    protected readonly string $description;
-
-    protected readonly mixed $defaultValue;
+    private readonly string $deprecationReason;
+    private readonly mixed $defaultValue;
 
     public function __construct(
-        protected readonly string $name,
-        protected readonly string $type,
-        protected readonly int $typeMode = 0,
+        string $name,
+        string $type,
+        int $typeMode = 0,
         ?string $description = null,
+        ?string $deprecationReason = null,
         mixed $defaultValue = null,
     ) {
-        if ($description) {
-            $this->description = $description;
+        parent::__construct($name, $type, $typeMode, $description);
+
+        if (null !== $deprecationReason) {
+            $this->deprecationReason = $deprecationReason;
         }
 
-        if (func_num_args() === 5) {
+        if (func_num_args() >= 6) {
             $this->defaultValue = $defaultValue;
         }
+    }
+
+    public function getDeprecationReason(): ?string
+    {
+        return $this->deprecationReason ?? null;
     }
 
     public function hasDefaultValue(): bool

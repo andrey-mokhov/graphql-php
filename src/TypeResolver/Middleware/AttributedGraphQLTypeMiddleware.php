@@ -163,10 +163,9 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
             return new LazyTypeResolver($class->getMethod('resolveType')->getClosure(), $this->typeRegistry);
         }
 
-        return new LazyTypeResolver(
-            $this->container->get($attribute?->resolveType ?? ResolveType::class),
-            $this->typeRegistry,
-        );
+        return $attribute?->resolveType
+            ? new LazyTypeResolver($this->container->get($attribute->resolveType), $this->typeRegistry)
+            : new ResolveType($this->typeRegistry);
     }
 
     private function getTypeParseValue(\ReflectionClass $class, ?Attribute\InputObjectType $attribute): callable
