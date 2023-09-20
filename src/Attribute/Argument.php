@@ -22,7 +22,7 @@ final class Argument extends AbstractDefinition
     ) {
         parent::__construct($name, $description);
 
-        if (func_num_args() === 5) {
+        if (func_num_args() >= 5) {
             $this->defaultValue = $defaultValue;
         }
     }

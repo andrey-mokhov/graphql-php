@@ -15,12 +15,13 @@ final class ArgumentTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $argument = new Argument('name', 'type', 123, 'description', 'defaultValue');
+        $argument = new Argument('name', 'type', 123, 'description', 'deprecationReason', 'defaultValue');
 
         self::assertSame('name', $argument->getName());
         self::assertSame('type', $argument->getType());
         self::assertSame(123, $argument->getTypeMode());
         self::assertSame('description', $argument->getDescription());
+        self::assertSame('deprecationReason', $argument->getDeprecationReason());
         self::assertSame('defaultValue', $argument->getDefaultValue());
         self::assertTrue($argument->hasDefaultValue());
     }
