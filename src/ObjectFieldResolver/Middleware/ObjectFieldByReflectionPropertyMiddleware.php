@@ -12,6 +12,7 @@ use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionProperty;
 use Spiral\Attributes\ReaderInterface;
@@ -57,7 +58,16 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
             return $attribute->description;
         }
 
-        if ($docComment = $property->getDocComment()) {
+        if ($property->isPromoted()) {
+            if ($docComment = $property->getDeclaringClass()->getConstructor()->getDocComment()) {
+                $docBlock = DocBlockFactory::createInstance(['psalm-param' => Param::class])->create($docComment);
+                foreach ($docBlock->getTags() as $tag) {
+                    if ($tag instanceof Param && $tag->getVariableName() === $property->getName()) {
+                        return (string) $tag->getDescription() ?: null;
+                    }
+                }
+            }
+        } elseif ($docComment = $property->getDocComment()) {
             return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
         }
 
