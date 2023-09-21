@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\Field;
 
+use Andi\GraphQL\Argument\Argument;
+use Andi\GraphQL\Definition\Field\ArgumentInterface;
 use Andi\GraphQL\Definition\Field\ArgumentsAwareInterface;
 use Andi\GraphQL\Definition\Field\ObjectFieldInterface;
+use GraphQL\Type\Definition as Webonyx;
 
 abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwareInterface
 {
@@ -48,6 +51,38 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
 
     public function getArguments(): iterable
     {
-        return $this->arguments ?? [];
+        foreach ($this->arguments ?? [] as $name => $argument) {
+            if ($argument instanceof ArgumentInterface) {
+                yield $argument;
+            } elseif (is_string($argument)) {
+                yield new Argument($name, $argument);
+            } elseif (is_array($argument)) {
+                if (is_string($name)) {
+                    $argument['name'] ??= $name;
+                }
+
+                if (! isset($argument['name'], $argument['type'])) {
+                    yield $argument;
+                }
+
+                if ($argument['type'] instanceof Webonyx\Type) {
+                    yield $argument;
+                }
+
+                $parameters = [
+                    'name' => $argument['name'],
+                    'type' => $argument['type'],
+                    'typeMode' => $argument['typeMode'] ?? 0,
+                    'description' => $argument['description'] ?? null,
+                    'deprecationReason'=> $argument['deprecationReason'] ?? null,
+                ];
+
+                if (isset($argument['defaultValue']) || array_key_exists('defaultValue', $argument)) {
+                    $parameters['defaultValue'] = $argument['defaultValue'];
+                }
+
+                yield new Argument(...$parameters);
+            }
+        }
     }
 }

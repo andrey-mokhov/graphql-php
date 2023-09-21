@@ -6,7 +6,6 @@ namespace Andi\GraphQL\Argument;
 
 use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
 use Andi\GraphQL\Definition\Field\DeprecationReasonAwareInterface;
-use ReflectionProperty;
 
 class Argument extends AbstractArgument implements DefaultValueAwareInterface, DeprecationReasonAwareInterface
 {
@@ -39,7 +38,8 @@ class Argument extends AbstractArgument implements DefaultValueAwareInterface, D
 
     public function hasDefaultValue(): bool
     {
-        return (new ReflectionProperty($this, 'defaultValue'))->isInitialized($this);
+        return isset($this->defaultValue)
+            || (new \ReflectionProperty($this, 'defaultValue'))->isInitialized($this);
     }
 
     public function getDefaultValue(): mixed
