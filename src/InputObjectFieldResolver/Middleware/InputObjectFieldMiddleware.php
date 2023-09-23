@@ -6,6 +6,7 @@ namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\Common\LazyType;
 use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
+use Andi\GraphQL\Definition\Field\DeprecationReasonAwareInterface;
 use Andi\GraphQL\Definition\Field\InputObjectFieldInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -29,9 +30,12 @@ final class InputObjectFieldMiddleware implements MiddlewareInterface
         $config = [
             'name'              => $field->getName(),
             'description'       => $field->getDescription(),
-            'deprecationReason' => $field->getDeprecationReason(),
             'type'              => new LazyType($field, $this->typeRegistry),
         ];
+
+        if ($field instanceof DeprecationReasonAwareInterface) {
+            $config['deprecationReason'] = $field->getDeprecationReason();
+        }
 
         if ($field instanceof DefaultValueAwareInterface && $field->hasDefaultValue()) {
             $config['defaultValue'] = $field->getDefaultValue();
