@@ -6,6 +6,7 @@ namespace Andi\Tests\GraphQL\InputObjectFieldResolver\Middleware;
 
 use Andi\GraphQL\Common\LazyType;
 use Andi\GraphQL\Definition\Field\DefaultValueAwareInterface;
+use Andi\GraphQL\Definition\Field\DeprecationReasonAwareInterface;
 use Andi\GraphQL\Definition\Field\InputObjectFieldInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\InputObjectFieldResolver\Middleware\InputObjectFieldMiddleware;
@@ -91,8 +92,7 @@ final class InputObjectFieldMiddlewareTest extends TestCase
                 'deprecationReason' => null,
                 'type' => Webonyx\Type::int(),
             ],
-            'field' => new class implements InputObjectFieldInterface {
-
+            'field' => new class implements InputObjectFieldInterface, DeprecationReasonAwareInterface {
                 public function getName(): string
                 {
                     return 'foo';
@@ -133,8 +133,11 @@ final class InputObjectFieldMiddlewareTest extends TestCase
                 'type' => Webonyx\Type::int(),
                 'defaultValue' => 123,
             ],
-            'field' => new class implements InputObjectFieldInterface, DefaultValueAwareInterface {
-
+            'field' => new class implements
+                InputObjectFieldInterface,
+                DeprecationReasonAwareInterface,
+                DefaultValueAwareInterface
+            {
                 public function getName(): string
                 {
                     return 'foo';

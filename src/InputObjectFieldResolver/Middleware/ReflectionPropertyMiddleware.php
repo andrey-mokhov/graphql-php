@@ -12,6 +12,7 @@ use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionProperty;
 use Spiral\Attributes\ReaderInterface;
@@ -54,19 +55,22 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
             ?? $property->getName();
     }
 
-    /**
-     * @param ReflectionProperty $property
-     * @param InputObjectField|null $attribute
-     *
-     * @return string|null
-     */
     private function getFieldDescription(ReflectionProperty $property, ?InputObjectField $attribute): ?string
     {
         if ($attribute?->description) {
             return $attribute->description;
         }
 
-        if ($docComment = $property->getDocComment()) {
+        if ($property->isPromoted()) {
+            if ($docComment = $property->getDeclaringClass()->getConstructor()->getDocComment()) {
+                $docBlock = DocBlockFactory::createInstance(['psalm-param' => Param::class])->create($docComment);
+                foreach ($docBlock->getTags() as $tag) {
+                    if ($tag instanceof Param && $tag->getVariableName() === $property->getName()) {
+                        return (string) $tag->getDescription() ?: null;
+                    }
+                }
+            }
+        } elseif ($docComment = $property->getDocComment()) {
             return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
         }
 
