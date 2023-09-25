@@ -7,7 +7,6 @@ namespace Andi\GraphQL\Common;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition as Webonyx;
-use ReflectionClass;
 
 final class ResolveType
 {
@@ -22,10 +21,10 @@ final class ResolveType
             return null;
         }
 
-        return $this->getObjectType(new ReflectionClass($value));
+        return $this->getObjectType(new \ReflectionClass($value));
     }
 
-    private function getObjectType(ReflectionClass $class): ?Webonyx\ObjectType
+    private function getObjectType(\ReflectionClass $class): ?Webonyx\ObjectType
     {
         $name = $class->getName();
 
