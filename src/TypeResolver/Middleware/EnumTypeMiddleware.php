@@ -45,7 +45,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         ];
 
         foreach ($class->getCases() as $case) {
-            $caseAttribute = $this->reader->firstConstantMetadata($case, Attribute\EnumCase::class);
+            $caseAttribute = $this->reader->firstConstantMetadata($case, Attribute\EnumValue::class);
             $config['values'][$this->getCaseName($case, $caseAttribute)] = [
                 'value' => $case->getValue(),
                 'description' => $this->getCaseDescription($case, $caseAttribute),
@@ -56,14 +56,14 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         return new Webonyx\EnumType($config);
     }
 
-    private function getCaseName(\ReflectionEnumUnitCase $case, ?Attribute\EnumCase $attribute): string
+    private function getCaseName(\ReflectionEnumUnitCase $case, ?Attribute\EnumValue $attribute): string
     {
         return null !== $attribute?->name
             ? $attribute->name
             : $case->getName();
     }
 
-    private function getCaseDescription(\ReflectionEnumUnitCase $case, ?Attribute\EnumCase $attribute): ?string
+    private function getCaseDescription(\ReflectionEnumUnitCase $case, ?Attribute\EnumValue $attribute): ?string
     {
         if ($attribute?->description) {
             return $attribute->description;
@@ -76,7 +76,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         return null;
     }
 
-    private function getCaseDeprecationReason(\ReflectionEnumUnitCase $case, ?Attribute\EnumCase $attribute): ?string
+    private function getCaseDeprecationReason(\ReflectionEnumUnitCase $case, ?Attribute\EnumValue $attribute): ?string
     {
         if ($attribute?->deprecationReason) {
             return $attribute->deprecationReason;
