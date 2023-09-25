@@ -45,18 +45,30 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         ];
 
         foreach ($class->getCases() as $case) {
-            $config['values'][$case->getName()] = [
+            $caseAttribute = $this->reader->firstConstantMetadata($case, Attribute\EnumCase::class);
+            $config['values'][$this->getCaseName($case, $caseAttribute)] = [
                 'value' => $case->getValue(),
-                'description' => $this->getCaseDescription($case),
-                'deprecationReason' => $this->getCaseDeprecationReason($case),
+                'description' => $this->getCaseDescription($case, $caseAttribute),
+                'deprecationReason' => $this->getCaseDeprecationReason($case, $caseAttribute),
             ];
         }
 
         return new Webonyx\EnumType($config);
     }
 
-    private function getCaseDescription(\ReflectionEnumUnitCase $case): ?string
+    private function getCaseName(\ReflectionEnumUnitCase $case, ?Attribute\EnumCase $attribute): string
     {
+        return null !== $attribute?->name
+            ? $attribute->name
+            : $case->getName();
+    }
+
+    private function getCaseDescription(\ReflectionEnumUnitCase $case, ?Attribute\EnumCase $attribute): ?string
+    {
+        if ($attribute?->description) {
+            return $attribute->description;
+        }
+
         if ($docComment = $case->getDocComment()) {
             return DocBlockFactory::createInstance()->create($docComment)->getSummary() ?: null;
         }
@@ -64,8 +76,12 @@ final class EnumTypeMiddleware implements MiddlewareInterface
         return null;
     }
 
-    private function getCaseDeprecationReason(\ReflectionEnumUnitCase $case): ?string
+    private function getCaseDeprecationReason(\ReflectionEnumUnitCase $case, ?Attribute\EnumCase $attribute): ?string
     {
+        if ($attribute?->deprecationReason) {
+            return $attribute->deprecationReason;
+        }
+
         if ($docComment = $case->getDocComment()) {
             $docBlock = DocBlockFactory::createInstance()->create($docComment);
             foreach ($docBlock->getTags() as $tag) {
