@@ -46,6 +46,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
 
         foreach ($class->getCases() as $case) {
             $caseAttribute = $this->reader->firstConstantMetadata($case, Attribute\EnumValue::class);
+
             $config['values'][$this->getCaseName($case, $caseAttribute)] = [
                 'value' => $case->getValue(),
                 'description' => $this->getCaseDescription($case, $caseAttribute),
