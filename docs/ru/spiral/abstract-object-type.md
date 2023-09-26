@@ -1,0 +1,1 @@
+# Абстрактный класс AbstractObjectType
