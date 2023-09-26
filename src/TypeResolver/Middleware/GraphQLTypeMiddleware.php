@@ -149,7 +149,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
-            $config['resolveType'] = new LazyTypeResolver($type->resolveType(...), $typeRegistry);
+            $config['resolveType'] = new LazyTypeResolver($type::resolveType(...), $typeRegistry);
         }
 
         return new Webonyx\UnionType($config);
