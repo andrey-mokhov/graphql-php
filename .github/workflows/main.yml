@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHP Unit tests
 
 on:
   push:
@@ -50,4 +50,4 @@ jobs:
 
       # Execution
       - name: Execute Tests
-        run: vendor/bin/phpunit --coverage-clover=coverage.clover
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage.clover
