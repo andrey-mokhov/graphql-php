@@ -13,7 +13,7 @@
     - [`EnumType`](enum-type.md)
     - [`UnionType`](union-type.md)
     - [`ScalarType`](scalar-type.md)
-6. Реестр GraphQL типов
+6. [Реестр GraphQL типов](type-registry.md)
 7. Расширение типов
    - ObjectType
    - InputObjectType
@@ -27,3 +27,6 @@
     - AbstractScalarType
 9. Загрузка файлов
 10. Разработка middleware слоев
+11. Дополнительные GraphQL типы
+    - `Date`
+    - `DateTime`
