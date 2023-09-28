@@ -129,6 +129,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
             $this->typeRegistry,
             $argumentResolver,
             $this->container,
+            $this->container,
         ));
         $objectFieldResolver->pipe(new ObjectFieldResolverMiddleware\ObjectFieldByReflectionPropertyMiddleware(
             $reader,
@@ -138,6 +139,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
             $reader,
             $this->typeRegistry,
             $argumentResolver,
+            $this->container,
             $this->container,
         ));
 

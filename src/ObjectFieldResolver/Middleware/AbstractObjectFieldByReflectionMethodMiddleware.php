@@ -11,6 +11,7 @@ use GraphQL\Type\Definition as Webonyx;
 use ReflectionMethod;
 use Spiral\Attributes\ReaderInterface;
 use Spiral\Core\InvokerInterface;
+use Spiral\Core\ScopeInterface;
 
 abstract class AbstractObjectFieldByReflectionMethodMiddleware extends AbstractFieldByReflectionMethodMiddleware
 {
@@ -18,6 +19,7 @@ abstract class AbstractObjectFieldByReflectionMethodMiddleware extends AbstractF
         ReaderInterface $reader,
         TypeRegistryInterface $typeRegistry,
         ArgumentResolverInterface $argumentResolver,
+        private readonly ScopeInterface $scope,
         private readonly InvokerInterface $invoker,
     ) {
         parent::__construct($reader, $typeRegistry, $argumentResolver);
@@ -31,6 +33,7 @@ abstract class AbstractObjectFieldByReflectionMethodMiddleware extends AbstractF
             $config,
             $method->getName(),
             $iterator->getReturn(),
+            $this->scope,
             $this->invoker,
         );
     }

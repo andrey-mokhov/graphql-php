@@ -7,6 +7,7 @@ namespace Andi\GraphQL\Field;
 use Andi\GraphQL\Common\ResolverArguments;
 use GraphQL\Type\Definition as Webonyx;
 use Spiral\Core\InvokerInterface;
+use Spiral\Core\ScopeInterface;
 
 final class OuterObjectField extends Webonyx\FieldDefinition
 {
@@ -15,6 +16,7 @@ final class OuterObjectField extends Webonyx\FieldDefinition
      * @param class-string $class
      * @param string $method
      * @param array<string,string> $argumentsMap
+     * @param ScopeInterface $scope
      * @param InvokerInterface $invoker
      */
     public function __construct(
@@ -22,6 +24,7 @@ final class OuterObjectField extends Webonyx\FieldDefinition
         private readonly string $class,
         private readonly string $method,
         private readonly array $argumentsMap,
+        private readonly ScopeInterface $scope,
         private readonly InvokerInterface $invoker,
     ) {
         $config['resolve'] = $this->resolve(...);
@@ -48,9 +51,9 @@ final class OuterObjectField extends Webonyx\FieldDefinition
             $parameters[$this->argumentsMap[$name] ?? $name] = $value;
         }
 
-        return $this->invoker->invoke(
-            [$this->class, $this->method],
-            ['resolverArguments' => new ResolverArguments($object, $args, $context, $info)] + $parameters,
+        return $this->scope->runScope(
+            [ResolverArguments::class => new ResolverArguments($object, $args, $context, $info)],
+            fn () => $this->invoker->invoke([$this->class, $this->method], $parameters),
         );
     }
 }
