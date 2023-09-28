@@ -38,6 +38,7 @@ release 1.0
   - [ ] EnumType
   - [x] ScalarType
 - [ ] documentation and examples
+- [ ] rootValue & context resolve via callable; add scope call
 - [x] extract type's properties description  from  contructor's docBlock
 - [x] UploadFile type (see https://github.com/Ecodev/graphql-upload)
 

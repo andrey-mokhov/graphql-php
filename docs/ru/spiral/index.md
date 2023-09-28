@@ -14,10 +14,7 @@
     - [`UnionType`](union-type.md)
     - [`ScalarType`](scalar-type.md)
 6. [Реестр GraphQL типов](type-registry.md)
-7. Расширение типов
-   - ObjectType
-   - InputObjectType
-   - InterfaceType
+7. [Расширение типов](additional-field.md) `ObjectType` и `InterfaceType`
 8. Использование абстрактных классов
     - AbstractObjectType
     - AbstractInputObjectType

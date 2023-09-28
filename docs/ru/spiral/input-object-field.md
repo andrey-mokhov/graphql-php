@@ -3,7 +3,6 @@
 Определение поля объектного GraphQL типа возможно:
 - с помошью атрибута `Andi\GraphQL\Attribute\InputObjectField` ([ссылка](#input-object-field-via-attribute));
 - путем реализации интерфейса `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` ([ссылка](#input-object-field-via-interface));
-- с помощью атрибута `Andi\GraphQL\Attribute\AdditionalField` ([ссылка](additional-field.md)).
 
 ## <a id="input-object-field-via-attribute">Определение с помощью атрибута</a>
 
