@@ -7,7 +7,7 @@ namespace Andi\GraphQL\Attribute;
 use Attribute;
 use Spiral\Attributes\NamedArgumentConstructor;
 
-#[Attribute(Attribute::TARGET_METHOD), NamedArgumentConstructor]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE), NamedArgumentConstructor]
 final class AdditionalField extends AbstractField
 {
     public function __construct(

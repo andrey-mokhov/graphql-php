@@ -32,6 +32,7 @@ use PHPUnit\Framework\TestCase;
 use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Attributes\ReaderInterface;
 use Spiral\Core\InvokerInterface;
+use Spiral\Core\ScopeInterface;
 
 #[CoversClass(AbstractOuterObjectFieldByReflectionMethodMiddleware::class)]
 #[CoversClass(AbstractFieldByReflectionMethodMiddleware::class)]
@@ -57,6 +58,8 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
 
     private ReaderInterface $reader;
 
+    private ScopeInterface $scope;
+
     private InvokerInterface $invoker;
 
     protected function setUp(): void
@@ -71,6 +74,7 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
             $this->reader,
             $this->typeRegistry,
             $argumentResolver,
+            $this->scope = \Mockery::mock(ScopeInterface::class),
             $this->invoker = \Mockery::mock(InvokerInterface::class),
         );
 
