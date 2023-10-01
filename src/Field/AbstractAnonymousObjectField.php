@@ -10,8 +10,8 @@ namespace Andi\GraphQL\Field;
  */
 abstract class AbstractAnonymousObjectField extends AbstractObjectField
 {
-    protected readonly mixed $resolve;
-    protected readonly mixed $complexity;
+    protected readonly mixed $resolveFn;
+    protected readonly mixed $complexityFn;
 
     public function __construct(
         string $name,
@@ -36,11 +36,11 @@ abstract class AbstractAnonymousObjectField extends AbstractObjectField
         }
 
         if (null !== $resolve) {
-            $this->resolve = $resolve;
+            $this->resolveFn = $resolve;
         }
 
         if (null !== $complexity) {
-            $this->complexity = $complexity;
+            $this->complexityFn = $complexity;
         }
     }
 }

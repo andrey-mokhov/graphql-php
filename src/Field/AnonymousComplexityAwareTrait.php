@@ -10,10 +10,13 @@ namespace Andi\GraphQL\Field;
  */
 trait AnonymousComplexityAwareTrait
 {
-    protected readonly mixed $complexity;
+    /**
+     * @var callable
+     */
+    protected readonly mixed $complexityFn;
 
     public function complexity(int $childrenComplexity, array $args): int
     {
-        return call_user_func($this->complexity, $childrenComplexity, $args);
+        return call_user_func($this->complexityFn, $childrenComplexity, $args);
     }
 }
