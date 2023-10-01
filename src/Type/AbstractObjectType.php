@@ -35,41 +35,15 @@ abstract class AbstractObjectType extends AbstractType implements
 
     public function getFields(): iterable
     {
-        foreach ($this->fields as $name => $field) {
+        foreach ($this->fields ?? [] as $name => $field) {
             if ($field instanceof Webonyx\FieldDefinition || $field instanceof ObjectFieldInterface) {
                 yield $field;
 
                 continue;
             }
 
-            $fieldName = $field['name'] ?? $name;
-
-            if (! is_string($fieldName)) {
-                throw new CantResolveObjectFieldException('Can\'t resolve ObjectField configuration: undefined name');
-            }
-
-            if (is_string($field)) {
-                yield $this->makeObjectField($fieldName, ['type' => $field]);
-
-                continue;
-            }
-
-            if (is_array($field)) {
-                if (! isset($field['type']) || ! is_string($field['type'])) {
-                    throw new CantResolveObjectFieldException(
-                        'Can\'t resolve ObjectField configuration: undefined type',
-                    );
-                }
-
-                if (isset($field['resolve'], $field['complexity'])) {
-                    yield $this->makeObjectFieldWithBoth($fieldName, $field);
-                } elseif (isset($field['resolve'])) {
-                    yield $this->makeObjectFieldWithResolve($fieldName, $field);
-                } elseif (isset($field['complexity'])) {
-                    yield $this->makeObjectFieldWithComplexity($fieldName, $field);
-                } else {
-                    yield $this->makeObjectField($fieldName, $field);
-                }
+            if (is_string($field) || is_array($field)) {
+                yield $this->getObjectField($name, $field);
 
                 continue;
             }
@@ -92,6 +66,41 @@ abstract class AbstractObjectType extends AbstractType implements
         $this->additionalFields[] = $field;
 
         return $this;
+    }
+
+    private function getObjectField(int|string $name, string|array $field): AbstractObjectField
+    {
+        $fieldName = $field['name'] ?? $name;
+
+        if (! is_string($fieldName)) {
+            throw new CantResolveObjectFieldException('Can\'t resolve ObjectField configuration: undefined name');
+        }
+
+        if (is_string($field)) {
+            return $this->makeObjectField($fieldName, ['type' => $field]);
+        }
+
+        if (is_array($field)) {
+            if (! isset($field['type']) || ! is_string($field['type'])) {
+                throw new CantResolveObjectFieldException(
+                    'Can\'t resolve ObjectField configuration: undefined type',
+                );
+            }
+
+            if (isset($field['resolve'], $field['complexity'])) {
+                return $this->makeObjectFieldWithBoth($fieldName, $field);
+            }
+
+            if (isset($field['resolve'])) {
+                return $this->makeObjectFieldWithResolve($fieldName, $field);
+            }
+
+            if (isset($field['complexity'])) {
+                return $this->makeObjectFieldWithComplexity($fieldName, $field);
+            }
+
+            return $this->makeObjectField($fieldName, $field);
+        }
     }
 
     private function makeObjectField(string $name, array $field): AbstractObjectField
@@ -168,7 +177,7 @@ abstract class AbstractObjectType extends AbstractType implements
         if (is_string($callable)) {
             try {
                 $method = str_contains($callable, '::')
-                    ? new \ReflectionMethod($callable)
+                    ? new \ReflectionMethod(...explode('::', $callable, 2))
                     : new \ReflectionMethod($this, $callable);
             } catch (\ReflectionException $exception) {
                 throw new CantResolveObjectFieldException(

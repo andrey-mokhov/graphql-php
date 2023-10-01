@@ -12,10 +12,13 @@ use GraphQL\Type\Definition as Webonyx;
  */
 trait AnonymousResolveAwareTrait
 {
-    protected readonly mixed $resolve;
+    /**
+     * @var callable
+     */
+    protected readonly mixed $resolveFn;
 
     public function resolve(mixed $objectValue, array $args, mixed $context, Webonyx\ResolveInfo $info): mixed
     {
-        return call_user_func($this->resolve, $objectValue, $args, $context, $info);
+        return call_user_func($this->resolveFn, $objectValue, $args, $context, $info);
     }
 }
