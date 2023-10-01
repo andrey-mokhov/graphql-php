@@ -16,7 +16,7 @@
 6. [Реестр GraphQL типов](type-registry.md)
 7. [Расширение типов](additional-field.md) `ObjectType` и `InterfaceType`
 8. Использование абстрактных классов
-    - AbstractObjectType
+    - [`AbstractObjectType`](abstract-object-type.md)
     - AbstractInputObjectType
     - AbstractInterfaceType
     - AbstractEnumType

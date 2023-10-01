@@ -31,7 +31,7 @@ release 1.0
 - [ ] Functional tests
 - [x] implementation technical debt
 - [ ] Abstract classes for base definitions
-  - [ ] ObjectType
+  - [x] ObjectType
   - [ ] InputObjectType
   - [ ] Interface
   - [ ] UnionType
