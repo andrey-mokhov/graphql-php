@@ -53,7 +53,9 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
     {
         foreach ($this->arguments ?? [] as $name => $argument) {
             if ($argument instanceof ArgumentInterface) {
-                yield $argument;
+                yield $name => $argument;
+            } elseif ($argument instanceof Webonyx\Type) {
+                yield $name => $argument;
             } elseif (is_string($argument)) {
                 yield new Argument($name, $argument);
             } elseif (is_array($argument)) {
@@ -62,11 +64,11 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
                 }
 
                 if (! isset($argument['name'], $argument['type'])) {
-                    yield $argument;
+                    yield $name => $argument;
                 }
 
                 if ($argument['type'] instanceof Webonyx\Type) {
-                    yield $argument;
+                    yield $name => $argument;
                 }
 
                 $parameters = [
@@ -81,7 +83,7 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
                     $parameters['defaultValue'] = $argument['defaultValue'];
                 }
 
-                yield new Argument(...$parameters);
+                yield $name => new Argument(...$parameters);
             }
         }
     }
