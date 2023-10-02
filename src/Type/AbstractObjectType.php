@@ -150,11 +150,11 @@ abstract class AbstractObjectType extends AbstractType implements
             return $callable;
         }
 
-        if (is_array($callable)) {
-            if (is_callable($callable)) {
-                return \Closure::fromCallable($callable);
-            }
+        if (is_callable($callable)) {
+            return \Closure::fromCallable($callable);
+        }
 
+        if (is_array($callable)) {
             if (! isset($callable[0], $callable[1])) {
                 throw new CantResolveObjectFieldException(
                     'Can\'t resolve ObjectField configuration: resolve must be callable',
