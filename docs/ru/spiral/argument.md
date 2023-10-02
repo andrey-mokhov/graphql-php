@@ -124,6 +124,55 @@ final class SimpleService
 >
 > В данном примере параметр `$logger` не будет отображен в GraphQL схеме, но будет доступен в методе.
 
+> :point_right: **Обратите внимание!!!** :point_left:
+>
+> При вычеслении значения поля вам может потребовать информация о том, с какими параметрами был вызван
+> резолвер поля (см. [параметр конфигурации `resolve`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options)).
+>
+> Укажите в вашем методе параметр с типом `Andi\GraphQL\Common\ResolverArguments` и вам будет доступна
+> требуемая информация:
+>
+> ```php
+> namespace App\GraphQL\Field;
+>
+> use Andi\GraphQL\Attribute\AdditionalField;
+> use Andi\GraphQL\Common\ResolverArguments;
+> use App\GraphQL\Type\User;
+> use App\GraphQL\Type\UserInterface;
+>
+> final class UpperCaseName
+> {
+>     #[AdditionalField(targetType: User::class)]
+>     #[AdditionalField(targetType: UserInterface::class)]
+>     public function upperCaseName(ResolverArguments $arguments): string
+>     {
+>         /** @var User $user */
+>         $user = $arguments->object;
+>
+>         return strtoupper($user->getDisplayName());
+>     }
+> }
+> ```
+>
+> В примере выше параметр метода `$arguments` содержит информацию о параметрах вызова резолвера.
+>
+> ```php
+> namespace Andi\GraphQL\Common;
+>
+> use GraphQL\Type\Definition as Webonyx;
+>
+> final class ResolverArguments
+> {
+>     public function __construct(
+>         public readonly mixed $object,
+>         public readonly array $args,
+>         public readonly mixed $context,
+>         public readonly Webonyx\ResolveInfo $info,
+>     ) {
+>     }
+> }
+> ```
+
 ## <a id="argument-via-interface">Определение аргумента с помощью интерфейса</a>
 
 Реализация интерфейса `Andi\GraphQL\Definition\Field\ArgumentInterface` может потребоваться

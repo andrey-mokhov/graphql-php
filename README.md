@@ -31,13 +31,14 @@ release 1.0
 - [ ] Functional tests
 - [x] implementation technical debt
 - [ ] Abstract classes for base definitions
-  - [ ] ObjectType
+  - [x] ObjectType
   - [ ] InputObjectType
   - [ ] Interface
   - [ ] UnionType
   - [ ] EnumType
   - [x] ScalarType
 - [ ] documentation and examples
+- [ ] rootValue & context resolve via callable; add scope call
 - [x] extract type's properties description  from  contructor's docBlock
 - [x] UploadFile type (see https://github.com/Ecodev/graphql-upload)
 
