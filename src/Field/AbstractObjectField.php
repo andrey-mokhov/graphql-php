@@ -12,6 +12,8 @@ use GraphQL\Type\Definition as Webonyx;
 
 abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwareInterface
 {
+    use FieldExtractorTrait;
+
     protected string $name;
 
     protected string $description;
@@ -52,10 +54,8 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
     public function getArguments(): iterable
     {
         foreach ($this->arguments ?? [] as $name => $argument) {
-            if ($argument instanceof ArgumentInterface) {
-                yield $name => $argument;
-            } elseif ($argument instanceof Webonyx\Type) {
-                yield $name => $argument;
+            if ($argument instanceof ArgumentInterface || $argument instanceof Webonyx\Type) {
+                yield $argument;
             } elseif (is_string($argument)) {
                 yield new Argument($name, $argument);
             } elseif (is_array($argument)) {
@@ -63,27 +63,7 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
                     $argument['name'] ??= $name;
                 }
 
-                if (! isset($argument['name'], $argument['type'])) {
-                    yield $name => $argument;
-                }
-
-                if ($argument['type'] instanceof Webonyx\Type) {
-                    yield $name => $argument;
-                }
-
-                $parameters = [
-                    'name' => $argument['name'],
-                    'type' => $argument['type'],
-                    'typeMode' => $argument['typeMode'] ?? 0,
-                    'description' => $argument['description'] ?? null,
-                    'deprecationReason'=> $argument['deprecationReason'] ?? null,
-                ];
-
-                if (isset($argument['defaultValue']) || array_key_exists('defaultValue', $argument)) {
-                    $parameters['defaultValue'] = $argument['defaultValue'];
-                }
-
-                yield $name => new Argument(...$parameters);
+                yield $this->extract($argument, Argument::class);
             }
         }
     }

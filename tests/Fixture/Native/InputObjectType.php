@@ -29,7 +29,6 @@ class InputObjectType implements InputObjectTypeInterface, ParseValueAwareInterf
     public function getFields(): iterable
     {
         yield new class implements InputObjectFieldInterface {
-
             public function getName(): string
             {
                 return 'field';
