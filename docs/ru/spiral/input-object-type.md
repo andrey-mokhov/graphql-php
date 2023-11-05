@@ -160,7 +160,7 @@ final class LoginRequest implements InputObjectTypeInterface
     </tr>
 </table>
 
-### Вспомогательные интерфейсы
+### <a id="input-object-type-interfaces">Вспомогательные интерфейсы</a>
 
 Для расширения возможностей входящих объектных GraphQL типов, вам может потребоваться реализация
 интерфейсов, перечисленных ниже.

@@ -17,7 +17,7 @@
 7. [Расширение типов](additional-field.md) `ObjectType` и `InterfaceType`
 8. Использование абстрактных классов
     - [`AbstractObjectType`](abstract-object-type.md)
-    - AbstractInputObjectType
+    - [`AbstractInputObjectType`](abstract-input-object-type.md)
     - AbstractInterfaceType
     - AbstractEnumType
     - AbstractUnionType
