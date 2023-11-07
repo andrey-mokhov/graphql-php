@@ -18,7 +18,7 @@
 8. Использование абстрактных классов
     - [`AbstractObjectType`](abstract-object-type.md)
     - [`AbstractInputObjectType`](abstract-input-object-type.md)
-    - AbstractInterfaceType
+    - [`AbstractInterfaceType`](abstract-interface-type.md)
     - AbstractEnumType
     - AbstractUnionType
     - AbstractScalarType

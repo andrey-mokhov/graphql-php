@@ -32,7 +32,7 @@ release 1.0
 - [ ] Abstract classes for base definitions
   - [x] ObjectType
   - [x] InputObjectType
-  - [ ] Interface
+  - [x] Interface
   - [ ] UnionType
   - [ ] EnumType
   - [x] ScalarType

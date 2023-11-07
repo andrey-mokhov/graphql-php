@@ -178,7 +178,7 @@ final class FullNameAwareInterface implements InterfaceTypeInterface
 > Интерфейсный тип по своей сигнатуре практически полностью совпадает в сигнатурой объектного типа.
 > Список полей описываются с использованием тех же интерфейсов.
 
-### Вспомогательные интерфейсы
+### <a id="interface-type-interfaces">Вспомогательные интерфейсы</a>
 
 <dl>
     <dt><a href="#resolve-type-aware-interface">ResolveTypeAwareInterface</a></dt>
@@ -209,7 +209,7 @@ final class FullNameAwareInterface implements InterfaceTypeInterface
         <td valign="top">
             Метод должен проанализировать структуру первого параметра <code>$value</code> и вернуть
             имя объектного GraphQL типа, ассоциированного с этой структурой. Допустимо краткое имя
-            объектного GraphQL типа или имя php-класса, реализующего cсоответствующий объектный тип.
+            объектного GraphQL типа или имя php-класса, реализующего соответствующий объектный тип.
         </td>
     </tr>
 </table>
