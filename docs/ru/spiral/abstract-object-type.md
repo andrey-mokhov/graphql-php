@@ -29,6 +29,8 @@ final class ExampleAbstractObjectType extends AbstractObjectType implements Reso
         ],
     ];
 
+    protected iterable $interfaces = [ExampleAbstractInterfaceType::class];
+
     private function getFirstname(User $user): string
     {
         return $user->getFirstname();
@@ -111,7 +113,7 @@ final class ExampleAbstractObjectType extends AbstractObjectType implements Reso
 [`InterfacesAwareInterface`](object-type.md#interfaces-aware-interface),
 [`DynamicObjectTypeInterface`](object-type.md#dynamic-object-type-interface).
 
-Для расширения возможностей объектного GraphQL тип, реализованного с помощью абстрактного класса
+Для расширения возможностей объектного GraphQL типа, реализованного с помощью абстрактного класса
 `AbstractObjectType`, вам может потребоваться реализация следующих интерфейсов:
 
 <dl>
@@ -330,8 +332,8 @@ $this->fields = [
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если параметр задан, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
-            причины будет указано значение данного параметра.
+            Если опция задана, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
+            причины будет указано значение данной опции.
         </td>
     </tr>
     <tr>
@@ -392,9 +394,9 @@ $this->fields = [
     </tr>
 </table>
 
-### <a id="field-arguments">Опция конфигурации `$arguments`</a>
+### <a id="field-arguments">Опция конфигурации `arguments`</a>
 
-Опция `$arguments` может иметь итерируемую структуру. Каждый элемент которой может быть:
+Опция `arguments` может иметь итерируемую структуру. Каждый элемент которой может быть:
 - экземпляром класса `ArgumentInterface`;
 - экземпляром класса, наследующего `Webonyx\Type`, где ключ определит имя аргумента, а значение его тип;
 - вида `'ключ' => 'значение'`, где ключ будет использован как имя аргумента, а значение - тип аргумента;
@@ -452,7 +454,7 @@ $this->fields = [
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если параметр задан, то в GraphQL схеме аргумент будет помечен устаревшим. В качестве
+            Если опция задана, то в GraphQL схеме аргумент будет помечен устаревшим. В качестве
             причины будет указано значение данной опции.
         </td>
     </tr>
