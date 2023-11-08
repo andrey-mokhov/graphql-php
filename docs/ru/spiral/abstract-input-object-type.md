@@ -104,7 +104,7 @@ $this->fields = [
     // экземпляром класса Webonyx\InputObjectField
     new Webonyx\InputObjectField([...]),
 
-    // экземпляом класса, реализующего интерфейс InputObjectFieldInterface
+    // экземпляром класса, реализующего интерфейс InputObjectFieldInterface
     new class implements InputObjectFieldInterface {...},
 
     // ключ => значение. Данная структура интерпретируюется следующим образом:

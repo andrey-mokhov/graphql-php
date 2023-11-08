@@ -2,6 +2,7 @@
     <a href="https://github.com/andrey-mokhov/graphql-php/actions"><img src="https://github.com/andrey-mokhov/graphql-php/workflows/build/badge.svg" /></a>
     <a href="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/?branch=master"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality" /></a>
     <a href="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/?branch=master"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/coverage.png?b=master" alt="Code Coverage" /></a>
+    <a href="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/build-status/master"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/build.png?b=master" alt="Build Status" /></a>
     <a href="https://scrutinizer-ci.com/code-intelligence"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/code-intelligence.svg?b=master" alt="Code Intelligence Status" /></a>
 </p>
 
@@ -34,7 +35,7 @@ release 1.0
   - [x] InputObjectType
   - [x] Interface
   - [ ] UnionType
-  - [ ] EnumType
+  - [x] EnumType
   - [x] ScalarType
 - [ ] documentation and examples
 - [ ] rootValue & context resolve via callable; add scope call

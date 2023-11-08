@@ -134,7 +134,7 @@ $this->fields = [
     // экземпляром класса Webonyx\FieldDefinition
     new Webonyx\FieldDefinition([...]),
 
-    // экземпляом класса, реализующего интерфейс ObjectFieldInterface
+    // экземпляром класса, реализующего интерфейс ObjectFieldInterface
     new class implements ObjectFieldInterface {...},
 
     // ключ => значение. Данная структура интерпретируюется следующим образом:
