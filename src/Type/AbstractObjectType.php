@@ -48,9 +48,7 @@ abstract class AbstractObjectType extends AbstractType implements
                 continue;
             }
 
-            throw new CantResolveObjectFieldException(
-                'Can\'t resolve ObjectField configuration: unknown field configuration',
-            );
+            throw new CantResolveObjectFieldException('Can\'t resolve ObjectField: wrong field configuration');
         }
 
         yield from $this->additionalFields;
@@ -73,7 +71,9 @@ abstract class AbstractObjectType extends AbstractType implements
         $fieldName = $field['name'] ?? $name;
 
         if (! is_string($fieldName)) {
-            throw new CantResolveObjectFieldException('Can\'t resolve ObjectField configuration: undefined name');
+            throw new CantResolveObjectFieldException(
+                'Can\'t resolve ObjectField: wrong configuration - undefined name',
+            );
         }
 
         if (is_string($field)) {
@@ -83,7 +83,7 @@ abstract class AbstractObjectType extends AbstractType implements
         if (is_array($field)) {
             if (! isset($field['type']) || ! is_string($field['type'])) {
                 throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField configuration: undefined type',
+                    'Can\'t resolve ObjectField: wrong configuration - undefined type',
                 );
             }
 
@@ -110,7 +110,7 @@ abstract class AbstractObjectType extends AbstractType implements
 
     private function makeObjectFieldWithResolve(string $name, array $field): AbstractObjectField
     {
-        $resolve = $this->makeClosure($field['resolve']);
+        $resolve = $this->makeClosure($field['resolve'], 'resolve');
 
         return new class($name, $field, $resolve) extends AbstractAnonymousObjectField implements
             ResolveAwareInterface
@@ -121,7 +121,7 @@ abstract class AbstractObjectType extends AbstractType implements
 
     private function makeObjectFieldWithComplexity(string $name, array $field): AbstractObjectField
     {
-        $complexity = $this->makeClosure($field['complexity']);
+        $complexity = $this->makeClosure($field['complexity'], 'complexity');
 
         return new class($name, $field, null, $complexity) extends AbstractAnonymousObjectField implements
             ComplexityAwareInterface
@@ -132,8 +132,8 @@ abstract class AbstractObjectType extends AbstractType implements
 
     private function makeObjectFieldWithBoth(string $name, array $field): AbstractObjectField
     {
-        $resolve = $this->makeClosure($field['resolve']);
-        $complexity = $this->makeClosure($field['complexity']);
+        $resolve = $this->makeClosure($field['resolve'], 'resolve');
+        $complexity = $this->makeClosure($field['complexity'], 'complexity');
 
         return new class($name, $field, $resolve, $complexity) extends AbstractAnonymousObjectField implements
             ResolveAwareInterface,
@@ -144,7 +144,7 @@ abstract class AbstractObjectType extends AbstractType implements
         };
     }
 
-    private function makeClosure($callable): \Closure
+    private function makeClosure($callable, string $option): \Closure
     {
         if ($callable instanceof \Closure) {
             return $callable;
@@ -156,16 +156,17 @@ abstract class AbstractObjectType extends AbstractType implements
 
         if (is_array($callable)) {
             if (! isset($callable[0], $callable[1])) {
-                throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField configuration: resolve must be callable',
-                );
+                throw new CantResolveObjectFieldException(sprintf(
+                    'Can\'t resolve ObjectField: wrong configuration - %s must be callable',
+                    $option
+                ));
             }
 
             try {
                 $method = new \ReflectionMethod($callable[0], $callable[1]);
             } catch (\ReflectionException $exception) {
                 throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField configuration: resolve must be callable',
+                    sprintf('Can\'t resolve ObjectField: wrong configuration - %s must be callable', $option),
                     $exception->getCode(),
                     $exception,
                 );
@@ -181,7 +182,7 @@ abstract class AbstractObjectType extends AbstractType implements
                     : new \ReflectionMethod($this, $callable);
             } catch (\ReflectionException $exception) {
                 throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField configuration: resolve must be callable',
+                    sprintf('Can\'t resolve ObjectField: wrong configuration - %s must be callable', $option),
                     $exception->getCode(),
                     $exception,
                 );
@@ -191,7 +192,7 @@ abstract class AbstractObjectType extends AbstractType implements
         }
 
         throw new CantResolveObjectFieldException(
-            'Can\'t resolve ObjectField configuration: resolve must be callable',
+            'Can\'t resolve ObjectField: wrong configuration - resolve must be callable',
         );
     }
 }

@@ -6,9 +6,10 @@ namespace Andi\GraphQL\Type;
 
 use Andi\GraphQL\Definition\Field\EnumValueInterface;
 use Andi\GraphQL\Definition\Type\EnumTypeInterface;
+use Andi\GraphQL\Exception\CantResolveEnumTypeException;
 use Andi\GraphQL\Field\EnumValue;
 
-class AbstractEnumType implements EnumTypeInterface
+abstract class AbstractEnumType implements EnumTypeInterface
 {
     protected string $name;
     protected string $description;
@@ -29,20 +30,23 @@ class AbstractEnumType implements EnumTypeInterface
         foreach ($this->values as $name => $value) {
             if ($value instanceof EnumValueInterface) {
                 yield $value;
-            } elseif (is_string($name)) {
-                if (is_array($value)) {
-                    yield new EnumValue(
-                        name: $name,
-                        value: $value['value'] ?? $name,
-                        description: $value['description'] ?? null,
-                        deprecationReason: $value['deprecationReason'] ?? null,
-                    );
-                } else {
-                    yield new EnumValue(name: $name, value: $value);
+            } elseif (is_array($value)) {
+                $valueName = $value['name'] ?? $name;
+                if (! is_string($valueName)) {
+                    throw new CantResolveEnumTypeException('Can\'t resolve EnumValue: wrong value configuration');
                 }
-
+                yield new EnumValue(
+                    name: $valueName,
+                    value: $value['value'] ?? $valueName,
+                    description: $value['description'] ?? null,
+                    deprecationReason: $value['deprecationReason'] ?? null,
+                );
+            } elseif (is_string($name)) {
+                yield new EnumValue(name: $name, value: $value);
             } elseif (is_string($value)) {
                 yield new EnumValue(name: $value, value: $value);
+            } else {
+                throw new CantResolveEnumTypeException('Can\'t resolve EnumValue: wrong value configuration');
             }
         }
     }

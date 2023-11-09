@@ -39,7 +39,7 @@ abstract class AbstractInterfaceType extends AbstractType implements InterfaceTy
             }
 
             throw new CantResolveObjectFieldException(
-                'Can\'t resolve ObjectField configuration: unknown field configuration',
+                'Can\'t resolve ObjectField: wrong field configuration',
             );
         }
 
@@ -58,7 +58,9 @@ abstract class AbstractInterfaceType extends AbstractType implements InterfaceTy
         $fieldName = $field['name'] ?? $name;
 
         if (! is_string($fieldName)) {
-            throw new CantResolveObjectFieldException('Can\'t resolve ObjectField configuration: undefined name');
+            throw new CantResolveObjectFieldException(
+                'Can\'t resolve ObjectField: wrong configuration - undefined name',
+            );
         }
 
         if (is_string($field)) {
@@ -68,7 +70,7 @@ abstract class AbstractInterfaceType extends AbstractType implements InterfaceTy
         if (is_array($field)) {
             if (! isset($field['type']) || ! is_string($field['type'])) {
                 throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField configuration: undefined type',
+                    'Can\'t resolve ObjectField: wrong configuration - undefined type',
                 );
             }
 

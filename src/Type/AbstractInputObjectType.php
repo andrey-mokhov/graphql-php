@@ -32,7 +32,7 @@ abstract class AbstractInputObjectType extends AbstractType implements InputObje
                 yield $this->extract($field, InputObjectField::class);
             } else {
                 throw new CantResolveInputObjectFieldException(
-                    'Can\'t resolve InputObjectField configuration: unknown field configuration',
+                    'Can\'t resolve InputObjectField: unknown field configuration',
                 );
             }
         }
