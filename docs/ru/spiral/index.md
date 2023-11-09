@@ -19,7 +19,7 @@
     - [`AbstractObjectType`](abstract-object-type.md)
     - [`AbstractInputObjectType`](abstract-input-object-type.md)
     - [`AbstractInterfaceType`](abstract-interface-type.md)
-    - AbstractEnumType
+    - [`AbstractEnumType`](abstract-enum-type.md)
     - AbstractUnionType
     - AbstractScalarType
 9. Загрузка файлов
