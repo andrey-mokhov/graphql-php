@@ -45,7 +45,7 @@ final class DateTime extends AbstractScalarType
 
         $dateTime = \DateTimeImmutable::createFromFormat('!Y-m-d', $str, new \DateTimeZone('UTC'))
             ?: \DateTimeImmutable::createFromFormat('!Y-m-d\\TH:i:s', $str, new \DateTimeZone('UTC'))
-                ?: \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $str);
+            ?: \DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, $str);
 
         $errors = \DateTimeImmutable::getLastErrors() ?: ['error_count' => 0, 'warnings' => []];
 
