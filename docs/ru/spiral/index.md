@@ -20,8 +20,8 @@
     - [`AbstractInputObjectType`](abstract-input-object-type.md)
     - [`AbstractInterfaceType`](abstract-interface-type.md)
     - [`AbstractEnumType`](abstract-enum-type.md)
-    - AbstractUnionType
-    - AbstractScalarType
+    - [`AbstractUnionType`](abstract-union-type.md)
+    - [`AbstractScalarType`](abstract-scalar-type.md)
 9. Загрузка файлов
 10. Разработка middleware слоев
 11. Дополнительные GraphQL типы
