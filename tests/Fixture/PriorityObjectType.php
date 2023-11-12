@@ -49,7 +49,7 @@ class PriorityObjectType implements
                 return Webonyx\StringType::class;
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return 0;
             }

@@ -12,7 +12,7 @@ trait FieldExtractorTrait
      * @param array{
      *     name: string,
      *     type: Webonyx\Type|string,
-     *     typeMode: int,
+     *     mode: int,
      *     description: string,
      *     deprecationReason: string,
      *     defaultValue: mixed
@@ -34,7 +34,7 @@ trait FieldExtractorTrait
         $parameters = [
             'name' => $config['name'],
             'type' => $config['type'],
-            'typeMode' => $config['typeMode'] ?? 0,
+            'mode' => $config['mode'] ?? 0,
             'description' => $config['description'] ?? null,
             'deprecationReason'=> $config['deprecationReason'] ?? null,
         ];

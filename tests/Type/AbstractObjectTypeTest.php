@@ -261,7 +261,7 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     'foo' => [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                     ],
                 ],
             ],
@@ -281,7 +281,7 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     'foo' => [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                         'resolve' => fn() => 17,
                     ],
                 ],
@@ -302,7 +302,7 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     'foo' => [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                         'complexity' => fn() => 12,
                     ],
                 ],
@@ -324,7 +324,7 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     'foo' => [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                         'resolve' => fn() => 23,
                         'complexity' => fn() => 24,
                     ],
@@ -597,7 +597,7 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                     ],
                 ],
             ],

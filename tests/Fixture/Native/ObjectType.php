@@ -56,7 +56,7 @@ class ObjectType implements
                 return Webonyx\Type::ID;
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return 0;
             }

@@ -76,7 +76,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
     private function getFieldType(ReflectionMethod $method, ?InputObjectField $attribute): callable
     {
         if ($attribute?->type) {
-            return new LazyParserType($attribute->type, $this->typeRegistry);
+            return new LazyParserType($attribute->type, $attribute->mode ?? 0, $this->typeRegistry);
         }
 
         $parameters = $method->getParameters();

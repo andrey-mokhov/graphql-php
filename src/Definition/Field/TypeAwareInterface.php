@@ -13,5 +13,5 @@ interface TypeAwareInterface
 
     public function getType(): string;
 
-    public function getTypeMode(): int;
+    public function getMode(): int;
 }

@@ -226,7 +226,7 @@ final class AbstractInterfaceTypeTest extends TestCase
                 'fields' => [
                     'foo' => [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                     ],
                 ],
             ],
@@ -245,7 +245,7 @@ final class AbstractInterfaceTypeTest extends TestCase
                 'fields' => [
                     [
                         'type' => Webonyx\IntType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                     ],
                 ],
             ],

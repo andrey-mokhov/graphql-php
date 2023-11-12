@@ -206,7 +206,7 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
 {
     protected string $name = 'square';
     protected string $type = 'Int';
-    protected int $typeMode = TypeAwareInterface::IS_REQUIRED;
+    protected int $mode = TypeAwareInterface::IS_REQUIRED;
 
     public function getArguments(): iterable
     {
@@ -226,7 +226,7 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
                 return 'Int';
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return TypeAwareInterface::IS_REQUIRED;
             }
@@ -285,7 +285,7 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
         </td>
     </tr>
     <tr>
-        <td valign="top"><code>getTypeMode</code></td>
+        <td valign="top"><code>getMode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Должен вернуть битовую маску для модификатора типа аргумента. Возможны следующие значения:
@@ -412,11 +412,11 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
 > {
 >     protected string $name = 'square';
 >     protected string $type = 'Int';
->     protected int $typeMode = TypeAwareInterface::IS_REQUIRED;
+>     protected int $mode = TypeAwareInterface::IS_REQUIRED;
 >
 >     public function getArguments(): iterable
 >     {
->         yield new Argument(name: 'num', type: 'Int', typeMode: TypeAwareInterface::IS_REQUIRED);
+>         yield new Argument(name: 'num', type: 'Int', mode: TypeAwareInterface::IS_REQUIRED);
 >     }
 >
 >     public function resolve(mixed $objectValue, array $args, mixed $context, Webonyx\ResolveInfo $info): mixed

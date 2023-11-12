@@ -10,6 +10,7 @@ abstract class AbstractField extends AbstractDefinition
         ?string $name = null,
         ?string $description = null,
         public readonly ?string $type = null,
+        public readonly ?int $mode = null,
         public readonly ?string $deprecationReason = null,
     ) {
         parent::__construct($name, $description);

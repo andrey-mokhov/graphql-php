@@ -28,15 +28,15 @@ final class LazyParserTypeTest extends TestCase
 
     public function testIsCallable(): void
     {
-        $instance = new LazyParserType('foo', $this->typeRegistry);
+        $instance = new LazyParserType('foo', 0, $this->typeRegistry);
 
         self::assertIsCallable($instance);
     }
 
     #[DataProvider('getDataForInvoke')]
-    public function testInvoke(Webonyx\Type $expected, string $type, string $exception = null): void
+    public function testInvoke(Webonyx\Type $expected, string $type, int $mode = 0, string $exception = null): void
     {
-        $instance = new LazyParserType($type, $this->typeRegistry);
+        $instance = new LazyParserType($type, $mode, $this->typeRegistry);
         if (null !== $exception) {
             $this->expectException($exception);
         }
@@ -73,6 +73,7 @@ final class LazyParserTypeTest extends TestCase
         yield 'raise-exception' => [
             'expected' => Webonyx\Type::id(),
             'type' => 'UnknownType',
+            'mode' => 0,
             'exception' => NotFoundException::class,
         ];
     }

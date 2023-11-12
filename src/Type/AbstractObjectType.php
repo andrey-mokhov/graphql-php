@@ -22,8 +22,8 @@ abstract class AbstractObjectType extends AbstractType implements
     DynamicObjectTypeInterface
 {
     /**
-     * @template A of array{name: string, type: string, typeMode: int, description: string, deprecationReason: string, defaultValue: mixed}
-     * @template F of array{name: string, type:string, typeMode: int, description: string, deprecationReason: string, resolve: callable, complexity: callable, arguments: array<array-key, string|A>}
+     * @template A of array{name: string, type: string, mode: int, description: string, deprecationReason: string, defaultValue: mixed}
+     * @template F of array{name: string, type:string, mode: int, description: string, deprecationReason: string, resolve: callable, complexity: callable, arguments: array<array-key, string|A>}
      *
      * @var iterable<array-key, string|ObjectFieldInterface|Webonyx\FieldDefinition|F>
      */

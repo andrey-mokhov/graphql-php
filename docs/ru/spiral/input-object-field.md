@@ -178,7 +178,7 @@ final class LoginRequest implements InputObjectTypeInterface
                 return 'String';
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return TypeAwareInterface::IS_REQUIRED;
             }
@@ -228,7 +228,7 @@ final class LoginRequest implements InputObjectTypeInterface
         </td>
     </tr>
     <tr>
-        <td valign="top"><code>getTypeMode</code></td>
+        <td valign="top"><code>getMode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Должен вернуть битовую маску для модификатора типа поля. Возможны следующие значения:
@@ -372,7 +372,7 @@ final class LoginRequest implements InputObjectTypeInterface
 >         yield new InputObjectField(
 >             name: 'password',
 >             type: 'String',
->             typeMode: TypeAwareInterface::IS_REQUIRED,
+>             mode: TypeAwareInterface::IS_REQUIRED,
 >         );
 >     }
 > }

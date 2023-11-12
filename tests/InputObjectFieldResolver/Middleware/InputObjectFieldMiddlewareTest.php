@@ -118,7 +118,7 @@ final class InputObjectFieldMiddlewareTest extends TestCase
                     return Webonyx\IntType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }
@@ -163,7 +163,7 @@ final class InputObjectFieldMiddlewareTest extends TestCase
                     return Webonyx\IntType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }

@@ -77,7 +77,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
         return Webonyx\StringType::class;
     }
 
-    public function getTypeMode(): int
+    public function getMode(): int
     {
         return TypeAwareInterface::IS_REQUIRED;
     }

@@ -135,6 +135,25 @@ final class ObjectFieldByReflectionPropertyMiddlewareTest extends TestCase
             },
         ];
 
+        yield 'foo in constructor with docblock' => [
+            'expected' => [
+                'name' => 'foo',
+                'description' => 'Foo description.',
+                'type' => Webonyx\Type::int(),
+                'resolve' => 12,
+            ],
+            'object' => new class {
+                /**
+                 * @param int $foo Foo description.
+                 */
+                public function __construct(
+                    #[ObjectField]
+                    public int $foo = 12,
+                ) {
+                }
+            },
+        ];
+
         yield 'bar-with-attribute' => [
             'expected' => [
                 'name' => 'bar',

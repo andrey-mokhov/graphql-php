@@ -25,7 +25,7 @@ final class LazyTypeTest extends TestCase
                 return Webonyx\IntType::class;
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return 0;
             }
@@ -55,7 +55,7 @@ final class LazyTypeTest extends TestCase
                     return Webonyx\IDType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }
@@ -70,7 +70,7 @@ final class LazyTypeTest extends TestCase
                     return 'Boolean';
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return TypeAwareInterface::IS_REQUIRED;
                 }
@@ -85,7 +85,7 @@ final class LazyTypeTest extends TestCase
                     return 'Int';
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return TypeAwareInterface::IS_LIST;
                 }
@@ -100,7 +100,7 @@ final class LazyTypeTest extends TestCase
                     return 'Float';
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return TypeAwareInterface::IS_LIST | TypeAwareInterface::ITEM_IS_REQUIRED;
                 }
@@ -115,7 +115,7 @@ final class LazyTypeTest extends TestCase
                     return Webonyx\StringType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED;
                 }

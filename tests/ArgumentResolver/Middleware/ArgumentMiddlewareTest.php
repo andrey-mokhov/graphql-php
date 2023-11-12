@@ -96,7 +96,7 @@ final class ArgumentMiddlewareTest extends TestCase
                     return Webonyx\StringType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }
@@ -129,7 +129,7 @@ final class ArgumentMiddlewareTest extends TestCase
                     return Webonyx\StringType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }
@@ -160,7 +160,7 @@ final class ArgumentMiddlewareTest extends TestCase
                     return Webonyx\StringType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }
@@ -196,7 +196,7 @@ final class ArgumentMiddlewareTest extends TestCase
                     return Webonyx\StringType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }
@@ -239,7 +239,7 @@ final class ArgumentMiddlewareTest extends TestCase
                     return Webonyx\IntType::class;
                 }
 
-                public function getTypeMode(): int
+                public function getMode(): int
                 {
                     return 0;
                 }

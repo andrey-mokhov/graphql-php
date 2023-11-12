@@ -13,14 +13,14 @@ class Argument extends AbstractArgument implements DefaultValueAwareInterface, D
     private readonly mixed $defaultValue;
 
     public function __construct(
-        string $name,
-        string $type,
-        int $typeMode = 0,
+        string  $name,
+        string  $type,
+        int $mode = 0,
         ?string $description = null,
         ?string $deprecationReason = null,
         mixed $defaultValue = null,
     ) {
-        parent::__construct($name, $type, $typeMode, $description);
+        parent::__construct($name, $type, $mode, $description);
 
         if (null !== $deprecationReason) {
             $this->deprecationReason = $deprecationReason;

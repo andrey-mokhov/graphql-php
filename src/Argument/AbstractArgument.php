@@ -14,7 +14,7 @@ abstract class AbstractArgument implements ArgumentInterface
     public function __construct(
         private readonly string $name,
         private readonly string $type,
-        private readonly int $typeMode = 0,
+        private readonly int $mode = 0,
         ?string $description = null,
     ) {
         if (null !== $description) {
@@ -37,9 +37,9 @@ abstract class AbstractArgument implements ArgumentInterface
         return $this->type;
     }
 
-    public function getTypeMode(): int
+    public function getMode(): int
     {
-        return $this->typeMode ?? 0;
+        return $this->mode ?? 0;
     }
 
     public function hasDefaultValue(): bool

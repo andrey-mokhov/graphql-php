@@ -91,6 +91,57 @@ class User
         </td>
     </tr>
     <tr>
+        <td valign="top"><code>mode</code></td>
+        <td valign="top"><code>int</code></td>
+        <td valign="top">
+            Модификатора типа поля. Параметр конструктора анализируется библиотекой в том случае,
+            если тип поля указан и не содержит модификаторов. Возможны следующие значения:
+            <dl>
+                <dt><code>TypeAwareInterface::NONE</code></dt>
+                <dd>
+                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
+                    значения.<br />
+                    Эквивалент: <code>String</code>
+                </dd>
+                <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
+                <dd>
+                    Модификатор исключающий <code>null</code> значение, т.е. значение поля будет
+                    строковым.<br />
+                    Эквивалент: <code>String!</code>
+                </dd>
+                <dt><code>TypeAwareInterface::IS_LIST</code></dt>
+                <dd>
+                    Модификатор определяющий список значений (массив), при этом <code>null</code>
+                    значение поля допустимо. Таким образом значением поля может быть:
+                    <code>null</code> значение, пустой массив, массив со строковыми или
+                    <code>null</code> значениями.<br />
+                    Эквивалент: <code>[String]</code>
+                </dd>
+                <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
+                <dd>
+                    Модификатор определяющий список значений (массив), при этом <code>null</code>
+                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    может быть: <code>null</code> значение или непустой список со строковыми
+                    значениями.<br />
+                    Эквивалент: <code>[String!]</code>
+                </dd>
+                <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
+                <dd>
+                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
+                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
+                    значение поля, но позволяющий пустой список или список содержащий строковые или
+                    <code>null</code> значения.<br />
+                    Эквивалент: <code>[String]!</code>
+                </dd>
+                <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
+                <dd>
+                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
+                    Эквивалент: <code>[String!]!</code>
+                </dd>
+            </dl>
+        </td>
+    </tr>
+    <tr>
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
@@ -203,7 +254,7 @@ final class UserFullName implements ObjectFieldInterface
         return 'String';
     }
 
-    public function getTypeMode(): int
+    public function getMode(): int
     {
         return TypeAwareInterface::IS_REQUIRED;
     }
@@ -258,7 +309,7 @@ final class UserFullName implements ObjectFieldInterface
         </td>
     </tr>
     <tr>
-        <td valign="top"><a id="get-type-mode"><code>getTypeMode</code></a></td>
+        <td valign="top"><a id="get-type-mode"><code>getMode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Должен вернуть битовую маску для модификатора типа поля. Возможны следующие значения:
@@ -348,7 +399,7 @@ final class UserFullName implements ObjectFieldInterface, ArgumentsAwareInterfac
         yield new Argument(
             name: 'separator',
             type: 'String',
-            typeMode: TypeAwareInterface::IS_REQUIRED,
+            mode: TypeAwareInterface::IS_REQUIRED,
             defaultValue: ' ',
         );
     }
