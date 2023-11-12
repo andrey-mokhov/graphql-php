@@ -81,7 +81,7 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
     private function getArgumentType(ReflectionParameter $parameter, ?Argument $attribute): callable
     {
         if ($attribute?->type) {
-            return new LazyParserType($attribute->type, $this->typeRegistry);
+            return new LazyParserType($attribute->type, $attribute->mode ?? 0, $this->typeRegistry);
         }
 
         if (! $parameter->hasType()) {

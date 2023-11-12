@@ -209,6 +209,7 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
                     name: 'bar',
                     description: 'Bar description',
                     type: 'ID',
+                    mode: 0,
                     deprecationReason: 'reason',
                 )]
                 public function getFoo(): int {

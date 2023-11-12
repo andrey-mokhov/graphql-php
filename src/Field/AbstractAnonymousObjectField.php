@@ -21,7 +21,7 @@ abstract class AbstractAnonymousObjectField extends AbstractObjectField
     ) {
         $this->name = $name;
         $this->type = $field['type'];
-        $this->typeMode = $field['typeMode'] ?? 0;
+        $this->mode = $field['mode'] ?? 0;
 
         if (isset($field['description']) && is_string($field['description'])) {
             $this->description = $field['description'];

@@ -15,8 +15,9 @@ final class AdditionalField extends AbstractField
         ?string $name = null,
         ?string $description = null,
         ?string $type = null,
+        ?int $mode = null,
         ?string $deprecationReason = null
     ) {
-        parent::__construct($name, $description, $type, $deprecationReason);
+        parent::__construct($name, $description, $type, $mode, $deprecationReason);
     }
 }

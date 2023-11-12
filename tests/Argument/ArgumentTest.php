@@ -19,7 +19,7 @@ final class ArgumentTest extends TestCase
 
         self::assertSame('name', $argument->getName());
         self::assertSame('type', $argument->getType());
-        self::assertSame(123, $argument->getTypeMode());
+        self::assertSame(123, $argument->getMode());
         self::assertSame('description', $argument->getDescription());
         self::assertSame('deprecationReason', $argument->getDeprecationReason());
         self::assertSame('defaultValue', $argument->getDefaultValue());

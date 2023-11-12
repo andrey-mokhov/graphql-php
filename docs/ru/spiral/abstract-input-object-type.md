@@ -23,7 +23,7 @@ final class RegistrationRequest extends AbstractInputObjectType implements Parse
         'lastname' => 'String',
         'firstname' => [
             'type' => StringType::class,
-            'typeMode' => TypeAwareInterface::IS_REQUIRED,
+            'mode' => TypeAwareInterface::IS_REQUIRED,
         ],
         'middlename' => [
             'type' => 'String',
@@ -122,7 +122,7 @@ $this->fields = [
         'type' => 'String',
 
         // Модификатор типа.
-        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+        'mode' => TypeAwareInterface::IS_REQUIRED,
 
         // Описание поля, используется для отображения в GraphQL схеме. Данная опция не обязательна.
         'description' => 'Field description',
@@ -181,7 +181,7 @@ $this->fields = [
         </td>
     </tr>
     <tr>
-        <td valign="top"><code>typeMode</code></td>
+        <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Битовая маска модификатора типа поля. Возможны следующие значения:

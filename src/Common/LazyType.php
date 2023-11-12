@@ -20,17 +20,17 @@ final class LazyType
     {
         $type = $this->typeRegistry->get($this->type->getType());
 
-        $typeMode = $this->type->getTypeMode();
+        $mode = $this->type->getMode();
 
-        if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $typeMode)) {
+        if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $mode)) {
             $type = Webonyx\Type::nonNull($type);
         }
 
-        if (TypeAwareInterface::IS_LIST === (TypeAwareInterface::IS_LIST & $typeMode)) {
+        if (TypeAwareInterface::IS_LIST === (TypeAwareInterface::IS_LIST & $mode)) {
             $type = Webonyx\Type::listOf($type);
         }
 
-        if (TypeAwareInterface::IS_REQUIRED === (TypeAwareInterface::IS_REQUIRED & $typeMode)) {
+        if (TypeAwareInterface::IS_REQUIRED === (TypeAwareInterface::IS_REQUIRED & $mode)) {
             $type = Webonyx\Type::nonNull($type);
         }
 

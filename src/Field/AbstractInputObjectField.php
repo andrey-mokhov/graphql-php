@@ -17,7 +17,7 @@ abstract class AbstractInputObjectField implements InputObjectFieldInterface, De
     public function __construct(
         private readonly string $name,
         private readonly string $type,
-        private readonly int $typeMode = 0,
+        private readonly int $mode = 0,
         ?string $description = null,
         ?string $deprecationReason = null,
     ) {
@@ -45,9 +45,9 @@ abstract class AbstractInputObjectField implements InputObjectFieldInterface, De
         return $this->type;
     }
 
-    public function getTypeMode(): int
+    public function getMode(): int
     {
-        return $this->typeMode;
+        return $this->mode;
     }
 
     public function getDeprecationReason(): ?string

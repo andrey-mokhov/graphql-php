@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Andi\GraphQL\Common;
 
+use Andi\GraphQL\Definition\Field\TypeAwareInterface;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Language\AST\ListTypeNode;
@@ -19,17 +20,32 @@ final class LazyParserType
 {
     public function __construct(
         private readonly string $type,
+        private readonly int $mode,
         private readonly TypeRegistryInterface $typeRegistry,
     ) {
     }
 
     public function __invoke(): Webonyx\Type
     {
-        if ($this->typeRegistry->has($this->type)) {
-            return $this->typeRegistry->get($this->type);
+        if (! $this->typeRegistry->has($this->type)) {
+            return $this->getType(Parser::parseType($this->type));
         }
 
-        return $this->getType(Parser::parseType($this->type));
+        $type = $this->typeRegistry->get($this->type);
+
+        if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $this->mode)) {
+            $type = Webonyx\Type::nonNull($type);
+        }
+
+        if (TypeAwareInterface::IS_LIST === (TypeAwareInterface::IS_LIST & $this->mode)) {
+            $type = Webonyx\Type::listOf($type);
+        }
+
+        if (TypeAwareInterface::IS_REQUIRED === (TypeAwareInterface::IS_REQUIRED & $this->mode)) {
+            $type = Webonyx\Type::nonNull($type);
+        }
+
+        return $type;
     }
 
     private function getType(Node&TypeNode $node): Webonyx\Type

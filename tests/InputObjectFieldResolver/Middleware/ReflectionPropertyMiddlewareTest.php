@@ -117,6 +117,25 @@ final class ReflectionPropertyMiddlewareTest extends TestCase
             'attribute' => null,
         ];
 
+        yield 'foo in constructor' => [
+            'expected' => [
+                'name' => 'foo',
+                'description' => 'Foo description.',
+                'deprecationReason' => null,
+                'type' => Webonyx\Type::int(),
+            ],
+            'object' => new class {
+                /**
+                 * @param int $foo Foo description.
+                 */
+                public function __construct(
+                    private int $foo = 12,
+                ) {
+                }
+            },
+            'attribute' => null,
+        ];
+
         yield 'bar-with-attribute' => [
             'expected' => [
                 'name' => 'bar',

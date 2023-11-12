@@ -210,7 +210,6 @@ class Pet implements ObjectTypeInterface
 ```php
 namespace App\GraphQL\Type;
 
-use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Attribute\ObjectType;
 use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
 
@@ -267,7 +266,6 @@ class User implements UserInterface, InterfacesAwareInterface
 ```php
 namespace App\GraphQL\Type;
 
-use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Attribute\ObjectType;
 use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
 
@@ -310,7 +308,6 @@ class User implements UserInterface, ResolveFieldAwareInterface
 ```php
 namespace App\GraphQL\Type;
 
-use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Attribute\ObjectType;
 use Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface;
 

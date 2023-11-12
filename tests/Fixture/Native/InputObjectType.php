@@ -54,7 +54,7 @@ class InputObjectType implements InputObjectTypeInterface, ParseValueAwareInterf
                 return Webonyx\IDType::class;
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return 0;
             }

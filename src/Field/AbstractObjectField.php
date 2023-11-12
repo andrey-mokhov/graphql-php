@@ -20,7 +20,7 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
 
     protected string $type;
 
-    protected int $typeMode;
+    protected int $mode;
 
     protected string $deprecationReason;
 
@@ -46,9 +46,9 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
         return $this->type;
     }
 
-    public function getTypeMode(): int
+    public function getMode(): int
     {
-        return $this->typeMode ?? 0;
+        return $this->mode ?? 0;
     }
 
     public function getArguments(): iterable

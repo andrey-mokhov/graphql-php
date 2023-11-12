@@ -50,7 +50,7 @@ class InterfaceType implements InterfaceTypeInterface, ResolveTypeAwareInterface
                 return Webonyx\IDType::class;
             }
 
-            public function getTypeMode(): int
+            public function getMode(): int
             {
                 return 0;
             }

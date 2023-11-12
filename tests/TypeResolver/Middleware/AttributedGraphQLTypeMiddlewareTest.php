@@ -7,6 +7,7 @@ namespace Andi\Tests\GraphQL\TypeResolver\Middleware;
 use Andi\GraphQL\ArgumentResolver\ArgumentResolver;
 use Andi\GraphQL\ArgumentResolver\Middleware\ReflectionParameterMiddleware;
 use Andi\GraphQL\Attribute;
+use Andi\GraphQL\Common\DefinitionAwareTrait;
 use Andi\GraphQL\Common\InputObjectFactory;
 use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
@@ -36,6 +37,7 @@ use Andi\Tests\GraphQL\Fixture\Native\EnumType;
 use Andi\Tests\GraphQL\Fixture\PriorityInputObjectType;
 use Andi\Tests\GraphQL\Fixture\PriorityInterfaceType;
 use Andi\Tests\GraphQL\Fixture\PriorityObjectType;
+use Andi\Tests\GraphQL\Fixture\Simple2InputObjectType;
 use Andi\Tests\GraphQL\Fixture\SimpleInputObjectType;
 use Andi\Tests\GraphQL\Fixture\SimpleInterfaceType;
 use Andi\Tests\GraphQL\Fixture\SimpleObjectType;
@@ -50,6 +52,7 @@ use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Core\Container;
 
 #[CoversClass(AttributedGraphQLTypeMiddleware::class)]
+#[CoversClass(DefinitionAwareTrait::class)]
 #[UsesClass(ArgumentResolver::class)]
 #[UsesClass(ReflectionParameterMiddleware::class)]
 #[UsesClass(InputObjectFieldResolver::class)]
@@ -184,7 +187,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
     }
 
     #[DataProvider('getDataForProcess')]
-    public function testProcess(array $expected, \ReflectionClass $class): void
+    public function testProcess(array $expected, string|\ReflectionClass $class): void
     {
         $nextResolver = \Mockery::mock(TypeResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->never();
@@ -231,7 +234,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
 
         // InputObjectType
         if (isset($expected['parseValue'])) {
-            self::assertSame($expected['parseValue'], $type->parseValue([]));
+            self::assertEquals($expected['parseValue'], $type->parseValue(['foo' => 'asd', 'bar' => 'qwe']));
         }
 
         // InterfaceType
@@ -311,6 +314,31 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'parseValue' => 17,
             ],
             'class' => new \ReflectionClass(SimpleInputObjectType::class),
+        ];
+
+        $obj = new Simple2InputObjectType();
+        $obj->foo = 'asd';
+        $obj->bar = 'qwe';
+
+        yield 'Simple2InputObjectType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\InputObjectType::class,
+                'name' => 'Simple2InputObjectType',
+                'fields' => [
+                    'foo' => Webonyx\Type::string(),
+                    'bar' => Webonyx\Type::string(),
+                ],
+                'parseValue' => $obj,
+            ],
+            'class' => Simple2InputObjectType::class,
+        ];
+
+        yield 'empty description' => [
+            'expected' => [
+                'instanceOf' => Webonyx\InputObjectType::class,
+                'name' => 'foo',
+            ],
+            'class' => new \ReflectionClass(new #[Attribute\InputObjectType(name: 'foo')] class {}),
         ];
 
         yield 'PriorityInputObjectType' => [

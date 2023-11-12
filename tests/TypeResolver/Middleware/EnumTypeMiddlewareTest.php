@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Andi\Tests\GraphQL\TypeResolver\Middleware;
 
 use Andi\GraphQL\Attribute\AbstractDefinition;
+use Andi\GraphQL\Attribute\EnumValue;
 use Andi\GraphQL\TypeResolver\Middleware\EnumTypeMiddleware;
 use Andi\GraphQL\TypeResolver\Middleware\MiddlewareInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use Andi\Tests\GraphQL\Fixture\AnnotatedEnum;
+use Andi\Tests\GraphQL\Fixture\AttributedEnum;
 use Andi\Tests\GraphQL\Fixture\FooEnum;
 use Andi\Tests\GraphQL\Fixture\PriorityEnum;
 use GraphQL\Type\Definition as Webonyx;
@@ -21,6 +23,7 @@ use Spiral\Attributes\Internal\NativeAttributeReader;
 
 #[CoversClass(EnumTypeMiddleware::class)]
 #[UsesClass(AbstractDefinition::class)]
+#[UsesClass(EnumValue::class)]
 final class EnumTypeMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -46,13 +49,13 @@ final class EnumTypeMiddlewareTest extends TestCase
     }
 
     #[DataProvider('getDataForProcess')]
-    public function testProcess(array $expected, \ReflectionEnum $reflection): void
+    public function testProcess(array $expected, string|\ReflectionEnum $type): void
     {
         $nextResolver = \Mockery::mock(TypeResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->never();
 
         /** @var Webonyx\EnumType $enum */
-        $enum = $this->middleware->process($reflection, $nextResolver);
+        $enum = $this->middleware->process($type, $nextResolver);
 
         self::assertSame($expected['name'], $enum->name());
         self::assertSame($expected['description'] ?? null, $enum->description());
@@ -79,7 +82,7 @@ final class EnumTypeMiddlewareTest extends TestCase
                     ],
                 ],
             ],
-            'reflection' => new \ReflectionEnum(FooEnum::class),
+            'type' => new \ReflectionEnum(FooEnum::class),
         ];
 
         yield 'AnnotatedEnum' => [
@@ -94,7 +97,7 @@ final class EnumTypeMiddlewareTest extends TestCase
                     ],
                 ],
             ],
-            'reflection' => new \ReflectionEnum(AnnotatedEnum::class),
+            'type' => new \ReflectionEnum(AnnotatedEnum::class),
         ];
 
         yield 'PriorityEnum' => [
@@ -108,6 +111,21 @@ final class EnumTypeMiddlewareTest extends TestCase
                 ],
             ],
             'reflection' => new \ReflectionEnum(PriorityEnum::class),
+        ];
+
+        yield 'AttributedEnum' => [
+            'expected' => [
+                'name' => 'FooEnum',
+                'description' => 'FooEnum description',
+                'values' => [
+                    'barValue' => [
+                        'value' => AttributedEnum::bar,
+                        'description' => 'bar description',
+                        'deprecationReason' => 'bar deprecation reason',
+                    ],
+                ],
+            ],
+            'type' => AttributedEnum::class,
         ];
     }
 }

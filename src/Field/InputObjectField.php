@@ -11,14 +11,14 @@ final class InputObjectField extends AbstractInputObjectField implements Default
     private readonly mixed $defaultValue;
 
     public function __construct(
-        string $name,
-        string $type,
-        int $typeMode = 0,
+        string  $name,
+        string  $type,
+        int $mode = 0,
         ?string $description = null,
         ?string $deprecationReason = null,
         mixed $defaultValue = null,
     ) {
-        parent::__construct($name, $type, $typeMode, $description, $deprecationReason);
+        parent::__construct($name, $type, $mode, $description, $deprecationReason);
 
         if (func_num_args() >= 6) {
             $this->defaultValue = $defaultValue;

@@ -17,12 +17,13 @@ final class Argument extends AbstractDefinition
         ?string $name = null,
         ?string $description = null,
         public readonly ?string $type = null,
+        public readonly ?int $mode = null,
         public readonly ?string $deprecationReason = null,
         mixed $defaultValue = null,
     ) {
         parent::__construct($name, $description);
 
-        if (func_num_args() >= 5) {
+        if (func_num_args() >= 6) {
             $this->defaultValue = $defaultValue;
         }
     }

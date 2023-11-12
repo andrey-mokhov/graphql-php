@@ -176,7 +176,7 @@ final class AbstractInputObjectTypeTest extends TestCase
             'config' => [
                 'name' => 'FooType',
                 'fields' => [
-                    new InputObjectField(name: 'foo', type: 'String', typeMode: TypeAwareInterface::IS_REQUIRED),
+                    new InputObjectField(name: 'foo', type: 'String', mode: TypeAwareInterface::IS_REQUIRED),
                 ],
             ],
         ];
@@ -278,7 +278,7 @@ final class AbstractInputObjectTypeTest extends TestCase
                     [
                         'name' => 'bar',
                         'type' => Webonyx\BooleanType::class,
-                        'typeMode' => TypeAwareInterface::IS_REQUIRED,
+                        'mode' => TypeAwareInterface::IS_REQUIRED,
                         'defaultValue' => true,
                         'deprecationReason' => 'do not use it field',
                     ],

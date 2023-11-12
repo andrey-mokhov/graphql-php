@@ -29,7 +29,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
             ? new \ReflectionEnum($type)
             : $type;
 
-        if ($type instanceof \ReflectionEnum) {
+        if ($enum instanceof \ReflectionEnum) {
             return $this->buildEnumType($enum, $this->reader->firstClassMetadata($enum, Attribute\EnumType::class));
         }
 

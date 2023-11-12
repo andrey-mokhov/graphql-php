@@ -124,7 +124,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
         return Webonyx\StringType::class;
     }
 
-    public function getTypeMode(): int
+    public function getMode(): int
     {
         return TypeAwareInterface::IS_REQUIRED;
     }
@@ -179,7 +179,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
         </td>
     </tr>
     <tr>
-        <td valign="top"><a id="get-type-mode"><code>getTypeMode</code></a></td>
+        <td valign="top"><a id="get-type-mode"><code>getMode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Должен вернуть битовую маску для модификатора типа Query поля. Возможны следующие значения:
@@ -241,7 +241,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
 > {
 >     protected string $name = 'concat';
 >     protected string $type = Webonyx\StringType::class;
->     protected int $typeMode = TypeAwareInterface::IS_REQUIRED
+>     protected int $mode = TypeAwareInterface::IS_REQUIRED
 > }
 > ```
 

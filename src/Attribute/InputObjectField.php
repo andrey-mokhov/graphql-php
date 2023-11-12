@@ -17,12 +17,13 @@ final class InputObjectField extends AbstractField
         ?string $name = null,
         ?string $description = null,
         ?string $type = null,
+        ?int $mode = null,
         ?string $deprecationReason = null,
         mixed $defaultValue = null,
     ) {
-        parent::__construct($name, $description, $type, $deprecationReason);
+        parent::__construct($name, $description, $type, $mode, $deprecationReason);
 
-        if (func_num_args() === 5) {
+        if (func_num_args() >= 6) {
             $this->defaultValue = $defaultValue;
         }
     }
