@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Andi\Tests\GraphQL\Common;
 
 use Andi\GraphQL\Common\LazyParserType;
+use Andi\GraphQL\Definition\Field\TypeAwareInterface;
 use Andi\GraphQL\Exception\NotFoundException;
 use Andi\GraphQL\TypeRegistry;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -34,44 +35,71 @@ final class LazyParserTypeTest extends TestCase
     }
 
     #[DataProvider('getDataForInvoke')]
-    public function testInvoke(Webonyx\Type $expected, string $type, int $mode = 0, string $exception = null): void
+    public function testInvoke(string $expected, string $type, int $mode = 0, string $exception = null): void
     {
         $instance = new LazyParserType($type, $mode, $this->typeRegistry);
         if (null !== $exception) {
             $this->expectException($exception);
         }
         $parsedType = call_user_func($instance);
-        if ($parsedType instanceof Webonyx\WrappingType) {
-            $parsedType = $parsedType->getWrappedType();
-        }
 
-        self::assertSame($expected, $parsedType);
+        self::assertSame($expected, (string) $parsedType);
     }
 
     public static function getDataForInvoke(): iterable
     {
         yield 'class-name' => [
-            'expected' => Webonyx\Type::id(),
+            'expected' => 'ID',
             'type' => Webonyx\IDType::class,
         ];
 
+        yield 'required class-name' => [
+            'expected' => 'ID!',
+            'type' => Webonyx\IDType::class,
+            'mode' => TypeAwareInterface::IS_REQUIRED,
+        ];
+
         yield 'nullable-int' => [
-            'expected' => Webonyx\Type::int(),
+            'expected' => 'Int',
             'type' => 'Int',
         ];
 
         yield 'required-string' => [
-            'expected' => Webonyx\Type::string(),
+            'expected' => 'String!',
             'type' => 'String!',
         ];
 
+        yield 'required string with mode' => [
+            'expected' => 'String!',
+            'type' => 'String',
+            'mode' => TypeAwareInterface::IS_REQUIRED
+        ];
+
         yield 'list-of-id' => [
-            'expected' => Webonyx\Type::id(),
+            'expected' => '[ID]',
             'type' => '[ID]',
         ];
 
+        yield 'list-of-id with mode' => [
+            'expected' => '[ID]',
+            'type' => Webonyx\IDType::class,
+            'mode' => TypeAwareInterface::IS_LIST,
+        ];
+
+        yield 'no empty list-of-id with mode' => [
+            'expected' => '[ID!]',
+            'type' => Webonyx\IDType::class,
+            'mode' => TypeAwareInterface::ITEM_IS_REQUIRED,
+        ];
+
+        yield 'no empty list of id with mode' => [
+            'expected' => '[ID!]!',
+            'type' => Webonyx\IDType::class,
+            'mode' => TypeAwareInterface::ITEM_IS_REQUIRED | TypeAwareInterface::IS_REQUIRED,
+        ];
+
         yield 'raise-exception' => [
-            'expected' => Webonyx\Type::id(),
+            'expected' => 'ID',
             'type' => 'UnknownType',
             'mode' => 0,
             'exception' => NotFoundException::class,
