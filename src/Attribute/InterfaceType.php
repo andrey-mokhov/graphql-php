@@ -22,5 +22,4 @@ final class InterfaceType extends AbstractType
     ) {
         parent::__construct($name, $description);
     }
-
 }
