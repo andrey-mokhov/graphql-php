@@ -14,6 +14,7 @@ use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
+use Andi\GraphQL\Common\ResolverArguments;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\Field;
 use Andi\GraphQL\ObjectFieldResolver\Middleware\AbstractFieldByReflectionMethodMiddleware;
@@ -31,11 +32,13 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Attributes\ReaderInterface;
+use Spiral\Core\Container;
 use Spiral\Core\InvokerInterface;
 use Spiral\Core\ScopeInterface;
 
 #[CoversClass(AbstractObjectFieldByReflectionMethodMiddleware::class)]
 #[CoversClass(AbstractFieldByReflectionMethodMiddleware::class)]
+#[CoversClass(Field\ObjectField::class)]
 #[UsesClass(ArgumentResolver::class)]
 #[UsesClass(ReflectionParameterMiddleware::class)]
 #[UsesClass(TypeRegistry::class)]
@@ -45,9 +48,9 @@ use Spiral\Core\ScopeInterface;
 #[UsesClass(LazyTypeByReflectionType::class)]
 #[UsesClass(LazyTypeByReflectionParameter::class)]
 #[UsesClass(ObjectField::class)]
-#[UsesClass(Field\ObjectField::class)]
 #[UsesClass(Next::class)]
 #[UsesClass(Argument::class)]
+#[UsesClass(ResolverArguments::class)]
 final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -58,10 +61,6 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
 
     private ReaderInterface $reader;
 
-    private ScopeInterface $scope;
-
-    private InvokerInterface $invoker;
-
     protected function setUp(): void
     {
         $this->reader = new NativeAttributeReader();
@@ -70,12 +69,13 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         $argumentResolver = new ArgumentResolver();
         $argumentResolver->pipe(new ReflectionParameterMiddleware($this->reader, $this->typeRegistry));
 
+        $container = new Container();
         $this->middleware = new ObjectFieldByReflectionMethodMiddleware(
             $this->reader,
             $this->typeRegistry,
             $argumentResolver,
-            $this->scope = \Mockery::mock(ScopeInterface::class),
-            $this->invoker = \Mockery::mock(InvokerInterface::class),
+            $container,
+            $container,
         );
 
     }
@@ -135,23 +135,19 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         self::assertSame($expected['description'] ?? null, $objectField->description);
         self::assertSame($expected['deprecationReason'] ?? null, $objectField->deprecationReason);
 
-        $type = $objectField->getType();
-        if ($type instanceof Webonyx\WrappingType) {
-            $type = $type->getWrappedType();
-        }
-        self::assertSame($expected['type'], $type);
+        self::assertSame($expected['type'], (string) $objectField->getType());
 
         if (isset($expected['arguments'])) {
             foreach ($expected['arguments'] as $name => $type) {
                 $argument = $objectField->getArg($name);
 
-                $argumentType = $argument->getType();
-                if ($argumentType instanceof Webonyx\WrappingType) {
-                    $argumentType = $argumentType->getWrappedType();
-                }
-
-                self::assertSame($type, $argumentType);
+                self::assertSame($type, (string) $argument->getType());
             }
+        }
+
+        if (isset($expected['resolve']) || array_key_exists('resolve', $expected)) {
+            $args = [$object, ['str' => 'string value', 'flag' => false], null, \Mockery::mock(Webonyx\ResolveInfo::class)];
+            self::assertSame($expected['resolve'], call_user_func_array($objectField->resolveFn, $args));
         }
     }
 
@@ -160,7 +156,8 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         yield 'foo' => [
             'expected' => [
                 'name' => 'foo',
-                'type' => Webonyx\Type::string(),
+                'type' => 'String!',
+                'resolve' => 'qew',
             ],
             'object' => new class {
                 #[ObjectField]
@@ -175,11 +172,12 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
                 'name' => 'foo',
                 'description' => 'Foo description.',
                 'deprecationReason' => 'Foo is deprecated.',
-                'type' => Webonyx\Type::int(),
+                'type' => 'Int!',
                 'arguments' => [
-                    'str' => Webonyx\Type::string(),
-                    'flag' => Webonyx\Type::boolean(),
+                    'str' => 'String!',
+                    'flag' => 'Boolean!',
                 ],
+                'resolve' => 1,
             ],
             'object' => new class {
                 /**
@@ -201,7 +199,8 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
                 'name' => 'bar',
                 'description' => 'Bar description',
                 'deprecationReason' => 'reason',
-                'type' => Webonyx\Type::id(),
+                'type' => 'ID',
+                'resolve' => 1,
             ],
             'object' => new class {
                 #[ObjectField(name: 'bar', description: 'Bar description', type: 'ID', deprecationReason: 'reason')]
@@ -211,7 +210,7 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
             },
         ];
 
-        yield 'raise-exception' => [
+        yield 'raise exception when field type undefined' => [
             'expected' => [],
             'object' => new class {
                 #[ObjectField]
