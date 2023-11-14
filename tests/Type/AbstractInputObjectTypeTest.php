@@ -26,14 +26,14 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractInputObjectType::class)]
+#[CoversClass(InputObjectField::class)]
+#[CoversClass(AbstractInputObjectField::class)]
 #[UsesClass(TypeRegistry::class)]
 #[UsesClass(InputObjectFieldMiddleware::class)]
 #[UsesClass(InputObjectFieldResolver::class)]
 #[UsesClass(AbstractType::class)]
 #[UsesClass(Next::class)]
 #[UsesClass(WebonyxInputObjectFieldMiddleware::class)]
-#[UsesClass(InputObjectField::class)]
-#[UsesClass(AbstractInputObjectField::class)]
 #[UsesClass(LazyType::class)]
 final class AbstractInputObjectTypeTest extends TestCase
 {
@@ -151,6 +151,8 @@ final class AbstractInputObjectTypeTest extends TestCase
                 'fields' => [
                     [
                         'name' => 'foo',
+                        'description' => 'foo description',
+                        'deprecationReason' => 'foo deprecation reason',
                         'type' => 'String',
                     ],
                 ],
@@ -158,7 +160,12 @@ final class AbstractInputObjectTypeTest extends TestCase
             'config' => [
                 'name' => 'FooType',
                 'fields' => [
-                    new Webonyx\InputObjectField(['name' => 'foo', 'type' => Webonyx\Type::string()]),
+                    new Webonyx\InputObjectField([
+                        'name' => 'foo',
+                        'description' => 'foo description',
+                        'deprecationReason' => 'foo deprecation reason',
+                        'type' => Webonyx\Type::string(),
+                    ]),
                 ],
             ],
         ];
@@ -170,13 +177,21 @@ final class AbstractInputObjectTypeTest extends TestCase
                     [
                         'name' => 'foo',
                         'type' => 'String!',
+                        'description' => 'foo description',
+                        'deprecationReason' => 'foo deprecation reason',
                     ],
                 ],
             ],
             'config' => [
                 'name' => 'FooType',
                 'fields' => [
-                    new InputObjectField(name: 'foo', type: 'String', mode: TypeAwareInterface::IS_REQUIRED),
+                    new InputObjectField(
+                        name: 'foo',
+                        type: 'String',
+                        mode: TypeAwareInterface::IS_REQUIRED,
+                        description: 'foo description',
+                        deprecationReason: 'foo deprecation reason',
+                    ),
                 ],
             ],
         ];
@@ -266,6 +281,7 @@ final class AbstractInputObjectTypeTest extends TestCase
                     [
                         'name' => 'bar',
                         'type' => 'Boolean!',
+                        'description' => 'bar description',
                         'deprecationReason' => 'do not use it field',
                         'defaultValue' => true,
                     ],
@@ -279,6 +295,7 @@ final class AbstractInputObjectTypeTest extends TestCase
                         'name' => 'bar',
                         'type' => Webonyx\BooleanType::class,
                         'mode' => TypeAwareInterface::IS_REQUIRED,
+                        'description' => 'bar description',
                         'defaultValue' => true,
                         'deprecationReason' => 'do not use it field',
                     ],

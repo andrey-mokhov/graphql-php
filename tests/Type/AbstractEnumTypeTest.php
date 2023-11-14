@@ -21,10 +21,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 #[CoversClass(AbstractEnumType::class)]
+#[CoversClass(EnumValue::class)]
 #[UsesClass(TypeResolver::class)]
 #[UsesClass(GraphQLTypeMiddleware::class)]
 #[UsesClass(Next::class)]
-#[UsesClass(EnumValue::class)]
 final class AbstractEnumTypeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;

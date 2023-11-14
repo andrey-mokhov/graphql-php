@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Andi\Tests\GraphQL\Type;
 
+use Andi\GraphQL\Argument\AbstractArgument;
+use Andi\GraphQL\Argument\Argument;
 use Andi\GraphQL\ArgumentResolver\ArgumentResolver;
 use Andi\GraphQL\ArgumentResolver\Middleware\ArgumentConfigurationMiddleware;
 use Andi\GraphQL\ArgumentResolver\Middleware\ArgumentMiddleware;
+use Andi\GraphQL\ArgumentResolver\Middleware\Next;
 use Andi\GraphQL\Common\LazyType;
 use Andi\GraphQL\Definition\Field\TypeAwareInterface;
 use Andi\GraphQL\Definition\Type\ObjectTypeInterface;
@@ -29,6 +32,10 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractObjectType::class)]
+#[CoversClass(AbstractObjectField::class)]
+#[CoversClass(AbstractAnonymousObjectField::class)]
+#[CoversClass(AnonymousResolveAwareTrait::class)]
+#[CoversClass(AnonymousComplexityAwareTrait::class)]
 #[UsesClass(ArgumentResolver::class)]
 #[UsesClass(ArgumentMiddleware::class)]
 #[UsesClass(ObjectFieldResolver::class)]
@@ -38,10 +45,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Objects\Next::class)]
 #[UsesClass(Objects\WebonyxObjectFieldMiddleware::class)]
 #[UsesClass(LazyType::class)]
-#[UsesClass(AbstractAnonymousObjectField::class)]
-#[UsesClass(AbstractObjectField::class)]
-#[UsesClass(AnonymousResolveAwareTrait::class)]
-#[UsesClass(AnonymousComplexityAwareTrait::class)]
+#[UsesClass(Argument::class)]
+#[UsesClass(AbstractArgument::class)]
+#[UsesClass(Next::class)]
 final class AbstractObjectTypeTest extends TestCase
 {
     private ObjectFieldResolverInterface $objectFieldResolver;
@@ -253,7 +259,23 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     [
                         'name' => 'foo',
+                        'description' => 'foo description',
+                        'deprecationReason' => 'foo deprecation reason',
                         'type' => 'Int!',
+                        'arguments' => [
+                            'bar' => [
+                                'type' => 'String!',
+                                'description' => 'bar description',
+                                'deprecationReason' => 'bar is deprecated',
+                                'defaultValue' => 'bar default value',
+                            ],
+                            'qwe' => [
+                                'type' => 'Int',
+                            ],
+                            'asd' => [
+                                'type' => '[ID!]!',
+                            ],
+                        ],
                     ]
                 ],
             ],
@@ -261,7 +283,25 @@ final class AbstractObjectTypeTest extends TestCase
                 'fields' => [
                     'foo' => [
                         'type' => Webonyx\IntType::class,
+                        'description' => 'foo description',
+                        'deprecationReason' => 'foo deprecation reason',
                         'mode' => TypeAwareInterface::IS_REQUIRED,
+                        'arguments' => [
+                            new Argument(
+                                name: 'bar',
+                                type: 'String',
+                                mode: TypeAwareInterface::IS_REQUIRED,
+                                description: 'bar description',
+                                deprecationReason: 'bar is deprecated',
+                                defaultValue: 'bar default value',
+                            ),
+                            'qwe' => 'Int',
+                            'ignored' => [
+                                'name' => 'asd',
+                                'type' => Webonyx\IDType::class,
+                                'mode' => TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED,
+                            ],
+                        ],
                     ],
                 ],
             ],
