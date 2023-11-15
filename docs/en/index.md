@@ -1,4 +1,4 @@
-# GraphQL библиотека для PHP
+# GraphQL library for PHP
 
 Библиотека опирается на библиотеку [webonyx/graphql-php](https://github.com/webonyx/graphql-php).
 
