@@ -6,3 +6,4 @@ composer.lock
 vendor
 build
 psalm-cache
+.vs
