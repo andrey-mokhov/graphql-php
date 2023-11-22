@@ -1,6 +1,6 @@
 # GraphQL library for PHP
 
-Библиотека опирается на библиотеку [webonyx/graphql-php](https://github.com/webonyx/graphql-php).
+Library is based on library [webonyx/graphql-php](https://github.com/webonyx/graphql-php).
 
-В настоящий момент реализованы интеграции со следующими framework'ами:
-- [spiral/framework](https://spiral.dev/) под управлением [RoadRunner](https://roadrunner.dev/). Подробнее об установке и настройке смотрите [соответствующий раздел документации](spiral/index.md)
+Currently realized integrations with the following framework's:
+- [spiral/framework](https://spiral.dev/) under control [RoadRunner](https://roadrunner.dev/). For more information about installation and setup, see [соответствующий раздел документации](spiral/index.md)

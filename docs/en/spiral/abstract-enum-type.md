@@ -1,11 +1,11 @@
-# Абстрактный класс AbstractEnumType
+# Abstract class AbstractEnumType
 
-Абстрактный класс `Andi\GraphQL\Type\AbstractEnumType` позволяет определять перечислимые GraphQL типы
-без необходимости реализации методов вспомогательных интерфейсов. Большинство интерфейсов уже
-реализовано в абстрактном классе, вам достаточно задать значения его свойств, чтобы определить
-результат реализованных методов.
+The abstract class `Andi\GraphQL\Type\AbstractEnumType` allows you to define GraphQL enum types
+without the need to implement methods of auxiliary interfaces. Most interfaces are already
+implemented in an abstract class, you just need to set the values ​​of its properties to determine
+the result of the implemented methods.
 
-Пример реализации абстрактного класса:
+An example of an abstract class implementation:
 
 ```php
 namespace App\GraphQL\Type;
@@ -26,122 +26,122 @@ final class CoinSides extends AbstractEnumType
 }
 ```
 
-При реализации перечислимого GraphQL типа с помощью абстрактного класса `AbstractEnumType` необходимо
-определить значения следующих свойств:
+When implementing a GraphQL enum type using the abstract class `AbstractEnumType` you must
+determine the values ​​of the following properties: 
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>$name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Имя перечислимого типа, <b>обязательно</b> должно быть определено.</td>
+        <td valign="top">Enum type name, <b>necessary</b> must be defined.</td>
     </tr>
     <tr>
         <td valign="top"><code>$description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание перечислимого типа, отображаемое в GraphQL схеме.
-            Не определяйте значение, если описание не требуется.
+            Enum type description displayed in GraphQL scheme.
+            Don't define a value unless a description is needed.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>$values</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>Список возможных значений перечислимого типа. <b>Обязательно</b> должно быть определено.</p>
-            <p>Требования к элементам итерируриемой структуры свойства изложены ниже.</p>
+            <p>List of possible values ​​of an enumerated type. <b>Necessary</b> must be defined.</p>
+            <p>Requirements for elements of an iterable property structure are below.</p>
         </td>
     </tr>
 </table>
 
-## Определение итерируемой структуры `$values`
+## Defining an Iterable Structure `$values`
 
 ```php
-// Каждый элемент интерируемой структуры $values может быть:
+// Each element of the interposed structure $values can be:
 $this->values = [
-    // экземпляром класса, реализующего интерфейс EnumValueInterface
+    // an instance of a class that implements an interface EnumValueInterface
     new class implements EnumValueInterface {...},
 
-    // строкой с числовым индексом.
-    // В этом случае в качестве имени и значения будет использована данная строка.
+    // string with a numeric index.
+    // In this case, this string will be used as the name and value.
     'red',
 
-    // ключ => значение. Данная структура интерпретируюется следующим образом:
-    //   ключ - имя возможного значения (используется в GraphQL запросах);
-    //   значение - соответствующее значение используемое в php.
-    // При данной конфигурации:
-    // если в GraphQL запросе было указано возможное значение 'green',
-    // в php оно будет преобразовано в '#00FF00'.
-    // Допустим любой тип данных (в том числе объект).
+    // key => value. This structure is interpreted as follows:
+    //   key - possible value name (used in GraphQL queries);
+    //   value - the corresponding value used in php.
+    // With this configuration:
+    // if a possible value was specified in the GraphQL request 'green',
+    // in php it will be converted to '#00FF00'.
+    // Any data type is acceptable (Including Objects).
     'green' => '#00FF00',
 
-    // ассоциативным массивом в виде конфигурации возможного значения
+    // an associative array in the form of a configuration of possible values
     'blue' => [
-        // Если опция конфигурации 'name' опущена (как в этом примере), в качестве имени возможного значения
-        // будет использован ключ структуры, в данном случае 'blue'.
+        // If the 'name' configuration option is omitted (as in this example), as the possible name for the value
+        // the structure key will be used, in this case 'blue'.
         // 'name' => 'sapphirine',
 
-        // Необязательная опция, определяющая внутреннее (в php) значение. Допустим любой тип данных.
-        // Если опция конфигурации отсутствует, в качестве значения будет использовано имя возможного значения.
+        // An optional option that specifies an internal (in PHP) value. Any data type is acceptable.
+        // If there is no configuration option, the name of the possible value will be used as the value.
         'value' => '#0000FF',
 
-        // Описание возможного значения, используется для отображения в GraphQL схеме.
-        // Данная опция не обязательна.
+        // Description of a possible value used for display in a GraphQL scheme.
+        // This option is not necessary.
         'description' => 'EnumValue description',
 
-        // Данная опция не обязательна. Следует определить значение опции, если в GraphQL схеме
-        // необходимо указать причину по которой данное возможное значение перечисления использовать
-        // не рекомендуется.
+        // This option is not necessary. You should define the value of the option if in the GraphQL scheme
+        // it is necessary to indicate the reason why this possible enumeration value is
+        // not recomended. **326**
         'deprecationReason' => 'This enum value is deprecated. Do not use it.',
     ],
 ];
 ```
 
-Итого: защищенное свойство `$values`, имеет итерируемую структуру. Может содержать следующие элементы:
-- экземпляр класса, реализующего интерфейс `EnumValueInterface`;
-- `'ключ' => 'значение'`, где строковый ключ будет использован как имя возможного значения
-  (имя используемое в GraphQL запросах), а значение - значение используемое в php;
-- ассоциативный массив опций конфигурации возможного значения.
+Total: protected property `$values`, has an iterable structure. It can contain following elements:
+- an instance of a class that implements an interface `EnumValueInterface`;
+- `'key' => 'value'`, where the string key will be used as the name of the possible value
+  (the name used in GraphQL queries), and the value is the value used in php;
+- associative array of configuration options' possible value.
 
-Опции конфигурации возможного значения могут быть следующими:
+Possible value configuration options can be as follows: **391**
 
 <table>
     <tr>
-        <th>Опция</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Option</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя возможного значения (используемое в GraphQL запросах).
-            Если не указано, в качестве имени будет использован ключ итерируемой структуры.
+            Name of possible value (used in GraphQL queries).
+            If not specified, the key of the iterable structure will be used as the name. **409**
         </td>
     </tr>
     <tr>
         <td valign="top"><b><code>value</code></b></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            <p>Необязательная опция, определяющая значение, доступное в php.</p>
-            <p>Если опция не задана, будет использовано имя возможного значения.</p>
+            <p>Optional option that specifies the value available in php.</p>
+            <p>If the option is not specified, the name of the possible value will be used.</p>
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Описание возможного значения.</td>
+        <td valign="top">Description of possible value.</td>
     </tr>
     <tr>
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если опция задана, то в GraphQL схеме возможное значение перечисления будет помечено устаревшим.
-            В качестве причины будет указано значение данной опции.
+            If the option is set, then in the GraphQL scheme the possible enumeration value will be marked as obsolete.
+            The reason will be indicated as the value of this option.
         </td>
     </tr>
 </table>
