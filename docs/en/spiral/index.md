@@ -1,29 +1,29 @@
-# GraphQL библиотека под управлением SpiralFramework
+# GraphQL under control of SpiralFramework
 
-Следующие инструкции справедливы для версии `spiral/framework` версии 3.8 и старше.
+The following instructions are valid for `spiral/framework` versions 3.8 and later.
 
-1. [Установка и настройка библиотеки `andi-lab/graphql-php`](install.md)
-2. [Настройка GraphQL схемы](configure.md)
-3. [Определение Query полей](query-filed.md)
-4. [Определение Mutation полей](mutation-field.md)
-5. Определение GraphQL типов
+1. [Installing and configuring the library `andi-lab/graphql-php`](install.md)
+2. [Setting up a GraphQL schema](configure.md)
+3. [Defining Query Fields](query-filed.md)
+4. [Defining Mutation Fields](mutation-field.md)
+5. Defining GraphQL Types
     - [`ObjectType`](object-type.md)
     - [`InputObjectType`](input-object-type.md)
     - [`IntefaceType`](interface-type.md)
     - [`EnumType`](enum-type.md)
     - [`UnionType`](union-type.md)
     - [`ScalarType`](scalar-type.md)
-6. [Реестр GraphQL типов](type-registry.md)
-7. [Расширение типов](additional-field.md) `ObjectType` и `InterfaceType`
-8. Использование абстрактных классов
+6. [GraphQL Type Registry](type-registry.md)
+7. [Type expansion](additional-field.md) `ObjectType` и `InterfaceType`
+8. Using Abstract Classes
     - [`AbstractObjectType`](abstract-object-type.md)
     - [`AbstractInputObjectType`](abstract-input-object-type.md)
     - [`AbstractInterfaceType`](abstract-interface-type.md)
     - [`AbstractEnumType`](abstract-enum-type.md)
     - [`AbstractUnionType`](abstract-union-type.md)
     - [`AbstractScalarType`](abstract-scalar-type.md)
-9. Загрузка файлов
-10. Разработка middleware слоев
-11. Дополнительные GraphQL типы
+9. Uploading files
+10. Development of middleware layers
+11. Additional GraphQL types
     - `Date`
     - `DateTime`

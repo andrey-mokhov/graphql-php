@@ -38,13 +38,13 @@ determine the values ​​of the following properties:
     <tr>
         <td valign="top"><code>$name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Enum type name, <b>necessary</b> must be defined.</td>
+        <td valign="top">Enum type name, <b>required</b> must be defined.</td>
     </tr>
     <tr>
         <td valign="top"><code>$description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Enum type description displayed in GraphQL scheme.
+            Enum type description displayed in GraphQL schema.
             Don't define a value unless a description is needed.
         </td>
     </tr>
@@ -52,16 +52,16 @@ determine the values ​​of the following properties:
         <td valign="top"><code>$values</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>List of possible values ​​of an enumerated type. <b>Necessary</b> must be defined.</p>
-            <p>Requirements for elements of an iterable property structure are below.</p>
+            <p>List of enum items ​​of an enumerated type. <b>required</b> must be defined.</p>sc
+            <p>Requirements for elements of an iterable property are below.</p>
         </td>
     </tr>
 </table>
 
-## Defining an Iterable Structure `$values`
+## Defining an iterable property `$values`
 
 ```php
-// Each element of the interposed structure $values can be:
+// Each element of the iterable property $values can be:
 $this->values = [
     // an instance of a class that implements an interface EnumValueInterface
     new class implements EnumValueInterface {...},
@@ -89,13 +89,13 @@ $this->values = [
         // If there is no configuration option, the name of the possible value will be used as the value.
         'value' => '#0000FF',
 
-        // Description of a possible value used for display in a GraphQL scheme.
-        // This option is not necessary.
+        // Description of a possible value used for display in a GraphQL schema.
+        // This option is not required.
         'description' => 'EnumValue description',
 
-        // This option is not necessary. You should define the value of the option if in the GraphQL scheme
-        // it is necessary to indicate the reason why this possible enumeration value is
-        // not recomended. **326**
+        // This option is not required. You should define the value of the option if in the GraphQL schema
+        // it is required to indicate the reason why this possible enumeration value is
+        // not recomended.
         'deprecationReason' => 'This enum value is deprecated. Do not use it.',
     ],
 ];
@@ -107,7 +107,7 @@ Total: protected property `$values`, has an iterable structure. It can contain f
   (the name used in GraphQL queries), and the value is the value used in php;
 - associative array of configuration options' possible value.
 
-Possible value configuration options can be as follows: **391**
+Possible value configuration options can be as follows:
 
 <table>
     <tr>
@@ -120,7 +120,7 @@ Possible value configuration options can be as follows: **391**
         <td valign="top"><code>string</code></td>
         <td valign="top">
             Name of possible value (used in GraphQL queries).
-            If not specified, the key of the iterable structure will be used as the name. **409**
+            If not specified, the key of the iterable structure will be used as the name.
         </td>
     </tr>
     <tr>
@@ -140,7 +140,7 @@ Possible value configuration options can be as follows: **391**
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            If the option is set, then in the GraphQL scheme the possible enumeration value will be marked as obsolete.
+            If the option is set, then in the GraphQL schema the possible enumeration value will be marked as deprecation.
             The reason will be indicated as the value of this option.
         </td>
     </tr>
