@@ -38,8 +38,8 @@ release 1.0
   - [x] EnumType
   - [x] ScalarType
 - [ ] documentation and examples
-- [ ] rootValue & context resolve via callable; add scope call
-- [ ] add typeMode to attribute (rename typeMode to mode)
+- [x] rootValue & context resolve via callable; add scope call
+- [x] add typeMode to attribute (rename typeMode to mode)
 - [x] extract type's properties description  from  contructor's docBlock
 - [x] UploadFile type (see https://github.com/Ecodev/graphql-upload)
 
