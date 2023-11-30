@@ -1,8 +1,8 @@
 # Abstract class AbstractInputObjectType
 
-The abstract class Andi\GraphQL\Type\AbstractInputObjectType allows you to define incoming
-GraphQL object types without having to implement helper interface methods.
-Most interfaces are already implemented in the abstract class, so you just need to define its values,
+The abstract class Andi\GraphQL\Type\AbstractInputObjectType allows you to define Input Object Type
+without having to implement helper interface methods.
+Most interfaces are already implemented in the abstract class, so you just need to define its properties,
 to determine the results of implemented methods.
 
 An example of an abstract class implementation:
@@ -43,7 +43,7 @@ final class RegistrationRequest extends AbstractInputObjectType implements Parse
 }
 ```
 
-When implementing a GraphQL input object type using the abstract class `AbstractInputObjectType`
+When implementing a GraphQL Input Object Type using the abstract class `AbstractInputObjectType`
 you need to define the values ​​of the following properties:
 
 <table>
@@ -55,13 +55,13 @@ you need to define the values ​​of the following properties:
     <tr>
         <td valign="top"><code>$name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Name of the incoming object type, <b>required</b> must be defined.</td>
+        <td valign="top">Name of the incoming object type, <b>required</b>, must be defined.</td>
     </tr>
     <tr>
         <td valign="top"><code>$description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Description of the incoming object type as displayed in the GraphQL schema.
+            Description of the Input Object Type as displayed in the GraphQL schema.
             Don't define a value unless a description is needed.
         </td>
     </tr>
@@ -71,18 +71,18 @@ you need to define the values ​​of the following properties:
         <td valign="top">
             <p>List of fields of the incoming object type.</p>
             <p>
-                Requirements for elements of an iterable property structure
-                <a href="#field-definition">изложены ниже</a>.
+                Requirements for elements of an iterable property
+                <a href="#field-definition">described below</a>.
             </p>
         </td>
     </tr>
 </table>
 
-### Auxiliary Interfaces
+### Additional Interfaces
 
-A GraphQL input object type, declared using the abstract class `AbstractInputObjectType`,
+A GraphQL Input Object Type, declared using the abstract class `AbstractInputObjectType`,
 already implements [auxiliary interface](input-object-type.md#input-object-type-interfaces)
-[`FieldsAwareInterface`](input-object-type.md#fields-aware-interface).
+[`FieldsAwareInterface`](Input-Object-Type.md#fields-aware-interface).
 
 To extend the capabilities of an incoming GraphQL object type implemented using an abstract class
 `AbstractInputObjectType`, you may need to implement the following interface:
@@ -96,10 +96,10 @@ To extend the capabilities of an incoming GraphQL object type implemented using 
 </dl>
 
 
-## <a id="field-definition">Определение итерируемой структуры `$fields`</a>
+## <a id="field-definition">Defining an Iterable `$fields`</a>
 
 ```php
-// Each element of the iterable structure $fields can be:
+// Each element of the $fields can be:
 $this->fields = [
     // instance of the class Webonyx\InputObjectField
     new Webonyx\InputObjectField([...]),
@@ -168,9 +168,9 @@ Field configuration options can be as follows:
             </p>
             <p>
                 Valid values ​​can be short names of GraphQL types
-                (<code>'String'</code>, <code>'Int'</code> и т.д.) or php class names,
+                (<code>'String'</code>, <code>'Int'</code> и etc) or php class names,
                 implementing the corresponding GraphQL type
-                (<code>StringType::class</code>, <code>IntType::class</code> и другие).
+                (<code>StringType::class</code>, <code>IntType::class</code> and others).
             </p>
             <p>
                 The field type can be:
@@ -195,7 +195,7 @@ Field configuration options can be as follows:
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
                     Modifier excluding <code>null</code> value, i.e. the field value will be
-                    line.<br />
+                    string.<br />
                     Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
@@ -239,7 +239,7 @@ Field configuration options can be as follows:
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            If the parameter is specified, the field will be marked obsolete in the GraphQL schema. As
+            If the parameter is specified, the field will be marked as deprecation in the GraphQL schema. As
             the reasons for this will indicate the value of this option.
         </td>
     </tr>

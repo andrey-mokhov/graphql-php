@@ -38,7 +38,7 @@ determine the values ​​of the following properties:
     <tr>
         <td valign="top"><code>$name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Enum type name, <b>required</b> must be defined.</td>
+        <td valign="top">Enum type name, <b>required</b>, must be defined.</td>
     </tr>
     <tr>
         <td valign="top"><code>$description</code></td>
@@ -52,7 +52,7 @@ determine the values ​​of the following properties:
         <td valign="top"><code>$values</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>List of enum items ​​of an enumerated type. <b>required</b> must be defined.</p>sc
+            <p>List of enum items ​​of an enumerated type. <b>Required</b>, must be defined.</p>sc
             <p>Requirements for elements of an iterable property are below.</p>
         </td>
     </tr>
