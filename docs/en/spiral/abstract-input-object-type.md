@@ -69,7 +69,7 @@ you need to define the values ​​of the following properties:
         <td valign="top"><code>$fields</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>List of fields of the incoming object type.</p>
+            <p>List of fields of the Input Object Type.</p>
             <p>
                 Requirements for elements of an iterable property
                 <a href="#field-definition">described below</a>.
@@ -84,7 +84,7 @@ A GraphQL Input Object Type, declared using the abstract class `AbstractInputObj
 already implements [auxiliary interface](input-object-type.md#input-object-type-interfaces)
 [`FieldsAwareInterface`](Input-Object-Type.md#fields-aware-interface).
 
-To extend the capabilities of an incoming GraphQL object type implemented using an abstract class
+To extend the capabilities of an GraphQL Input Object Type implemented using an abstract class
 `AbstractInputObjectType`, you may need to implement the following interface:
 
 <dl>
@@ -168,7 +168,7 @@ Field configuration options can be as follows:
             </p>
             <p>
                 Valid values ​​can be short names of GraphQL types
-                (<code>'String'</code>, <code>'Int'</code> и etc) or php class names,
+                (<code>'String'</code>, <code>'Int'</code> etc) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
             </p>
@@ -239,7 +239,7 @@ Field configuration options can be as follows:
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            If the parameter is specified, the field will be marked as deprecation in the GraphQL schema. As
+            If the option is specified, the field will be marked as deprecation in the GraphQL schema. As
             the reasons for this will indicate the value of this option.
         </td>
     </tr>
