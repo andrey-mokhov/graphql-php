@@ -85,26 +85,26 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
 
         $instance = null;
         if ($class->isSubclassOf(FieldsAwareInterface::class)) {
-            $instance ??= $class->newInstanceWithoutConstructor();
+            $instance = $class->newInstanceWithoutConstructor();
 
             $config['fields'] = new LazyObjectFields($instance, $this->objectFieldResolver);
         }
 
         if ($class->isSubclassOf(InterfacesAwareInterface::class)) {
             $instance ??= $class->newInstanceWithoutConstructor();
-
+            /** @psalm-suppress UndefinedMethod */
             $config['interfaces'] = new LazyTypeIterator($instance->getInterfaces(...), $this->typeRegistry);
         }
 
         if ($class->isSubclassOf(IsTypeOfAwareInterface::class)) {
             $instance ??= $class->newInstanceWithoutConstructor();
-
+            /** @psalm-suppress UndefinedMethod */
             $config['isTypeOf'] = $instance->isTypeOf(...);
         }
 
         if ($class->isSubclassOf(ResolveFieldAwareInterface::class)) {
             $instance ??= $class->newInstanceWithoutConstructor();
-
+            /** @psalm-suppress UndefinedMethod */
             $config['resolveField'] = $instance->resolveField(...);
         }
 

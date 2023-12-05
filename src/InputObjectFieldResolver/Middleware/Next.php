@@ -20,8 +20,9 @@ final class Next implements InputObjectFieldResolverInterface
         $this->queue = clone $queue;
     }
 
-    public function resolve(mixed $argument): Webonyx\InputObjectField
+    public function resolve(mixed $field): Webonyx\InputObjectField
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (! isset($this->queue)) {
             throw new NextHandlerIsEmptyException('Cannot invoke pipeline resolver more than once');
         }
@@ -29,7 +30,7 @@ final class Next implements InputObjectFieldResolverInterface
         if ($this->queue->isEmpty()) {
             unset($this->queue);
 
-            return $this->fallbackResolver->resolve($argument);
+            return $this->fallbackResolver->resolve($field);
         }
 
         /** @var MiddlewareInterface $middleware */
@@ -38,6 +39,6 @@ final class Next implements InputObjectFieldResolverInterface
         $next = clone $this;
         unset($this->queue);
 
-        return $middleware->process($argument, $next);
+        return $middleware->process($field, $next);
     }
 }

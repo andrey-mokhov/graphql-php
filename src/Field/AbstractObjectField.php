@@ -33,11 +33,13 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
 
     public function getDescription(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->description ?? null;
     }
 
     public function getDeprecationReason(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->deprecationReason ?? null;
     }
 
@@ -48,11 +50,17 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
 
     public function getMode(): int
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->mode ?? 0;
     }
 
     public function getArguments(): iterable
     {
+        /**
+         * @psalm-suppress RedundantPropertyInitializationCheck
+         * @psalm-suppress RedundantCondition
+         * @psalm-suppress TypeDoesNotContainType
+         */
         foreach ($this->arguments ?? [] as $name => $argument) {
             if ($argument instanceof ArgumentInterface || $argument instanceof Webonyx\Type) {
                 yield $argument;

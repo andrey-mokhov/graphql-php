@@ -15,7 +15,7 @@ class TypeRegistry implements TypeRegistryInterface
     protected array $aliases;
 
     /**
-     * @var array<string, Webonyx\Type>
+     * @var array<string, Webonyx\Type&Webonyx\NamedType>
      */
     protected array $registry;
 
@@ -43,13 +43,13 @@ class TypeRegistry implements TypeRegistryInterface
         return isset($this->aliases[$type]) || isset($this->registry[$type]);
     }
 
-    public function get(string $type): Webonyx\Type
+    public function get(string $type): Webonyx\Type&Webonyx\NamedType
     {
         return $this->registry[$this->aliases[$type] ?? $type]
             ?? throw NotFoundException::create($type);
     }
 
-    public function register(Webonyx\Type $type, string ...$aliases): void
+    public function register(Webonyx\Type&Webonyx\NamedType $type, string ...$aliases): void
     {
         $name = (string) $type;
 

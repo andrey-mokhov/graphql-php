@@ -13,6 +13,11 @@ use Spiral\Attributes\ReaderInterface;
 use Spiral\Core\InvokerInterface;
 use Spiral\Core\ScopeInterface;
 
+/**
+ * @see Webonyx\FieldDefinition
+ *
+ * @phpstan-import-type FieldDefinitionConfig from Webonyx\FieldDefinition
+ */
 abstract class AbstractObjectFieldByReflectionMethodMiddleware extends AbstractFieldByReflectionMethodMiddleware
 {
     public function __construct(
@@ -25,6 +30,12 @@ abstract class AbstractObjectFieldByReflectionMethodMiddleware extends AbstractF
         parent::__construct($reader, $typeRegistry, $argumentResolver);
     }
 
+    /**
+     * @param FieldDefinitionConfig $config
+     * @param ReflectionMethod $method
+     *
+     * @return Webonyx\FieldDefinition
+     */
     protected function buildField(array $config, ReflectionMethod $method): Webonyx\FieldDefinition
     {
         $config['args'] = iterator_to_array($iterator = $this->getFieldArguments($method));

@@ -8,6 +8,11 @@ use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use GraphQL\Type\Definition as Webonyx;
 
+/**
+ * @see Webonyx\InterfaceType
+ *
+ * @phpstan-import-type InterfaceConfig from Webonyx\InterfaceType
+ */
 class InterfaceType extends Webonyx\InterfaceType implements DynamicObjectTypeInterface
 {
     /**
@@ -17,6 +22,10 @@ class InterfaceType extends Webonyx\InterfaceType implements DynamicObjectTypeIn
 
     private array $additionalFields = [];
 
+    /**
+     * @param InterfaceConfig $config
+     * @param ObjectFieldResolverInterface $objectFieldResolver
+     */
     public function __construct(
         array $config,
         private readonly ObjectFieldResolverInterface $objectFieldResolver,
@@ -39,6 +48,7 @@ class InterfaceType extends Webonyx\InterfaceType implements DynamicObjectTypeIn
 
     private function extractFields(): iterable
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (isset($this->nativeFields)) {
             $fields = is_callable($this->nativeFields)
                 ? call_user_func($this->nativeFields)

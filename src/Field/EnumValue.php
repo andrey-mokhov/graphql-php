@@ -34,11 +34,13 @@ final class EnumValue implements EnumValueInterface
 
     public function getDescription(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->description ?? null;
     }
 
     public function getDeprecationReason(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->deprecationReason ?? null;
     }
 

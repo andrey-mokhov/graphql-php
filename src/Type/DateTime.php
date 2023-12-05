@@ -56,7 +56,7 @@ final class DateTime extends AbstractScalarType
                 Utils::printSafeJson($value),
             ));
         }
-
+        assert($dateTime instanceof \DateTimeImmutable);
         return $dateTime;
     }
 
@@ -75,7 +75,7 @@ final class DateTime extends AbstractScalarType
                     $valueNode,
                 );
             }
-
+            assert($dateTime instanceof \DateTimeImmutable);
             return $dateTime;
         }
 

@@ -82,6 +82,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         ];
 
         if ($type instanceof InterfacesAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['interfaces'] = new LazyTypeIterator(
                 $type->getInterfaces(...),
                 $this->container->get(TypeRegistryInterface::class),
@@ -89,10 +90,12 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         }
 
         if ($type instanceof IsTypeOfAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['isTypeOf'] = $type->isTypeOf(...);
         }
 
         if ($type instanceof ResolveFieldAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['resolveField'] = $type->resolveField(...);
         }
 
@@ -114,6 +117,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         ];
 
         if ($type instanceof ParseValueAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['parseValue'] = $type->parseValue(...);
         }
 
@@ -132,6 +136,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
         if ($type instanceof ResolveTypeAwareInterface) {
             $typeRegistry = $this->container->get(TypeRegistryInterface::class);
+            /** @psalm-suppress UndefinedMethod */
             $config['resolveType'] = new LazyTypeResolver($type->resolveType(...), $typeRegistry);
         }
 
@@ -149,6 +154,7 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['resolveType'] = new LazyTypeResolver($type::resolveType(...), $typeRegistry);
         }
 
