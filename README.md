@@ -4,6 +4,8 @@
     <a href="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/?branch=master"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/coverage.png?b=master" alt="Code Coverage" /></a>
     <a href="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/build-status/master"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/build.png?b=master" alt="Build Status" /></a>
     <a href="https://scrutinizer-ci.com/code-intelligence"><img src="https://scrutinizer-ci.com/g/andrey-mokhov/graphql-php/badges/code-intelligence.svg?b=master" alt="Code Intelligence Status" /></a>
+    <a href="https://shepherd.dev/github/andrey-mokhov/graphql-php"><img src="https://shepherd.dev/github/andrey-mokhov/graphql-php/coverage.svg" alt="Code Coverage" /></a>
+    <a href="https://shepherd.dev/github/andrey-mokhov/graphql-php"><img src="https://shepherd.dev/github/andrey-mokhov/graphql-php/level.svg" alt="Psalm Level" /></a>
 </p>
 
 # GraphQL library
