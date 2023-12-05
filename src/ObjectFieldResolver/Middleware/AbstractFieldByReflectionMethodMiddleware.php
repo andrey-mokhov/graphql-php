@@ -18,6 +18,11 @@ use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionMethod;
 use Spiral\Attributes\ReaderInterface;
 
+/**
+ * @see Webonyx\FieldDefinition
+ *
+ * @phpstan-import-type FieldDefinitionConfig from Webonyx\FieldDefinition
+ */
 abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareInterface
 {
     /**
@@ -118,6 +123,12 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         return $map;
     }
 
+    /**
+     * @param FieldDefinitionConfig $config
+     * @param ReflectionMethod $method
+     *
+     * @return Webonyx\FieldDefinition
+     */
     abstract protected function buildField(array $config, ReflectionMethod $method): Webonyx\FieldDefinition;
 
     private function getFieldDeprecationReason(ReflectionMethod $method, AbstractField $attribute): ?string

@@ -11,20 +11,40 @@ use Andi\GraphQL\Field\AbstractAnonymousObjectField;
 use Andi\GraphQL\Field\AbstractObjectField;
 use GraphQL\Type\Definition as Webonyx;
 
+/**
+ * @phpstan-type ArgumentConfig array{
+ *     name: string,
+ *     type: string,
+ *     mode: int,
+ *     description?: string|null,
+ *     deprecationReason?: string|null,
+ *     defaultValue: mixed
+ * }
+ * @phpstan-type FieldConfig array{
+ *     name: string,
+ *     type: string,
+ *     mode: int,
+ *     description?: string|null,
+ *     deprecationReason?: string|null,
+ *     arguments: array<array-key, string|ArgumentConfig>
+ * }
+ */
 abstract class AbstractInterfaceType extends AbstractType implements InterfaceTypeInterface, DynamicObjectTypeInterface
 {
     /**
-     * @template A of array{name: string, type: string, mode: int, description: string, deprecationReason: string, defaultValue: mixed}
-     * @template F of array{name: string, type: string, mode: int, description: string, deprecationReason: string, arguments: array<array-key, string|A>}
-     *
-     * @var iterable<array-key, string|ObjectFieldInterface|Webonyx\FieldDefinition|F>
+     * @var iterable<array-key, string|ObjectFieldInterface|Webonyx\FieldDefinition|FieldConfig>
      */
     protected iterable $fields;
 
-    protected iterable $additionalFields = [];
+    protected array $additionalFields = [];
 
     public function getFields(): iterable
     {
+        /**
+         * @psalm-suppress RedundantPropertyInitializationCheck
+         * @psalm-suppress RedundantCondition
+         * @psalm-suppress TypeDoesNotContainType
+         */
         foreach ($this->fields ?? [] as $name => $field) {
             if ($field instanceof Webonyx\FieldDefinition || $field instanceof ObjectFieldInterface) {
                 yield $field;
@@ -67,19 +87,18 @@ abstract class AbstractInterfaceType extends AbstractType implements InterfaceTy
             return $this->makeObjectField($fieldName, ['type' => $field]);
         }
 
-        if (is_array($field)) {
-            if (! isset($field['type']) || ! is_string($field['type'])) {
-                throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField: wrong configuration - undefined type',
-                );
-            }
-
-            return $this->makeObjectField($fieldName, $field);
+        if (! isset($field['type']) || ! is_string($field['type'])) {
+            throw new CantResolveObjectFieldException(
+                'Can\'t resolve ObjectField: wrong configuration - undefined type',
+            );
         }
+
+        return $this->makeObjectField($fieldName, $field);
     }
 
     private function makeObjectField(string $name, array $field): AbstractObjectField
     {
+        /** @psalm-suppress InternalClass */
         return new class($name, $field) extends AbstractAnonymousObjectField {};
     }
 }

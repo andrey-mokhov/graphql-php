@@ -22,6 +22,7 @@ final class Next implements TypeResolverInterface
 
     public function resolve(mixed $type): Webonyx\Type
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (! isset($this->queue)) {
             throw new NextHandlerIsEmptyException('Cannot invoke pipeline resolver more than once');
         }

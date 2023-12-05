@@ -22,6 +22,7 @@ abstract class AbstractEnumType implements EnumTypeInterface
 
     public function getDescription(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->description ?? null;
     }
 

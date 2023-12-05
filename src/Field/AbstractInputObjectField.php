@@ -37,6 +37,7 @@ abstract class AbstractInputObjectField implements InputObjectFieldInterface, De
 
     public function getDescription(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->description ?? null;
     }
 
@@ -52,6 +53,7 @@ abstract class AbstractInputObjectField implements InputObjectFieldInterface, De
 
     public function getDeprecationReason(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->deprecationReason ?? null;
     }
 

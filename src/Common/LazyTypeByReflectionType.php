@@ -36,6 +36,7 @@ class LazyTypeByReflectionType
 
     private function getTypeFromReflectionNamedType(): Webonyx\Type
     {
+        assert($this->type instanceof ReflectionNamedType);
         if ($this->type->isBuiltin()) {
             try {
                 $type = match ($this->type->getName()) {
@@ -51,14 +52,15 @@ class LazyTypeByReflectionType
         } else {
             $name = $this->type->getName();
 
+            /** @psalm-suppress TypeDoesNotContainType */
             $type = 'self' === $name || 'static' === $name
                 ? $this->typeRegistry->get($this->selfClassName)
                 : $this->typeRegistry->get($name);
         }
 
-        return $this->type->allowsNull()
-            ? $type
-            : Webonyx\Type::nonNull($type);
+        return !$this->type->allowsNull() && $type instanceof Webonyx\NullableType
+            ? Webonyx\Type::nonNull($type)
+            : $type;
     }
 
     /**
@@ -66,11 +68,12 @@ class LazyTypeByReflectionType
      */
     private function getTypeFromReflectionUnionType(): Webonyx\Type
     {
-        /** @var ReflectionType $type */
         $names = [];
         $types = [];
         $allowsNull = false;
+        assert($this->type instanceof ReflectionUnionType);
         foreach ($this->type->getTypes() as $type) {
+            assert($type instanceof ReflectionNamedType);
             if ($type->isBuiltin()) {
                 $allowsNull = 'null' === $type->getName()
                     || throw new CantResolveGraphQLTypeException('UnionType must contains only ObjectTypes');
@@ -99,9 +102,9 @@ class LazyTypeByReflectionType
         if ($this->typeRegistry->has($name)) {
             $existsType = $this->typeRegistry->get($name);
 
-            return $this->type->allowsNull() || $allowsNull
-                ? $existsType
-                : Webonyx\Type::nonNull($existsType);
+            return !$this->type->allowsNull() && !$allowsNull && $existsType instanceof Webonyx\NullableType
+                ? Webonyx\Type::nonNull($existsType)
+                : $existsType;
         }
 
         $unionType = new Webonyx\UnionType([

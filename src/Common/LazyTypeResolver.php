@@ -10,12 +10,12 @@ use GraphQL\Type\Definition as Webonyx;
 final class LazyTypeResolver
 {
     /**
-     * @var pure-callable(mixed, mixed, Webonyx\ResolveInfo): ?string
+     * @var callable(mixed, mixed, Webonyx\ResolveInfo): ?string
      */
     private readonly mixed $type;
 
     /**
-     * @param pure-callable(mixed, mixed, Webonyx\ResolveInfo): ?string $type
+     * @param callable(mixed, mixed, Webonyx\ResolveInfo): ?string $type
      * @param TypeRegistryInterface $typeRegistry
      */
     public function __construct(

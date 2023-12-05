@@ -14,6 +14,11 @@ use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 
+/**
+ * @see Webonyx\FieldDefinition
+ *
+ * @phpstan-import-type FieldDefinitionConfig from Webonyx\FieldDefinition
+ */
 final class ObjectFieldMiddleware implements MiddlewareInterface
 {
     public const PRIORITY = 2048;
@@ -30,6 +35,7 @@ final class ObjectFieldMiddleware implements MiddlewareInterface
             return $fieldResolver->resolve($field);
         }
 
+        /** @var FieldDefinitionConfig $config */
         $config = [
             'name'              => $field->getName(),
             'description'       => $field->getDescription(),
@@ -42,10 +48,12 @@ final class ObjectFieldMiddleware implements MiddlewareInterface
         }
 
         if ($field instanceof ResolveAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['resolve'] = $field->resolve(...);
         }
 
         if ($field instanceof ComplexityAwareInterface) {
+            /** @psalm-suppress UndefinedMethod */
             $config['complexity'] = $field->complexity(...);
         }
 

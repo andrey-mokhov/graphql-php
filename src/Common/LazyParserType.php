@@ -34,6 +34,7 @@ final class LazyParserType
         $type = $this->typeRegistry->get($this->type);
 
         if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $this->mode)) {
+            assert($type instanceof Webonyx\NullableType);
             $type = Webonyx\Type::nonNull($type);
         }
 

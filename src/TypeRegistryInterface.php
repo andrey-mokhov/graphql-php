@@ -10,9 +10,9 @@ interface TypeRegistryInterface
 {
     public function has(string $type): bool;
 
-    public function get(string $type): Webonyx\Type;
+    public function get(string $type): Webonyx\Type&Webonyx\NamedType;
 
-    public function register(Webonyx\Type $type, string ...$aliases): void;
+    public function register(Webonyx\Type&Webonyx\NamedType $type, string ...$aliases): void;
 
     public function getTypes(): iterable;
 }

@@ -59,9 +59,12 @@ final class EnumTypeMiddleware implements MiddlewareInterface
 
     private function getCaseName(\ReflectionEnumUnitCase $case, ?Attribute\EnumValue $attribute): string
     {
-        return null !== $attribute?->name
-            ? $attribute->name
-            : $case->getName();
+        if ($attribute?->name) {
+            assert($attribute->name !== null);
+            return $attribute->name;
+        }
+
+        return $case->getName();
     }
 
     private function getCaseDescription(\ReflectionEnumUnitCase $case, ?Attribute\EnumValue $attribute): ?string

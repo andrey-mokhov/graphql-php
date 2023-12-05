@@ -12,6 +12,11 @@ use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 
+/**
+ * @see Webonyx\InputObjectField
+ *
+ * @phpstan-import-type InputObjectFieldConfig from Webonyx\InputObjectField
+ */
 final class InputObjectFieldMiddleware implements MiddlewareInterface
 {
     public const PRIORITY = 2048;
@@ -27,6 +32,7 @@ final class InputObjectFieldMiddleware implements MiddlewareInterface
             return $fieldResolver->resolve($field);
         }
 
+        /** @var InputObjectFieldConfig $config */
         $config = [
             'name'              => $field->getName(),
             'description'       => $field->getDescription(),

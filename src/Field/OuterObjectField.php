@@ -9,10 +9,15 @@ use GraphQL\Type\Definition as Webonyx;
 use Spiral\Core\InvokerInterface;
 use Spiral\Core\ScopeInterface;
 
+/**
+ * @see Webonyx\FieldDefinition
+ *
+ * @phpstan-import-type FieldDefinitionConfig from Webonyx\FieldDefinition
+ */
 final class OuterObjectField extends Webonyx\FieldDefinition
 {
     /**
-     * @param array $config
+     * @param FieldDefinitionConfig $config
      * @param class-string $class
      * @param string $method
      * @param array<string,string> $argumentsMap

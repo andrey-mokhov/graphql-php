@@ -22,6 +22,7 @@ final class Next implements ObjectFieldResolverInterface
 
     public function resolve(mixed $field): Webonyx\FieldDefinition
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (! isset($this->queue)) {
             throw new NextHandlerIsEmptyException('Cannot invoke pipeline resolver more than once');
         }

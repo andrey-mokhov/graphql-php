@@ -33,6 +33,7 @@ class Argument extends AbstractArgument implements DefaultValueAwareInterface, D
 
     public function getDeprecationReason(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->deprecationReason ?? null;
     }
 

@@ -16,25 +16,47 @@ use Andi\GraphQL\Field\AnonymousComplexityAwareTrait;
 use Andi\GraphQL\Field\AnonymousResolveAwareTrait;
 use GraphQL\Type\Definition as Webonyx;
 
+/**
+ * @phpstan-type ArgumentConfig array{
+ *     name: string,
+ *     type: string,
+ *     mode: int,
+ *     description?: string|null,
+ *     deprecationReason?: string|null,
+ *     defaultValue: mixed
+ * }
+ * @phpstan-type FieldConfig array{
+ *     name: string,
+ *     type:string,
+ *     mode: int,
+ *     description?: string|null,
+ *     deprecationReason?: string|null,
+ *     resolve?: callable|null,
+ *     complexity?: callable|null,
+ *     arguments: array<array-key, string|ArgumentConfig>
+ * }
+ */
 abstract class AbstractObjectType extends AbstractType implements
     ObjectTypeInterface,
     InterfacesAwareInterface,
     DynamicObjectTypeInterface
 {
     /**
-     * @template A of array{name: string, type: string, mode: int, description: string, deprecationReason: string, defaultValue: mixed}
-     * @template F of array{name: string, type:string, mode: int, description: string, deprecationReason: string, resolve: callable, complexity: callable, arguments: array<array-key, string|A>}
-     *
-     * @var iterable<array-key, string|ObjectFieldInterface|Webonyx\FieldDefinition|F>
+     * @var iterable<array-key, string|ObjectFieldInterface|Webonyx\FieldDefinition|FieldConfig>
      */
     protected iterable $fields;
 
     protected iterable $interfaces;
 
-    protected iterable $additionalFields = [];
+    protected array $additionalFields = [];
 
     public function getFields(): iterable
     {
+        /**
+         * @psalm-suppress RedundantPropertyInitializationCheck
+         * @psalm-suppress RedundantCondition
+         * @psalm-suppress TypeDoesNotContainType
+         */
         foreach ($this->fields ?? [] as $name => $field) {
             if ($field instanceof Webonyx\FieldDefinition || $field instanceof ObjectFieldInterface) {
                 yield $field;
@@ -56,6 +78,7 @@ abstract class AbstractObjectType extends AbstractType implements
 
     public function getInterfaces(): iterable
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         yield from $this->interfaces ?? [];
     }
 
@@ -80,38 +103,37 @@ abstract class AbstractObjectType extends AbstractType implements
             return $this->makeObjectField($fieldName, ['type' => $field]);
         }
 
-        if (is_array($field)) {
-            if (! isset($field['type']) || ! is_string($field['type'])) {
-                throw new CantResolveObjectFieldException(
-                    'Can\'t resolve ObjectField: wrong configuration - undefined type',
-                );
-            }
-
-            if (isset($field['resolve'], $field['complexity'])) {
-                return $this->makeObjectFieldWithBoth($fieldName, $field);
-            }
-
-            if (isset($field['resolve'])) {
-                return $this->makeObjectFieldWithResolve($fieldName, $field);
-            }
-
-            if (isset($field['complexity'])) {
-                return $this->makeObjectFieldWithComplexity($fieldName, $field);
-            }
-
-            return $this->makeObjectField($fieldName, $field);
+        if (! isset($field['type']) || ! is_string($field['type'])) {
+            throw new CantResolveObjectFieldException(
+                'Can\'t resolve ObjectField: wrong configuration - undefined type',
+            );
         }
+
+        if (isset($field['resolve'], $field['complexity'])) {
+            return $this->makeObjectFieldWithBoth($fieldName, $field);
+        }
+
+        if (isset($field['resolve'])) {
+            return $this->makeObjectFieldWithResolve($fieldName, $field);
+        }
+
+        if (isset($field['complexity'])) {
+            return $this->makeObjectFieldWithComplexity($fieldName, $field);
+        }
+
+        return $this->makeObjectField($fieldName, $field);
     }
 
     private function makeObjectField(string $name, array $field): AbstractObjectField
     {
+        /** @psalm-suppress InternalClass */
         return new class($name, $field) extends AbstractAnonymousObjectField {};
     }
 
     private function makeObjectFieldWithResolve(string $name, array $field): AbstractObjectField
     {
         $resolve = $this->makeClosure($field['resolve'], 'resolve');
-
+        /** @psalm-suppress InternalClass */
         return new class($name, $field, $resolve) extends AbstractAnonymousObjectField implements
             ResolveAwareInterface
         {
@@ -122,7 +144,7 @@ abstract class AbstractObjectType extends AbstractType implements
     private function makeObjectFieldWithComplexity(string $name, array $field): AbstractObjectField
     {
         $complexity = $this->makeClosure($field['complexity'], 'complexity');
-
+        /** @psalm-suppress InternalClass */
         return new class($name, $field, null, $complexity) extends AbstractAnonymousObjectField implements
             ComplexityAwareInterface
         {
@@ -134,7 +156,7 @@ abstract class AbstractObjectType extends AbstractType implements
     {
         $resolve = $this->makeClosure($field['resolve'], 'resolve');
         $complexity = $this->makeClosure($field['complexity'], 'complexity');
-
+        /** @psalm-suppress InternalClass */
         return new class($name, $field, $resolve, $complexity) extends AbstractAnonymousObjectField implements
             ResolveAwareInterface,
             ComplexityAwareInterface

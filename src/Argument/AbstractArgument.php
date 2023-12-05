@@ -29,6 +29,7 @@ abstract class AbstractArgument implements ArgumentInterface
 
     public function getDescription(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->description ?? null;
     }
 
@@ -39,7 +40,7 @@ abstract class AbstractArgument implements ArgumentInterface
 
     public function getMode(): int
     {
-        return $this->mode ?? 0;
+        return $this->mode;
     }
 
     public function hasDefaultValue(): bool

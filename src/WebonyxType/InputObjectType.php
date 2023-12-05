@@ -8,6 +8,11 @@ use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use GraphQL\Type\Definition as Webonyx;
 
+/**
+ * @see Webonyx\InputObjectType
+ *
+ * @phpstan-import-type InputObjectConfig from Webonyx\InputObjectType
+ */
 class InputObjectType extends Webonyx\InputObjectType implements DynamicObjectTypeInterface
 {
     /**
@@ -17,6 +22,10 @@ class InputObjectType extends Webonyx\InputObjectType implements DynamicObjectTy
 
     private array $additionalFields = [];
 
+    /**
+     * @param InputObjectConfig $config
+     * @param InputObjectFieldResolverInterface $inputObjectFieldResolver
+     */
     public function __construct(
         array $config,
         private readonly InputObjectFieldResolverInterface $inputObjectFieldResolver,
@@ -39,6 +48,7 @@ class InputObjectType extends Webonyx\InputObjectType implements DynamicObjectTy
 
     private function extractFields(): iterable
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (isset($this->nativeFields)) {
             $fields = is_callable($this->nativeFields)
                 ? call_user_func($this->nativeFields)

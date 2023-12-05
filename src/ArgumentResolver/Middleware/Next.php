@@ -21,6 +21,7 @@ final class Next implements ArgumentResolverInterface
 
     public function resolve(mixed $argument): array
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (! isset($this->queue)) {
             throw new NextHandlerIsEmptyException('Cannot invoke pipeline resolver more than once');
         }

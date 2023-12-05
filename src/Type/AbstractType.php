@@ -19,6 +19,7 @@ abstract class AbstractType implements TypeInterface
 
     public function getDescription(): ?string
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         return $this->description ?? null;
     }
 }
