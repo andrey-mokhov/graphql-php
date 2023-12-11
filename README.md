@@ -10,43 +10,66 @@
 
 # GraphQL library
 
-Russian [documentations](docs/ru/index.md)
+The GraphQL library for PHP allows you to define a GraphQL API using attributes, interfaces,
+and prepared abstract classes.
 
-# roadmap
-release 0.1
-- [x] Type resolver
-  - [x] UnionType resolver
-  - [x] InterfaceType resolver
-  - [x] EnumType resolver
-  - [x] ScalarType resolver
-  - [x] ObjectType resolver
-  - [x] InputObjectType resolver
-- [x] Dynamic UnionType
-- [x] Attribute `QueryField` for any service methods
-- [x] Attribute `MutationField` for any service methods
-- [x] Attribute `AdditionalField` for any service methods - add additional field to `ObjectType`, `InterfaceType`
-- [x] scalar DateTime type
-- [x] scalar Date type
+## Features
 
-release 1.0
-- [x] Unit tests
-- [ ] Functional tests
-- [x] implementation technical debt
-- [x] Abstract classes for base definitions
-  - [x] ObjectType
-  - [x] InputObjectType
-  - [x] Interface
-  - [x] UnionType
-  - [x] EnumType
-  - [x] ScalarType
-- [ ] documentation and examples
-- [x] rootValue & context resolve via callable; add scope call
-- [x] add typeMode to attribute (rename typeMode to mode)
-- [x] extract type's properties description  from  contructor's docBlock
-- [x] UploadFile type (see https://github.com/Ecodev/graphql-upload)
+Key features of the library include:
+- framework agnostic, currently integrated with SpiralFramework on RoadRunner;
+- support code first & schema first principles, which can simultaneously complement each other;
+- extending via middleware layers.
 
-release 1.1
-- [ ] Mockup types and fields
+## Simple Example
 
-release 1.2
-- [ ] inputs validate
+```php
+use Andi\GraphQL\Attribute\Argument;
+use Andi\GraphQL\Attribute\MutationField;
+use Andi\GraphQL\Attribute\QueryField;
+
+final class SimpleController
+{
+    #[QueryField(name: 'echo')]
+    #[MutationField(name: 'echo')]
+    public function echoMessage(#[Argument] string $message): string
+    {
+        return 'echo: ' . $message;
+    }
+}
+```
+
+This example shows how easy it is to define Query & Mutation. At the same time, the library
+provides full control when defining a GraphQL schema: custom types, required fields,
+default values, and much more.
+
+## Documentation
+
+Documentation is currently available in [Russian](docs/ru/index.md).
+
+An English version is also planned, will come later.
+
+## Examples
+
+The library [includes examples](examples) of defining a GraphQL schema. All definitions mentioned
+in the documentation are present in the examples in one form or another.
+
+## License
+
+See [LICENSE](../../../LICENSE)
+
+## Community
+
+Telegram group: [GraphQL library for PHP](https://t.me/andi_lab_graphql)
+
+## Roadmap
+
+- [ ] release 1.0
+  - [ ] documentation of the development of middleware layers, with an example
+  - [ ] documentation and example of connecting the
+    [Ecodev/graphql-upload](https://github.com/Ecodev/graphql-upload) library for uploading files
+- [ ] release 1.1
+  - [ ] mockup types and fields
+- [ ] other release
+  - [ ] inputs validate
+  - [ ] integration with Apollo Federation
+
