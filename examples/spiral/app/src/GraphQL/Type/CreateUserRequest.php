@@ -12,9 +12,9 @@ use Andi\GraphQL\Definition\Type\ParseValueAwareInterface;
 final class CreateUserRequest implements ParseValueAwareInterface
 {
     /**
-     * @param string $lastname Фамилия
-     * @param string $firstname Имя
-     * @param string $middlename Отчество
+     * @param string $lastname Lastname
+     * @param string $firstname Firstname
+     * @param string $middlename Middlename
      */
     public function __construct(
         #[InputObjectField] public readonly string $lastname,

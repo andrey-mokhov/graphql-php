@@ -23,7 +23,7 @@
     - [`AbstractUnionType`](abstract-union-type.md)
     - [`AbstractScalarType`](abstract-scalar-type.md)
 9. Загрузка файлов
-10. Разработка middleware слоев
+10. [Разработка middleware слоев](middleware.md)
 11. Дополнительные GraphQL типы
     - `Date`
     - `DateTime`

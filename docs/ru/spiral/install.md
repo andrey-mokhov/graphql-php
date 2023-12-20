@@ -8,7 +8,7 @@
 composer require andi-lab/graphql-php-spiral
 ```
 
-## Настройка загрузчика
+## <a id="bootloader">Настройка загрузчика</a>
 
  Добавьте `Andi\GraphQL\Spiral\Bootloader\GraphQLBootloader` в список загрузчиков `App\Application\Kernel::LOAD`
 

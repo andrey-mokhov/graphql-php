@@ -1,7 +1,7 @@
 # Определение полей входящего объектного GraphQL типа
 
 Определение поля объектного GraphQL типа возможно:
-- с помошью атрибута `Andi\GraphQL\Attribute\InputObjectField` ([ссылка](#input-object-field-via-attribute));
+- с помощью атрибута `Andi\GraphQL\Attribute\InputObjectField` ([ссылка](#input-object-field-via-attribute));
 - путем реализации интерфейса `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` ([ссылка](#input-object-field-via-interface));
 
 ## <a id="input-object-field-via-attribute">Определение с помощью атрибута</a>
