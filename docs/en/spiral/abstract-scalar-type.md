@@ -1,11 +1,11 @@
-# Абстрактный класс AbstractScalarType
+# Abstract class AbstractScalarType
 
-Абстрактный класс `Andi\GraphQL\Type\AbstractScalarType` позволяет определять скалярные GraphQL типы
-без необходимости реализации методов `getName` и `getDescription`. Эти методы уже реализовано в абстрактном
-классе, вам достаточно задать значения соответствующих свойств, чтобы определить результат этих методов.
+Abstract class `Andi\GraphQL\Type\AbstractScalarType` allows you to define scalar GraphQL types
+without the need to implement the `getName` and `getDescription` methods. These methods are already implemented in the abstract
+class, you just need to set the values ​​of the corresponding properties to determine the result of these methods.
 
-Определение типа `Money` ([пример из смежного документа](scalar-type.md)) может выглядеть следующим
-образом:
+The `Money` type definition ([example from related document](scalar-type.md)) might look like this
+way:
 
 ```php
 namespace App\GraphQL\Type;
@@ -45,37 +45,37 @@ final class Money implements AbstractScalarType
 }
 ```
 
-Абстрактный класс `AbstractScalarType` частично реализует методы, требуемые в интерфейсе
-`ScalarTypeInterface`. Вам потребуется реализовать следующие методы:
+The abstract class `AbstractScalarType` partially implements the methods required in the interface
+`ScalarTypeInterface`. You will need to implement the following methods:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>serialize</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Метод должен преобразовать полученную php-структуру <code>$value</code> в скалярное значение.
+            The method must convert the resulting PHP structure <code>$value</code> into a scalar value.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>parseValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Метод должен преобразовать переменные (variables) GraphQL запроса во внутреннюю php-структуру.
+            The method must convert the GraphQL request variables into an internal php-structure.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>parseLiteral</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Метод должен преобразовать данные из тела GraphQL запроса во внутреннюю php-структуру.
+            The method must convert data from the GraphQL request body into an internal php-structure.
         </td>
     </tr>
 </table>
 
-[Определение скалярных типов](https://webonyx.github.io/graphql-php/type-definitions/scalars/)
-идентично определению в опорной библиотеке `webonyx/graphql-php`.
+[Defining Scalar Types](https://webonyx.github.io/graphql-php/type-definitions/scalars/)
+identical to the definition in the reference library `webonyx/graphql-php`.
