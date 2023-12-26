@@ -66,18 +66,18 @@ determine the values ​​of the following properties:
             <p>
                 Iterable structure (<code>array</code> or <code>\Traversable</code>)
                 (an empty structure is not allowed) containing a list of object type names,
-                components of the combined type.
+                components of the union type.
             </p>
             <p>
                 Valid elements of an iterable structure are short names
-                <a href="object-type.md">GraphQL object types</a> or php class names,
-                implementing the corresponding GraphQL object type.
+                <a href="object-type.md">GraphQL ObjectTypes</a> or php class names,
+                implementing the corresponding GraphQL ObjectType.
             </p>
         </td>
     </tr>
 </table>
 
-A class defining a generic GraphQL type can implement the `ResolveTypeAwareInterface` interface
+A class defining a UnionType GraphQL can implement the `ResolveTypeAwareInterface` interface
 (see example above).
 
 The `ResolveTypeAwareInterface` interface requires the following method to be implemented:
@@ -92,8 +92,8 @@ The `ResolveTypeAwareInterface` interface requires the following method to be im
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
             The method should parse the structure of the first parameter <code>$value</code> and return
-            the name of the GraphQL object type associated with this structure. Short name is acceptable
-            GraphQL object type or the name of a PHP class that implements the corresponding object type.
+            the name of the GraphQL ObjectType associated with this structure. Short name is acceptable
+            GraphQL ObjectType or the name of a PHP class that implements the corresponding ObjectType.
         </td>
     </tr>
 </table>

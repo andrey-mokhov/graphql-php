@@ -1,6 +1,6 @@
-# Type expansion
+# Type extension
 
-The mechanism for expanding object types is provided by the library initially. For example definition
+The mechanism for extend ObjectType is provided by the library initially. For example definition
 Query and Mutation of fields using attributes [`#[QueryField]`](query-filed.md№query-field-via-attribute) and
 [`#[MutationField]`](mutation-field.md№mutation-field-via-attribute), this is nothing else than an extension of
 corresponding object types `Query` and `Mutation`. Thus the attribute
@@ -93,7 +93,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Field type modifier. The constructor parameter is parsed by the library if
+            Field type modifier. The constructor parameter is parsed by the library
             if the field type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
@@ -111,7 +111,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     A modifier defining a list of values ​​(array), with <code>null</code>
-                    The field value is valid. So the field value could be:
+                    the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
@@ -144,7 +144,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            If the constructor parameter is specified, the field will be marked obsolete in the GraphQL schema.
+            If the constructor parameter is specified, the field will be marked deprecated in the GraphQL schema.
             The reason will be indicated by the value of this parameter. If the parameter is not specified, but
             in the docBlock of the method there is a tag <code>@deprecated</code>, the comment of this tag will be used.
         </td>
