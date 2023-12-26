@@ -1,10 +1,10 @@
-# Абстрактный класс AbstractUnionType
+# Abstract class AbstractUnionType
 
-Абстрактный класс `Andi\GraphQL\Type\AbstractUnionType` позволяет определять объединенные GraphQL типы
-без необходимости реализации методов. Основные методы уже реализовано в абстрактном классе, вам достаточно
-задать значения его свойств, чтобы определить результат реализованных методов.
+The abstract class `Andi\GraphQL\Type\AbstractUnionType` allows you to define GraphQL union types
+without the need to implement methods. The main methods are already implemented in the abstract class, all you need is
+set the values ​​of its properties to determine the result of the implemented methods.
 
-Пример реализации абстрактного класса:
+An example of an abstract class implementation:
 
 ```php
 namespace App\GraphQL\Type;
@@ -37,26 +37,26 @@ final class ExampleAbstractUnionType extends AbstractUnionType implements Resolv
 }
 ```
 
-При реализации объединяющего GraphQL типа с помощью абстрактного класса `AbstractUnionType` необходимо
-определить значения следующих свойств:
+When implementing a GraphQL union type using the abstract class `AbstractUnionType` you must
+determine the values ​​of the following properties:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>$name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Имя объединяющего типа, <b>обязательно</b> должно быть определено.</td>
+        <td valign="top">The name of the union type, <b>required</b> must be defined.</td>
     </tr>
     <tr>
         <td valign="top"><code>$description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание объединяющего типа, отображаемое в GraphQL схеме.
-            Не определяйте значение, если описание не требуется.
+            A description of the union type that is displayed in the GraphQL schema.
+            Don't define a value unless a description is needed.
         </td>
     </tr>
     <tr>
@@ -64,37 +64,36 @@ final class ExampleAbstractUnionType extends AbstractUnionType implements Resolv
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
             <p>
-                Итерируемая структура (<code>array</code> или <code>\Traversable</code>)
-                (пустая структура недопустима) содержащая список имен объектных типов,
-                составляющих объединенный тип.
+                Iterable structure (<code>array</code> or <code>\Traversable</code>)
+                (an empty structure is not allowed) containing a list of object type names,
+                components of the combined type.
             </p>
             <p>
-                Допустимыми элементами итерируемой структуры являются краткие имена
-                <a href="object-type.md">объектных GraphQL типов</a> или имена php классов,
-                реализующих соответствующий объектный GraphQL тип.
+                Valid elements of an iterable structure are short names
+                <a href="object-type.md">GraphQL object types</a> or php class names,
+                implementing the corresponding GraphQL object type.
             </p>
         </td>
     </tr>
 </table>
 
-Класс, определяющий объединенный GraphQL тип, может реализовать интерфейс `ResolveTypeAwareInterface`
-(см. пример выше).
+A class defining a generic GraphQL type can implement the `ResolveTypeAwareInterface` interface
+(see example above).
 
-Интерфейс `ResolveTypeAwareInterface` требует реализации следующего метода:
-
+The `ResolveTypeAwareInterface` interface requires the following method to be implemented:
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>resolveType</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Метод должен проанализировать структуру первого параметра <code>$value</code> и вернуть
-            имя объектного GraphQL типа, ассоциированного с этой структурой. Допустимо краткое имя
-            объектного GraphQL типа или имя php-класса, реализующего cсоответствующий объектный тип.
+            The method should parse the structure of the first parameter <code>$value</code> and return
+            the name of the GraphQL object type associated with this structure. Short name is acceptable
+            GraphQL object type or the name of a PHP class that implements the corresponding object type.
         </td>
     </tr>
 </table>
