@@ -3,7 +3,7 @@ MAKEFLAGS += --no-print-directory
 
 .EXPORT_ALL_VARIABLES:
 PHP_IMAGE_VERSION := 8.1-cli-alpine3.18
-RR_VERSION := 2023.3.7
+RR_VERSION := 2023.3.8
 ROOT_DIR := $(shell pwd)
 
 install:
