@@ -36,9 +36,9 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstPropertyMetadata($field, InputObjectField::class);
 
         $config = [
-            'name'              => $this->getFieldName($field, $attribute),
-            'description'       => $this->getFieldDescription($field, $attribute),
-            'type'              => $this->getFieldType($field, $attribute),
+            'name' => $this->getFieldName($field, $attribute),
+            'description' => $this->getFieldDescription($field, $attribute),
+            'type' => $this->getFieldType($field, $attribute),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
@@ -84,7 +84,7 @@ final class ReflectionPropertyMiddleware implements MiddlewareInterface
         }
 
         if (! $property->hasType()) {
-            throw new CantResolveGraphQLTypeException(sprintf(
+            throw new CantResolveGraphQLTypeException(\sprintf(
                 'Can\'t resolve GraphQL type for field "%s"',
                 $property->getName()
             ));

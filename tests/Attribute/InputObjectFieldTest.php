@@ -42,7 +42,7 @@ final class InputObjectFieldTest extends TestCase
         self::assertSame($expected['mode'] ?? null, $attribute->mode);
         self::assertSame($expected['deprecationReason'] ?? null, $attribute->deprecationReason);
 
-        if (isset($expected['defaultValue']) || array_key_exists('defaultValue', $expected)) {
+        if (isset($expected['defaultValue']) || \array_key_exists('defaultValue', $expected)) {
             self::assertTrue($attribute->hasDefaultValue());
             self::assertSame($expected['defaultValue'], $attribute->defaultValue);
         } else {

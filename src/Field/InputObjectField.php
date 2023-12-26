@@ -20,7 +20,7 @@ final class InputObjectField extends AbstractInputObjectField implements Default
     ) {
         parent::__construct($name, $type, $mode, $description, $deprecationReason);
 
-        if (func_num_args() >= 6) {
+        if (\func_num_args() >= 6) {
             $this->defaultValue = $defaultValue;
         }
     }

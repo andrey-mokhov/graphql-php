@@ -57,7 +57,7 @@ final class UserFullName implements
     public function resolve(mixed $objectValue, array $args, mixed $context, Webonyx\ResolveInfo $info): mixed
     {
         /** @var User $objectValue */
-        return implode(
+        return \implode(
             $args['separator'],
             [
                 $objectValue->getLastname(),

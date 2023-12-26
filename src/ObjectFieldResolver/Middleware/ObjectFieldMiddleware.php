@@ -37,10 +37,10 @@ final class ObjectFieldMiddleware implements MiddlewareInterface
 
         /** @var FieldDefinitionConfig $config */
         $config = [
-            'name'              => $field->getName(),
-            'description'       => $field->getDescription(),
+            'name' => $field->getName(),
+            'description' => $field->getDescription(),
             'deprecationReason' => $field->getDeprecationReason(),
-            'type'              => new LazyType($field, $this->typeRegistry),
+            'type' => new LazyType($field, $this->typeRegistry),
         ];
 
         if ($field instanceof ArgumentsAwareInterface) {

@@ -14,7 +14,7 @@ final class InputObjectFieldResolver implements PipelineInterface
 {
     private SplPriorityQueue $pipeline;
 
-    private int $secondPriority = PHP_INT_MAX;
+    private int $secondPriority = \PHP_INT_MAX;
 
     public function __construct()
     {

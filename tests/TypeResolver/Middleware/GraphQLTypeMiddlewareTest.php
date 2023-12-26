@@ -143,7 +143,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
         if (isset($expected['interfaces'])) {
             $interfaces = $type->getInterfaces();
             foreach ($expected['interfaces'] as $interface) {
-                self::assertTrue(in_array($this->typeRegistry->get($interface), $interfaces, true));
+                self::assertContains($this->typeRegistry->get($interface), $interfaces);
             }
         }
 
@@ -153,7 +153,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
 
         if (isset($expected['resolveField'])) {
             self::assertIsCallable($type->resolveFieldFn);
-            self::assertSame($expected['resolveField'], call_user_func($type->resolveFieldFn, null, [], null, $info));
+            self::assertSame($expected['resolveField'], \call_user_func($type->resolveFieldFn, null, [], null, $info));
         }
 
         if ($type instanceof DynamicObjectTypeInterface) {
@@ -174,7 +174,7 @@ final class GraphQLTypeMiddlewareTest extends TestCase
         if (isset($expected['types'])) {
             $types = $type->getTypes();
             foreach ($expected['types'] as $name) {
-                self::assertTrue(in_array($this->typeRegistry->get($name), $types, true));
+                self::assertContains($this->typeRegistry->get($name), $types);
             }
         }
 

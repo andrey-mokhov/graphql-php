@@ -34,16 +34,15 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstParameterMetadata($argument, Argument::class);
 
         $config = [
-            'name'              => $this->getArgumentName($argument, $attribute),
-            'description'       => $this->getArgumentDescription($argument, $attribute),
-            'type'              => $this->getArgumentType($argument, $attribute),
+            'name' => $this->getArgumentName($argument, $attribute),
+            'description' => $this->getArgumentDescription($argument, $attribute),
+            'type' => $this->getArgumentType($argument, $attribute),
             'deprecationReason' => $this->getArgumentDeprecationReason($argument, $attribute),
         ];
 
         if ($this->hasDefaultValue($argument, $attribute)) {
             $config['defaultValue'] = $this->getArgumentDefaultValue($argument, $attribute);
         }
-
 
         return $config;
     }
@@ -85,7 +84,7 @@ final class ReflectionParameterMiddleware implements MiddlewareInterface
         }
 
         if (! $parameter->hasType()) {
-            throw new CantResolveGraphQLTypeException(sprintf(
+            throw new CantResolveGraphQLTypeException(\sprintf(
                 'Can\'t resolve GraphQL type for argument "%s"',
                 $parameter->getName()
             ));

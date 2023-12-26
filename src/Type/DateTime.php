@@ -49,14 +49,14 @@ final class DateTime extends AbstractScalarType
 
         $errors = \DateTimeImmutable::getLastErrors() ?: ['error_count' => 0, 'warnings' => []];
 
-        if ($errors['error_count'] > 0 || count($errors['warnings'])) {
-            throw new Error(sprintf(
+        if ($errors['error_count'] > 0 || \count($errors['warnings'])) {
+            throw new Error(\sprintf(
                 'The DateTime value must be a string value in "%s" format; given: %s',
                 \DateTimeInterface::ATOM,
                 Utils::printSafeJson($value),
             ));
         }
-        assert($dateTime instanceof \DateTimeImmutable);
+        \assert($dateTime instanceof \DateTimeImmutable);
         return $dateTime;
     }
 
@@ -69,17 +69,17 @@ final class DateTime extends AbstractScalarType
 
             $errors = \DateTimeImmutable::getLastErrors() ?: ['error_count' => 0, 'warnings' => []];
 
-            if ($errors['error_count'] > 0 || count($errors['warnings'])) {
+            if ($errors['error_count'] > 0 || \count($errors['warnings'])) {
                 throw new Error(
-                    sprintf('Invalid DateTime value; given: %s', Printer::doPrint($valueNode)),
+                    \sprintf('Invalid DateTime value; given: %s', Printer::doPrint($valueNode)),
                     $valueNode,
                 );
             }
-            assert($dateTime instanceof \DateTimeImmutable);
+            \assert($dateTime instanceof \DateTimeImmutable);
             return $dateTime;
         }
 
-        throw new Error(sprintf(
+        throw new Error(\sprintf(
             'The DateTime value must be a string value in "%s" format; given: %s',
             \DateTimeInterface::ATOM,
             Printer::doPrint($valueNode),

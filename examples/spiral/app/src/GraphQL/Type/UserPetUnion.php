@@ -32,7 +32,7 @@ final class UserPetUnion implements UnionTypeInterface, ResolveTypeAwareInterfac
             return User::class;
         }
 
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return 'pet';
         }
 

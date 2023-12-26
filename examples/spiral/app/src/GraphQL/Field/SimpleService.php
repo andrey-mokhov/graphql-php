@@ -65,7 +65,7 @@ final class SimpleService
     #[QueryField(type: 'UserPetUnion!')]
     public function userOrPet(): mixed
     {
-        if (random_int(0, 9) < 5) {
+        if (\random_int(0, 9) < 5) {
             return $this->getUser();
         } else {
             return 'Tom';
@@ -75,7 +75,7 @@ final class SimpleService
     #[QueryField(type: 'ExampleAbstractUnionType!')]
     public function exampleAbstractUnionType(): mixed
     {
-        if (random_int(0, 9) < 5) {
+        if (\random_int(0, 9) < 5) {
             return $this->exampleAbstractObjectType();
         } else {
             return 'Jerry';
@@ -85,7 +85,7 @@ final class SimpleService
     #[QueryField(type: Money::class)]
     public function randomSum(): int
     {
-        return random_int(10000, 50000);
+        return \random_int(10000, 50000);
     }
 
     #[QueryField(type: ExampleAbstractObjectType::class)]
@@ -97,7 +97,7 @@ final class SimpleService
     #[QueryField(type: 'CoinSides!')]
     public function tossUpACoin(): bool
     {
-        return (bool) (random_int(0, 9) & 1);
+        return (bool) (\random_int(0, 9) & 1);
     }
 
     #[QueryField]

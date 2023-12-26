@@ -17,11 +17,11 @@ class Simple2InputObjectType
     #[InputObjectField]
     public string $foo;
 
-    public string $bar;
+    public string $qwe;
 
     #[InputObjectField]
     public function setBar(string $value): void
     {
-        $this->bar = $value;
+        $this->qwe = $value;
     }
 }

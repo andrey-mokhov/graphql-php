@@ -19,6 +19,6 @@ trait AnonymousResolveAwareTrait
 
     public function resolve(mixed $objectValue, array $args, mixed $context, Webonyx\ResolveInfo $info): mixed
     {
-        return call_user_func($this->resolveFn, $objectValue, $args, $context, $info);
+        return \call_user_func($this->resolveFn, $objectValue, $args, $context, $info);
     }
 }

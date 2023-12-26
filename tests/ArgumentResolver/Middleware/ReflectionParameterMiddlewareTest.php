@@ -81,8 +81,8 @@ final class ReflectionParameterMiddlewareTest extends TestCase
         }
 
         $config = $middleware->process($parameter, $nextResolver);
-        if (isset($config['type']) && is_callable($config['type'])) {
-            $config['type'] = call_user_func($config['type']);
+        if (isset($config['type']) && \is_callable($config['type'])) {
+            $config['type'] = \call_user_func($config['type']);
         }
         if ($config['type'] instanceof Webonyx\WrappingType) {
             $config['type'] = $config['type']->getWrappedType();
@@ -93,7 +93,7 @@ final class ReflectionParameterMiddlewareTest extends TestCase
             self::assertSame($value, $config[$name]);
         }
 
-        if (! array_key_exists('defaultValue', $expected)) {
+        if (! \array_key_exists('defaultValue', $expected)) {
             self::assertArrayNotHasKey('defaultValue', $config);
         }
     }

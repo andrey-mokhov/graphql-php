@@ -62,7 +62,7 @@ final class LazyTypeByReflectionTypeTest extends TestCase
             $this->expectException($exception);
         }
 
-        $type = (string) call_user_func($instance);
+        $type = (string) \call_user_func($instance);
         self::assertSame($expected, $type);
     }
 
@@ -88,7 +88,7 @@ final class LazyTypeByReflectionTypeTest extends TestCase
             'fn' => static function (): null|float {return null;},
         ];
 
-        if (PHP_VERSION_ID >= 80200) {
+        if (\PHP_VERSION_ID >= 80200) {
             $fn = null;
             eval('$fn = static function (): true {return true;};');
 

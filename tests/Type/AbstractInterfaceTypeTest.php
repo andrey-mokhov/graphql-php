@@ -77,7 +77,7 @@ final class AbstractInterfaceTypeTest extends TestCase
             self::assertSame($expected['name'], $instance->getName());
         }
 
-        if (isset($expected['description']) || array_key_exists('description', $expected)) {
+        if (isset($expected['description']) || \array_key_exists('description', $expected)) {
             self::assertSame($expected['description'], $instance->getDescription());
         }
 
@@ -94,7 +94,7 @@ final class AbstractInterfaceTypeTest extends TestCase
                     self::assertSame($expField['name'], $field->getName());
                 }
 
-                if (isset($expField['description']) || array_key_exists('description', $expField)) {
+                if (isset($expField['description']) || \array_key_exists('description', $expField)) {
                     self::assertSame($expField['description'], $field->description);
                 }
 
@@ -124,7 +124,7 @@ final class AbstractInterfaceTypeTest extends TestCase
                             self::assertFalse($arg->isDeprecated());
                         }
 
-                        if (isset($expArg['defaultValue']) || array_key_exists('defaultValue', $expArg)) {
+                        if (isset($expArg['defaultValue']) || \array_key_exists('defaultValue', $expArg)) {
                             self::assertTrue($arg->defaultValueExists());
                             self::assertSame($expArg['defaultValue'], $arg->defaultValue);
                         } else {

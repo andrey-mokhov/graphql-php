@@ -8,6 +8,6 @@ class NotFoundException extends \Exception implements GraphQLExceptionInterface
 {
     public static function create(string $type): self
     {
-        return new self(sprintf('Can\'t resolve GraphQL type: "%s"', $type));
+        return new self(\sprintf('Can\'t resolve GraphQL type: "%s"', $type));
     }
 }

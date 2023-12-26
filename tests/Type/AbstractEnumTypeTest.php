@@ -60,7 +60,7 @@ final class AbstractEnumTypeTest extends TestCase
         self::assertSame($expected['name'], $instance->name());
         self::assertSame($expected['description'] ?? null, $instance->description());
 
-        self::assertCount(count($expected['values'] ?? []), $instance->getValues());
+        self::assertCount(\count($expected['values'] ?? []), $instance->getValues());
         foreach ($expected['values'] as $expValueName => $expEnumValue) {
             $enumValue = $instance->getValue($expValueName);
             self::assertInstanceOf(Webonyx\EnumValueDefinition::class, $enumValue);

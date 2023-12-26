@@ -23,7 +23,7 @@ final class LazyType
         $mode = $this->type->getMode();
 
         if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $mode)) {
-            assert($type instanceof Webonyx\NullableType);
+            \assert($type instanceof Webonyx\NullableType);
             $type = Webonyx\Type::nonNull($type);
         }
 

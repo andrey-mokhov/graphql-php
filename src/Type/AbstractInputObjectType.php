@@ -22,10 +22,10 @@ abstract class AbstractInputObjectType extends AbstractType implements InputObje
         foreach ($this->fields as $name => $field) {
             if ($field instanceof Webonyx\InputObjectField || $field instanceof InputObjectFieldInterface) {
                 yield $field;
-            } elseif (is_string($field)) {
+            } elseif (\is_string($field)) {
                 yield new InputObjectField($name, $field);
-            } elseif (is_array($field)) {
-                if (is_string($name)) {
+            } elseif (\is_array($field)) {
+                if (\is_string($name)) {
                     $field['name'] ??= $name;
                 }
 

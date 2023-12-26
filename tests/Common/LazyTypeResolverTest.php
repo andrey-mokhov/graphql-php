@@ -36,7 +36,7 @@ final class LazyTypeResolverTest extends TestCase
         $typeRegistry->register(new Webonyx\ObjectType(['name' => 'Bar']));
 
         $instance = new LazyTypeResolver($fn, $typeRegistry);
-        $type = call_user_func($instance, $value, $context, $info);
+        $type = \call_user_func($instance, $value, $context, $info);
 
         self::assertSame($expected, (string) $type);
     }

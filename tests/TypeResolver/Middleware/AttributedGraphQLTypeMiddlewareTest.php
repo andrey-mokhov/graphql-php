@@ -33,6 +33,8 @@ use Andi\GraphQL\TypeResolver\TypeResolverInterface;
 use Andi\GraphQL\WebonyxType\InputObjectType;
 use Andi\GraphQL\WebonyxType\InterfaceType;
 use Andi\GraphQL\WebonyxType\ObjectType;
+use Andi\Tests\GraphQL\Fixture\FooInterfaceType;
+use Andi\Tests\GraphQL\Fixture\FooObjectType;
 use Andi\Tests\GraphQL\Fixture\Native\EnumType;
 use Andi\Tests\GraphQL\Fixture\PriorityInputObjectType;
 use Andi\Tests\GraphQL\Fixture\PriorityInterfaceType;
@@ -112,9 +114,9 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
         $this->typeRegistry->register(new Webonyx\ObjectType([
             'name' => 'FooObjectType',
             'fields' => [
-                'foo' => Webonyx\Type::string(),
+                'foo' => Webonyx\Type::nonNull(Webonyx\Type::string()),
             ],
-        ]));
+        ]), FooObjectType::class);
         $this->container->bind(TypeRegistryInterface::class, $this->typeRegistry);
         $this->container->bind(ResolveType::class, new ResolveType($this->typeRegistry));
 
@@ -204,18 +206,15 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
             foreach ($expected['fields'] as $name => $expectedFieldType) {
                 $field = $type->getField($name);
                 $fieldType = $field->getType();
-                if ($fieldType instanceof Webonyx\WrappingType) {
-                    $fieldType = $fieldType->getWrappedType();
-                }
 
-                self::assertSame($expectedFieldType, $fieldType);
+                self::assertSame($expectedFieldType, (string) $fieldType);
             }
         }
 
         if (isset($expected['interfaces'])) {
             $interfaces = $type->getInterfaces();
             foreach ($expected['interfaces'] as $interface) {
-                self::assertTrue(in_array($this->typeRegistry->get($interface), $interfaces, true));
+                self::assertContains($this->typeRegistry->get($interface), $interfaces);
             }
         }
 
@@ -225,7 +224,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
 
         if (isset($expected['resolveField'])) {
             self::assertIsCallable($type->resolveFieldFn);
-            self::assertSame($expected['resolveField'], call_user_func($type->resolveFieldFn, null, [], null, $info));
+            self::assertSame($expected['resolveField'], \call_user_func($type->resolveFieldFn, null, [], null, $info));
         }
 
         if ($type instanceof DynamicObjectTypeInterface) {
@@ -240,7 +239,10 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
         // InterfaceType
         if (isset($expected['resolveType'])) {
             $resolvedType = $this->typeRegistry->get($expected['resolveType']);
-            self::assertSame($resolvedType, $type->resolveType(null, $this->typeRegistry, $info));
+            self::assertSame(
+                $resolvedType,
+                $type->resolveType($expected['valueForResolveType'] ?? null, $this->typeRegistry, $info),
+            );
         }
     }
 
@@ -252,8 +254,8 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'SimpleObjectType',
                 'description' => 'ObjectType description.',
                 'fields' => [
-                    'foo' => Webonyx\Type::int(),
-                    'bar' => Webonyx\Type::string(),
+                    'foo' => 'Int!',
+                    'bar' => 'String!',
                 ],
             ],
             'class' => new \ReflectionClass(SimpleObjectType::class),
@@ -265,7 +267,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'HiPriorityObjectType',
                 'description' => 'Hi priority description',
                 'fields' => [
-                    'foo' => Webonyx\Type::string(),
+                    'foo' => 'String',
                 ],
                 'interfaces' => [
                     'FooInterface',
@@ -282,7 +284,7 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'SimpleInterfaceType',
                 'description' => 'InterfaceType description.',
                 'fields' => [
-                    'foo' => Webonyx\Type::string(),
+                    'foo' => 'String!',
                 ],
                 'resolveType' => 'FooObjectType',
             ],
@@ -295,11 +297,24 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'HiPriorityInterfaceType',
                 'description' => 'Hi priority description',
                 'fields' => [
-                    'foo' => Webonyx\Type::int(),
+                    'foo' => 'Int!',
                 ],
                 'resolveType' => 'FooObjectType',
             ],
             'class' => new \ReflectionClass(PriorityInterfaceType::class),
+        ];
+
+        yield 'FooInterfaceType' => [
+            'expected' => [
+                'instanceOf' => Webonyx\InterfaceType::class,
+                'name' => 'FooInterfaceType',
+                'fields' => [
+                    'foo' => 'String!',
+                ],
+                'resolveType' => 'FooObjectType',
+                'valueForResolveType' => new FooObjectType(),
+            ],
+            'class' => new \ReflectionClass(FooInterfaceType::class),
         ];
 
         yield 'SimpleInputObjectType' => [
@@ -308,8 +323,8 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'SimpleInputObjectType',
                 'description' => 'SimpleInputObjectType description.',
                 'fields' => [
-                    'foo' => Webonyx\Type::string(),
-                    'bar' => Webonyx\Type::string(),
+                    'foo' => 'String!',
+                    'bar' => 'String!',
                 ],
                 'parseValue' => 17,
             ],
@@ -318,15 +333,15 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
 
         $obj = new Simple2InputObjectType();
         $obj->foo = 'asd';
-        $obj->bar = 'qwe';
+        $obj->qwe = 'qwe';
 
         yield 'Simple2InputObjectType' => [
             'expected' => [
                 'instanceOf' => Webonyx\InputObjectType::class,
                 'name' => 'Simple2InputObjectType',
                 'fields' => [
-                    'foo' => Webonyx\Type::string(),
-                    'bar' => Webonyx\Type::string(),
+                    'foo' => 'String!',
+                    'bar' => 'String!',
                 ],
                 'parseValue' => $obj,
             ],
@@ -347,8 +362,8 @@ final class AttributedGraphQLTypeMiddlewareTest extends TestCase
                 'name' => 'HiPriorityInputObjectType',
                 'description' => 'Hi priority description',
                 'fields' => [
-                    'foo' => Webonyx\Type::int(),
-                    'bar' => Webonyx\Type::id(),
+                    'foo' => 'Int',
+                    'bar' => 'ID',
                 ],
                 'parseValue' => 12,
             ],

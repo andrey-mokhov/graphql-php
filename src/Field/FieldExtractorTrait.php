@@ -39,7 +39,7 @@ trait FieldExtractorTrait
             'deprecationReason'=> $config['deprecationReason'] ?? null,
         ];
 
-        if (isset($config['defaultValue']) || array_key_exists('defaultValue', $config)) {
+        if (isset($config['defaultValue']) || \array_key_exists('defaultValue', $config)) {
             $parameters['defaultValue'] = $config['defaultValue'];
         }
 

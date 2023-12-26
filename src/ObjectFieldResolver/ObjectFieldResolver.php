@@ -14,7 +14,7 @@ final class ObjectFieldResolver implements PipelineInterface
 {
     private SplPriorityQueue $pipeline;
 
-    private int $secondPriority = PHP_INT_MAX;
+    private int $secondPriority = \PHP_INT_MAX;
 
     public function __construct()
     {
@@ -25,6 +25,7 @@ final class ObjectFieldResolver implements PipelineInterface
     {
         $this->pipeline = clone $this->pipeline;
     }
+
     public function resolve(mixed $field): Webonyx\FieldDefinition
     {
         return (new Next($this->pipeline, new CantResolveObjectFieldResolver()))->resolve($field);

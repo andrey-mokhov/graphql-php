@@ -24,14 +24,14 @@ final class Money implements ScalarTypeInterface
 
     public function serialize(mixed $value): int
     {
-        return is_int($value)
+        return \is_int($value)
             ? $value
             : throw new SerializationError("Int cannot represent non-integer value");
     }
 
     public function parseValue(mixed $value): int
     {
-        return is_int($value)
+        return \is_int($value)
             ? $value
             : throw new Error("Int cannot represent non-integer value");
     }

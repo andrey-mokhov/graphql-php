@@ -39,9 +39,9 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstFunctionMetadata($field, InputObjectField::class);
 
         $config = [
-            'name'              => $this->getInputObjectFieldName($field, $attribute),
-            'description'       => $this->getFieldDescription($field, $attribute),
-            'type'              => $this->getFieldType($field, $attribute),
+            'name' => $this->getInputObjectFieldName($field, $attribute),
+            'description' => $this->getFieldDescription($field, $attribute),
+            'type' => $this->getFieldType($field, $attribute),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
@@ -81,8 +81,8 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
 
         $parameters = $method->getParameters();
 
-        if (1 !== count($parameters)) {
-            throw new CantResolveGraphQLTypeException(sprintf(
+        if (1 !== \count($parameters)) {
+            throw new CantResolveGraphQLTypeException(\sprintf(
                 'Can\'t resolve GraphQL type "%s" for field "%s". Method must have a single parameter.',
                 $method->getDeclaringClass()->getName(),
                 $method->getName(),
@@ -92,7 +92,7 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
         $parameter = $parameters[0];
 
         if (! $parameter->hasType()) {
-            throw new CantResolveGraphQLTypeException(sprintf(
+            throw new CantResolveGraphQLTypeException(\sprintf(
                 'Can\'t resolve GraphQL type "%s" for field "%s". Parameter has no type.',
                 $method->getDeclaringClass()->getName(),
                 $method->getName(),

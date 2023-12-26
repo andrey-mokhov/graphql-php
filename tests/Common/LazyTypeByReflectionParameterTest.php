@@ -49,7 +49,7 @@ final class LazyTypeByReflectionParameterTest extends TestCase
 
         $instance = new LazyTypeByReflectionParameter($parameter, new TypeRegistry());
 
-        $type = (string) call_user_func($instance);
+        $type = (string) \call_user_func($instance);
         self::assertSame($expected, $type);
     }
 

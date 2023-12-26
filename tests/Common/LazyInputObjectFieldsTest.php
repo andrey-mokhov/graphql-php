@@ -49,7 +49,7 @@ final class LazyInputObjectFieldsTest extends TestCase
 
         self::assertFalse($class->isCalled);
 
-        $fields = call_user_func($instance);
+        $fields = \call_user_func($instance);
         foreach ($fields as $tmp) {
             // nothing
         }

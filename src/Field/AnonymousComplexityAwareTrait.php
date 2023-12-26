@@ -17,6 +17,6 @@ trait AnonymousComplexityAwareTrait
 
     public function complexity(int $childrenComplexity, array $args): int
     {
-        return call_user_func($this->complexityFn, $childrenComplexity, $args);
+        return \call_user_func($this->complexityFn, $childrenComplexity, $args);
     }
 }

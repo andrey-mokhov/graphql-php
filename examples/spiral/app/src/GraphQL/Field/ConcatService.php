@@ -68,7 +68,7 @@ final class ConcatService implements
 
     public function resolve(mixed $objectValue, array $args, mixed $context, Webonyx\ResolveInfo $info): mixed
     {
-        return implode($args['separator'], $args['parts']);
+        return \implode($args['separator'], $args['parts']);
     }
 
     public function complexity(int $childrenComplexity, array $args): int

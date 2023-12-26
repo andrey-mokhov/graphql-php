@@ -29,7 +29,7 @@ final class LazyTypeIteratorTest extends TestCase
         $instance = new LazyTypeIterator($fn, new TypeRegistry());
 
         $types = [];
-        foreach (call_user_func($instance) as $type) {
+        foreach (\call_user_func($instance) as $type) {
             $types[] = (string) $type;
         }
 

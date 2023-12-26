@@ -34,8 +34,6 @@ use PHPUnit\Framework\TestCase;
 use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Attributes\ReaderInterface;
 use Spiral\Core\Container;
-use Spiral\Core\InvokerInterface;
-use Spiral\Core\ScopeInterface;
 
 #[CoversClass(AbstractOuterObjectFieldByReflectionMethodMiddleware::class)]
 #[CoversClass(AbstractFieldByReflectionMethodMiddleware::class)]
@@ -149,9 +147,9 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
             }
         }
 
-        if (isset($expected['resolve']) || array_key_exists('resolve', $expected)) {
+        if (isset($expected['resolve']) || \array_key_exists('resolve', $expected)) {
             $args = [$object, ['str' => 'string value', 'flag' => false], null, \Mockery::mock(Webonyx\ResolveInfo::class)];
-            self::assertSame($expected['resolve'], call_user_func_array($objectField->resolveFn, $args));
+            self::assertSame($expected['resolve'], \call_user_func_array($objectField->resolveFn, $args));
         }
     }
 

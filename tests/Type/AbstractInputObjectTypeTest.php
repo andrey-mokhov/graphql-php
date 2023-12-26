@@ -101,7 +101,7 @@ final class AbstractInputObjectTypeTest extends TestCase
                     self::assertFalse($field->isDeprecated());
                 }
 
-                if (isset($expField['defaultValue']) || array_key_exists('defaultValue', $expField)) {
+                if (isset($expField['defaultValue']) || \array_key_exists('defaultValue', $expField)) {
                     self::assertTrue($field->defaultValueExists());
                     self::assertSame($expField['defaultValue'], $field->defaultValue);
                 } else {

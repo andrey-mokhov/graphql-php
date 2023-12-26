@@ -13,8 +13,9 @@ final class ArgumentConfigurationMiddleware implements MiddlewareInterface
 
     public function process(mixed $argument, ArgumentResolverInterface $argumentResolver): array
     {
-        $isConfig = is_array($argument)
+        $isConfig = \is_array($argument)
             && isset($argument['name'], $argument['type'])
+            && \is_string($argument['name'])
             && $argument['type'] instanceof Webonyx\Type;
 
         return $isConfig
