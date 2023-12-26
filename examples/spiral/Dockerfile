@@ -1,11 +1,6 @@
-ARG RR_VERSION
-ARG RR_IMAGE=spiralscout/roadrunner:${RR_VERSION}
-ARG PHP_IMAGE_VERSION
-ARG PHP_IMAGE=php:${PHP_IMAGE_VERSION}
+FROM spiralscout/roadrunner:2023.3.8 as rr
 
-FROM ${RR_IMAGE} as rr
-
-FROM ${PHP_IMAGE}
+FROM php:8.1-cli-alpine3.18
 
 # Copy Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

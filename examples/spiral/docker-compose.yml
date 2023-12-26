@@ -8,9 +8,6 @@ services:
     user: ${UID}
     build:
       dockerfile: Dockerfile
-      args:
-        PHP_IMAGE_VERSION: ${PHP_IMAGE_VERSION}
-        RR_VERSION: ${RR_VERSION}
     environment:
       PHP_IDE_CONFIG: serverName=graphql-example.local
       XDEBUG_MODE: debug
