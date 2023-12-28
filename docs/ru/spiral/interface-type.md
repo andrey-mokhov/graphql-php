@@ -165,7 +165,7 @@ final class FullNameAwareInterface implements InterfaceTypeInterface
                 </li>
                 <li>
                     экземпляром класса, реализующего интерфейс <code>ObjectFieldInterface</code>,
-                    это не опечатка, имеено <code>ObjectFieldInterface</code>
+                    это не опечатка, именно <code>ObjectFieldInterface</code>
                     (см. <a href="object-field.md#object-field-via-interface">Определение полей объектного типа путем реализации интерфейса</a>).
                 </li>
             </ul>
@@ -187,7 +187,7 @@ final class FullNameAwareInterface implements InterfaceTypeInterface
     </dd>
     <dt><a href="#dynamic-object-type-interface">DynamicObjectTypeInterface</a></dt>
     <dd>
-        Позволяет расширять интерфейсный тип дополнительными полями, опреденными вне класса.
+        Позволяет расширять интерфейсный тип дополнительными полями, определенными вне класса.
     </dd>
 </dl>
 

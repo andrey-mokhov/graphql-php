@@ -67,7 +67,7 @@ final class CreateUserRequest
     </tr>
 </table>
 
-Поля входящего объектного типа можно задать с помошью атрибута `#[InputObjectField]`, об этом
+Поля входящего объектного типа можно задать с помощью атрибута `#[InputObjectField]`, об этом
 подробно изложено в [Определение полей входящего объектного типа с помощью атрибута](input-object-field.md#input-object-field-via-attribute).
 
 Класс с атрибутом `#[InputObjectType]` может, в том числе, реализовывать вспомогательные интерфейсы:
@@ -149,7 +149,7 @@ final class LoginRequest implements InputObjectTypeInterface
             <ul>
                 <li>
                     экземпляром класса <code>InputObjectField</code>
-                    (см. опции кофигурации поля, чуть ниже <a href="https://webonyx.github.io/graphql-php/type-definitions/inputs/#configuration-options">Configuration options</a>).
+                    (см. опции конфигурации поля, чуть ниже <a href="https://webonyx.github.io/graphql-php/type-definitions/inputs/#configuration-options">Configuration options</a>).
                 </li>
                 <li>
                     экземпляром класса, реализующего интерфейс <code>InputObjectFieldInterface</code>
@@ -204,7 +204,7 @@ final class LoginRequest implements InputObjectTypeInterface
             <ul>
                 <li>
                     экземпляром класса <code>InputObjectField</code>
-                    (см. опции кофигурации поля, чуть ниже <a href="https://webonyx.github.io/graphql-php/type-definitions/inputs/#configuration-options">Configuration options</a>).
+                    (см. опции конфигурации поля, чуть ниже <a href="https://webonyx.github.io/graphql-php/type-definitions/inputs/#configuration-options">Configuration options</a>).
                 </li>
                 <li>
                     экземпляром класса, реализующего интерфейс <code>InputObjectFieldInterface</code>

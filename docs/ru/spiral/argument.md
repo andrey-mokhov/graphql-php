@@ -61,7 +61,7 @@ final class SimpleService
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип аргумента поля. Допустимыми значеними могут быть краткие имена GraphQL типов
+                Тип аргумента поля. Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
                 <code>IntType::class</code> и другие).
@@ -112,7 +112,7 @@ final class SimpleService
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>
@@ -177,7 +177,7 @@ final class SimpleService
 
 > :point_right: **Обратите внимание!!!** :point_left:
 >
-> При вычеслении значения поля вам может потребовать информация о том, с какими параметрами был вызван
+> При вычислении значения поля вам может потребовать информация о том, с какими параметрами был вызван
 > резолвер поля (см. [параметр конфигурации `resolve`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options)).
 >
 > Укажите в вашем методе параметр с типом `Andi\GraphQL\Common\ResolverArguments` и вам будет доступна
@@ -307,7 +307,7 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возращать имя аргумента, отображаемое в GraphQL схеме.</td>
+        <td valign="top">Должен возвращать имя аргумента, отображаемое в GraphQL схеме.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
@@ -322,7 +322,7 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип аргумента. Допустимыми значеними могут быть краткие имена GraphQL
+                Должен вернуть тип аргумента. Допустимыми значениями могут быть краткие имена GraphQL
                 типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
                 <code>IntType::class</code> и другие).
@@ -419,7 +419,7 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
     <tr>
         <td valign="top"><code>getDefaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
-        <td valign="top">Должен возращать значение, используемое аргументом по умолчанию.</td>
+        <td valign="top">Должен возвращать значение, используемое аргументом по умолчанию.</td>
     </tr>
 </table>
 

@@ -1,7 +1,7 @@
 # Определение полей интерфейсного GraphQL типа
 
 Определение поля интерфейсного GraphQL типа возможно:
-- с помошью атрибута `Andi\GraphQL\Attribute\InterfaceField` ([ссылка](#interface-field-via-attribute));
+- с помощью атрибута `Andi\GraphQL\Attribute\InterfaceField` ([ссылка](#interface-field-via-attribute));
 - путем реализации интерфейса `Andi\GraphQL\Definition\Field\ObjectFieldInterface` ([ссылка](#interface-field-via-interface)).
   Это не опечатка, при реализации метода [`getFields`](interface-type.md#interface-type-interface-get-fields)
   можно возвращать экземпляр класса, реализующий данный интерфейс;
@@ -60,7 +60,7 @@ interface UserInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип поля. Допустимыми значеними могут быть краткие имена GraphQL типов
+                Тип поля. Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип
                 (<code>StringType::class</code>, <code>IntType::class</code> и другие).
@@ -109,7 +109,7 @@ interface UserInterface
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>
@@ -136,7 +136,7 @@ interface UserInterface
         <td valign="top">
             Если параметр задан, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
             причины будет указано значение данного параметра. Если параметр не задан, но в
-            docBlock метода есть тэг <code>@deprecated</code>, то будет использован комментарий этого тэга.
+            docBlock метода есть тэг <code>@deprecated</code>, то будет использован комментарий этого тега.
         </td>
     </tr>
 </table>

@@ -63,7 +63,7 @@ final class CreateUserRequest implements ParseValueAwareInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип поля. Допустимыми значеними могут быть краткие имена GraphQL типов
+                Тип поля. Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
                 <code>IntType::class</code> и другие).
@@ -112,7 +112,7 @@ final class CreateUserRequest implements ParseValueAwareInterface
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>
@@ -140,7 +140,7 @@ final class CreateUserRequest implements ParseValueAwareInterface
             Если параметр задан, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
             причины будет указано значение данного параметра. Если параметр не задан, но в
             docBlock (свойства/метода) есть тэг <code>@deprecated</code>, то будет использован
-            комментарий этого тэга.
+            комментарий этого тега.
         </td>
     </tr>
     <tr>
@@ -250,7 +250,7 @@ final class LoginRequest implements InputObjectTypeInterface
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возращать имя поля, отображаемое в GraphQL схеме.</td>
+        <td valign="top">Должен возвращать имя поля, отображаемое в GraphQL схеме.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
@@ -265,7 +265,7 @@ final class LoginRequest implements InputObjectTypeInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип поля. Допустимыми значеними могут быть краткие имена GraphQL
+                Должен вернуть тип поля. Допустимыми значениями могут быть краткие имена GraphQL
                 типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
                 <code>IntType::class</code> и другие).
@@ -286,7 +286,7 @@ final class LoginRequest implements InputObjectTypeInterface
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строкове или <code>null</code>
+                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
                     значения поля.<br />
                     Эквивалент: <code>String</code>
                 </dd>
@@ -362,7 +362,7 @@ final class LoginRequest implements InputObjectTypeInterface
     <tr>
         <td valign="top"><code>getDefaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
-        <td valign="top">Должен возращать значение, используемое полем по умолчанию.</td>
+        <td valign="top">Должен возвращать значение, используемое полем по умолчанию.</td>
     </tr>
 </table>
 
