@@ -1,19 +1,19 @@
-# Определение аргументов полей
+# Defining Field Arguments
 
-Определить аргументы поля можно:
-- с помощью атрибута `Andi\GraphQL\Attribute\Argument` ([ссылка](#argument-via-attribute));
-- путем реализации интерфейса `Andi\GraphQL\Definition\Field\ArgumentInterface`
+You can define field arguments:
+- using the `Andi\GraphQL\Attribute\Argument` attribute ([link](#argument-via-attribute));
+- by implementing the interface `Andi\GraphQL\Definition\Field\ArgumentInterface`
   ([ссылка](#argument-via-interface)).
 
-## <a id="argument-via-attribute">Определение аргумента с помощью атрибута</a>
+## <a id="argument-via-attribute">Defining an argument using an attribute</a>
 
-Атрибут `#[Argument]` применим к параметрам метода. Метод, в свою очередь, должен иметь один
-из следующих атрибутов:
-- [`#[QueryField]`](query-filed.md#query-field-via-attribute) - поле Query типа;
-- [`#[MutationField]`](mutation-field.md#mutation-field-via-attribute) - поле Mutation типа;
-- [`#[ObjectField]`](object-field.md#object-field-via-attribute) - поле объектного типа;
-- [`#[InterfaceField]`](interface-field.md#interface-field-via-attribute) - поле интерфейсного типа;
-- [`#[AdditionalField]`](additional-field.md) - определение дополнительного поля для объектных и интерфейсных полей.
+The `#[Argument]` attribute applies to method parameters. The method must have one
+from the following attributes:
+- [`#[QueryField]`](query-filed.md#query-field-via-attribute) - Query type field;
+- [`#[MutationField]`](mutation-field.md#mutation-field-via-attribute) - Mutation type field;
+- [`#[ObjectField]`](object-field.md#object-field-via-attribute) - ObjectType field;
+- [`#[InterfaceField]`](interface-field.md#interface-field-via-attribute) - Interface type field;
+- [`#[AdditionalField]`](additional-field.md) - defining an additional field for object and interface fields.
 
 ```php
 namespace App\GraphQL\Field;
@@ -35,25 +35,25 @@ final class SimpleService
 }
 
 ```
-Атрибут `#[Argument]` может иметь следующие параметры конструктора:
+The `#[Argument]` attribute can have the following constructor parameters:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Имя аргумента поля. Если не указано, используется имя параметра.</td>
+        <td valign="top">Field argument name. If not specified, the parameter name is used.</td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание аргумента поля. Если не указано, используется описание параметра, указанное
-            в docBlock метода.
+            Description of the field argument. If not specified, the parameter description specified
+            in the docBlock method is used.
         </td>
     </tr>
     <tr>
@@ -61,24 +61,24 @@ final class SimpleService
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип аргумента поля. Допустимыми значеними могут быть краткие имена GraphQL типов
-                (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
-                <code>IntType::class</code> и другие).
+                The type of the field argument. Valid values ​​can be short names of GraphQL types
+                (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type (<code>StringType::class</code>,
+                <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом аргумента могут быть:
+                The argument type can be:
                 <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="input-object-type.md"><code>InputObjectType</code></a>.
             </p>
             <p>
-                Если параметр <code>type</code> не указан, библиотека постарается определить
-                значение самостоятельно (опираясь на определение параметра). Для php типов
-                <code>array</code>, <code>iterable</code>, <code>mixed</code> и др. следует
-                указать значение данного параметра явно. Параметр метода со spread оператором
-                (<code>...</code>) будет преобразован в список соответствующего GraphQL типа,
-                например: <code>string ...$messages</code> станет <code>[String!]</code>
+                If the <code>type</code> parameter is not specified, the library will try to determine
+                value independently (based on the definition of the parameter). For php types
+                <code>array</code>, <code>iterable</code>, <code>mixed</code>, etc. should
+                specify the value of this parameter explicitly. Method parameter with spread operator
+                (<code>...</code>) will be converted to a list of the appropriate GraphQL type,
+                for example: <code>string ...$messages</code> will become <code>[String!]</code>
             </p>
         </td>
     </tr>
@@ -86,49 +86,49 @@ final class SimpleService
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Модификатора типа аргумента. Параметр конструктора анализируется библиотекой в том случае,
-            если тип аргумента указан и не содержит модификаторов. Возможны следующие значения:
+            Argument type modifier. The constructor parameter is parsed by the library if
+            if the argument type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
-                    значения.<br />
-                    Эквивалент: <code>String</code>
+                    Without modifiers, i.e. for example strings or <code>null</code> are acceptable
+                    values.<br />
+                    Equivalent: <code>String</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значение поля будет
-                    строковым.<br />
-                    Эквивалент: <code>String!</code>
+                    Modifier excluding <code>null</code> value, i.e. the field value will be
+                    string.<br />
+                    Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо. Таким образом значением поля может быть:
-                    <code>null</code> значение, пустой массив, массив со строковыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[String]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    The field value is valid. So the field value could be:
+                    <code>null</code> value, empty array, array with string or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
-                    может быть: <code>null</code> значение или непустой список со строковыми
-                    значениями.<br />
-                    Эквивалент: <code>[String!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid but excluded in values. Thus, by assigning the field
+                    could be: <code>null</code> value or non-empty list with strings
+                    values.<br />
+                    Equivalent: <code>[String!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение поля, но позволяющий пустой список или список содержащий строковые или
-                    <code>null</code> значения.<br />
-                    Эквивалент: <code>[String]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    field value, but allowing an empty list or a list containing strings or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
-                    Эквивалент: <code>[String!]!</code>
+                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
         </td>
@@ -137,28 +137,28 @@ final class SimpleService
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если параметр конструктора задан, то в GraphQL схеме аргумент будет помечен устаревшим.
-            В качестве причины будет указано значение этого параметра.
+            If the constructor parameter is specified, the argument will be marked as obsolete in the GraphQL schema.
+            The reason will be the value of this parameter.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>defaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Значение аргумента по умолчанию. Допустимы скалярные и Enum php-значения,
-            а также <code>null</code>. Если параметр не задан, библиотека постарается определить
-            значение по умолчанию самостоятельно (опираясь на определение параметра).
+            Default argument value. Scalar and Enum php values ​​are allowed,
+            and also <code>null</code>. If the parameter is not specified, the library will try to determine
+            default value yourself (based on the parameter definition).
         </td>
     </tr>
 </table>
 
-> :point_right: **Обратите внимание!**
+> :point_right: **Note!**
 >
-> При обработке GraphQL запроса будет вызван соответствующий метод php-класса. Для параметров с
-> атрибутом `#[Argument]` будут использованы значения из GraphQL запроса, для остальных параметров
-> значения из DI-контейнера.
+> When processing a GraphQL request, the corresponding php class method will be called. For parameters with
+> the `#[Argument]` attribute will use the values ​​from the GraphQL request, for the remaining parameters
+> values ​​from the DI container.
 >
-> Вы должны быть уверены, что DI-контейнер сможет определить значения параметров метода.
+> You must be sure that the DI container can determine the values ​​of the method parameters.
 >
 > ```php
 > final class SimpleService
@@ -173,15 +173,15 @@ final class SimpleService
 > }
 > ```
 >
-> В данном примере параметр `$logger` не будет отображен в GraphQL схеме, но будет доступен в методе.
+> In this example, the `$logger` parameter will not be displayed in the GraphQL schema, but will be available in the method.
 
-> :point_right: **Обратите внимание!!!** :point_left:
+> :point_right: **Note!!!** :point_left:
 >
-> При вычеслении значения поля вам может потребовать информация о том, с какими параметрами был вызван
-> резолвер поля (см. [параметр конфигурации `resolve`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options)).
+> When calculating the value of a field, you may be asked for information about what parameters the call was called with.
+> field resolver (see [configuration option `resolve`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options)).
 >
-> Укажите в вашем методе параметр с типом `Andi\GraphQL\Common\ResolverArguments` и вам будет доступна
-> требуемая информация:
+> Specify in your method a parameter with type `Andi\GraphQL\Common\ResolverArguments` and you will have access to
+> information required:
 >
 > ```php
 > namespace App\GraphQL\Field;
@@ -205,7 +205,7 @@ final class SimpleService
 > }
 > ```
 >
-> В примере выше параметр метода `$arguments` содержит информацию о параметрах вызова резолвера.
+> In the example above, the `$arguments` method parameter contains information about the parameters of the resolver call.
 >
 > ```php
 > namespace Andi\GraphQL\Common;
@@ -226,22 +226,22 @@ final class SimpleService
 
 ## <a id="argument-via-interface">Определение аргумента с помощью интерфейса</a>
 
-Реализация интерфейса `Andi\GraphQL\Definition\Field\ArgumentInterface` может потребоваться
-при реализации метода `getArguments`, требуемого в интерфейсе
-[`ArgumentsAwareInterface`](object-field.md#arguments-aware-interface). Который позволяет задать
-аргументы для таких полей как:
+Implementation of the `Andi\GraphQL\Definition\Field\ArgumentInterface` interface may be required
+when implementing the `getArguments` method required in the interface
+[`ArgumentsAwareInterface`](object-field.md#arguments-aware-interface). Which allows you to set
+arguments for fields such as:
 - `QueryFieldInterface`
 - `MutationFieldInterface`
 - `ObjectFieldInterface`
 
 
-> :point_right: **Рекомендация!** :point_left:
+> :point_right: **Recommendation!** :point_left:
 >
-> Для определения аргументов полей вместо реализации интерфейса `ArgumentInterface`
-> используйте класс `Andi\GraphQL\Argument\Argument`, в нём уже реализованы вспомогательные
-> интерфейсы, а требуемые значения можно задать в конструкторе.
+> To define field arguments instead of implementing the `ArgumentInterface` interface
+> use the `Andi\GraphQL\Argument\Argument` class, it already implements auxiliary
+> interfaces, and the required values ​​can be set in the constructor.
 
-Пример реализации интерфейса `ArgumentInterface` (см. метод `getArguments`):
+An example implementation of the `ArgumentInterface` interface (see the `getArguments` method):
 
 ```php
 namespace App\GraphQL\Field;
@@ -296,25 +296,25 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
 }
 ```
 
-Интерфейс <a id="argument-interface">`ArgumentInterface`</a> требует реализации следующих методов:
+The <a id="argument-interface">`ArgumentInterface`</a> interface requires the implementation of the following methods:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возращать имя аргумента, отображаемое в GraphQL схеме.</td>
+        <td valign="top">Should return the name of the argument as it appears in the GraphQL schema.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание аргумента, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return the description of the argument as displayed in the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
@@ -322,13 +322,13 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип аргумента. Допустимыми значеними могут быть краткие имена GraphQL
-                типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
-                <code>IntType::class</code> и другие).
+                Must return the type of the argument. Valid values ​​can be GraphQL short names
+                types (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type (<code>StringType::class</code>,
+                <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом аргумента могут быть:
+                The argument type can be:
                 <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="input-object-type.md"><code>InputObjectType</code></a>.
@@ -339,48 +339,48 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
         <td valign="top"><code>getMode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Должен вернуть битовую маску для модификатора типа аргумента. Возможны следующие значения:
+            Must return a bitmask for the argument type modifier. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например числовые или <code>null</code>
-                    значения аргумента.<br />
-                    Эквивалент: <code>Int</code>
+                    Without modifiers, i.e. valid for example numeric or <code>null</code>
+                    argument values.<br />
+                    Equivalent: <code>Int</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значением аргумента будет
-                    число.<br />
-                    Эквивалент: <code>Int!</code>
+                    Modifier excluding <code>null</code> value, i.e. the value of the argument will be
+                    number.<br />
+                    Equivalent: <code>Int!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение аргумента допустимо. Таким образом значениями аргумента могут быть:
-                    <code>null</code> значение, пустой массив, массив с числовыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[Int]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the argument value is valid. Thus, the argument values ​​can be:
+                    <code>null</code> value, empty array, array with numeric or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[Int]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение аргумента допустимо, но исключено в значениях. Таким образом зачениями
-                    аргумента могут быть: <code>null</code> значение или непустой список с числовыми
-                    значениями.<br />
-                    Эквивалент: <code>[Int!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the argument value is valid, but excluded in values. Thus, the meanings
+                    arguments can be: <code>null</code> value or non-empty list with numeric values
+                    values.<br />
+                    Equivalent: <code>[Int!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение аргумента, но позволяющий пустой список или список содержащий
-                    числовые или <code>null</code> значения.<br />
-                    Эквивалент: <code>[Int]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    argument value, but allowing an empty list or a list containing
+                    numeric or <code>null</code> values.<br />
+                    Equivalent: <code>[Int]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список числовых значений (массив чисел).<br />
-                    Эквивалент: <code>[Int!]!</code>
+                    A modifier that defines a non-empty list of numeric values ​​(an array of numbers).<br />
+                    Equivalent: <code>[Int!]!</code>
                 </dd>
             </dl>
         </td>
@@ -389,66 +389,66 @@ final class SquaringService extends AbstractObjectField implements QueryFieldInt
         <td valign="top"><code>hasDefaultValue</code></td>
         <td valign="top"><code>bool</code></td>
         <td valign="top">
-            Должен вернуть <code>true</code> если аргумент имеет значение по умолчанию. Для определения
-            значения по умолчанию следует реализовать интерфейс <code>DefaultValueAwareInterface</code>
+            Should return <code>true</code> if the argument has a default value. For determining
+            default values ​​should implement the interface <code>DefaultValueAwareInterface</code>
             (см. <a href="#default-value-aware-interface">ниже</a>).
         </td>
     </tr>
 </table>
 
-Вспомогательные интерфейсы при определении аргумента поля:
+Helper interfaces when defining a field argument:
 
 <dl>
     <dt><a href="#default-value-aware-interface">DefaultValueAwareInterface</a></dt>
-    <dd>Позволяет определить значение аргумента, используемого по умолчанию.</dd>
+    <dd>Allows you to specify the default argument value.</dd>
     <dt><a href="#deprecation-reason-aware-interface">DeprecationReasonAwareInterface</a></dt>
-    <dd>Позволяет в GraphQL схеме указать причину, по которой аргумент использовать не рекомендуется.</dd>
+    <dd>Allows you to specify in a GraphQL schema a reason why an argument is not recommended to be used.</dd>
 </dl>
 
 ### <a id="default-value-aware-interface">DefaultValueAwareInterface</a>
 
-Чтобы указать для аргумента значение по умолчанию следует реализовать интерфейс
-`DefaultValueAwareInterface`, который требует реализации следующего метода:
+To specify a default value for an argument, you must implement the interface
+`DefaultValueAwareInterface`, which requires the following method to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getDefaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
-        <td valign="top">Должен возращать значение, используемое аргументом по умолчанию.</td>
+        <td valign="top">Must return the value used by the default argument.</td>
     </tr>
 </table>
 
 ### <a id="deprecation-reason-aware-interface">DeprecationReasonAwareInterface</a>
 
-Если в GraphQL схеме необходимо указать причины, по которой аргумент не рекомендуется использовать,
-необходимо реализовать интерфейс `DeprecationReasonAwareInterface`, который требует реализации
-следующего метода:
+If your GraphQL schema needs to specify reasons why an argument is not recommended,
+it is necessary to implement the `DeprecationReasonAwareInterface` interface, which requires implementation
+following method:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getDeprecationReason</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен возвращать описание причины, для отображения в GraphQL схеме, по которой
-            аргумент использовать не рекомендуется и <code>null</code> значение, если такая причина
-            отсутствует.
+            Should return a description of the reason for displaying in the GraphQL schema for which
+            argument is not recommended to be used and <code>null</code> value if such a reason
+            absent.
         </td>
     </tr>
 </table>
 
-> :point_right: **Рекомендация!** :point_left:
+> :point_right: **Recommendation!** :point_left:
 >
-> При использовании класса `Argument` пример выше выглядел бы следующим образом:
+> Using the `Argument` class, the example above would look like this:
 > ```php
 > namespace App\GraphQL\Field;
 >
