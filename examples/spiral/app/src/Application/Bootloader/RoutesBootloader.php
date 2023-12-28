@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Bootloader;
 
+use GraphQL\Upload\UploadMiddleware;
 use Spiral\Bootloader\Http\RoutesBootloader as BaseRoutesBootloader;
 use Spiral\Cookies\Middleware\CookiesMiddleware;
 use Spiral\Csrf\Middleware\CsrfMiddleware;
@@ -35,6 +36,7 @@ final class RoutesBootloader extends BaseRoutesBootloader
 
             ErrorHandlerMiddleware::class,
             JsonPayloadMiddleware::class,
+            UploadMiddleware::class,
             HttpCollector::class,
         ];
     }
