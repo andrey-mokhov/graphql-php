@@ -13,6 +13,7 @@
         "ext-mbstring": "*",
         "ext-sockets": "*",
         "andi-lab/graphql-php-spiral": "^1.0",
+        "ecodev/graphql-upload": "^7.0",
         "spiral-packages/yii-error-handler-bridge": "^1.1",
         "spiral/framework": "^3.7",
         "spiral/nyholm-bridge": "^1.3",

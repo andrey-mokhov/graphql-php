@@ -49,5 +49,6 @@ return [
     ],
 
     'additionalTypes' => [
+        \GraphQL\Upload\UploadType::class => \Nyholm\Psr7\UploadedFile::class,
     ],
 ];
