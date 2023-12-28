@@ -3,7 +3,7 @@
 You can define field arguments:
 - using the `Andi\GraphQL\Attribute\Argument` attribute ([link](#argument-via-attribute));
 - by implementing the interface `Andi\GraphQL\Definition\Field\ArgumentInterface`
-  ([ссылка](#argument-via-interface)).
+  ([link](#argument-via-interface)).
 
 ## <a id="argument-via-attribute">Defining an argument using an attribute</a>
 
@@ -12,7 +12,7 @@ from the following attributes:
 - [`#[QueryField]`](query-filed.md#query-field-via-attribute) - Query type field;
 - [`#[MutationField]`](mutation-field.md#mutation-field-via-attribute) - Mutation type field;
 - [`#[ObjectField]`](object-field.md#object-field-via-attribute) - ObjectType field;
-- [`#[InterfaceField]`](interface-field.md#interface-field-via-attribute) - Interface type field;
+- [`#[InterfaceField]`](interface-field.md#interface-field-via-attribute) - InterfaceType field;
 - [`#[AdditionalField]`](additional-field.md) - defining an additional field for object and interface fields.
 
 ```php
@@ -137,7 +137,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            If the constructor parameter is specified, the argument will be marked as obsolete in the GraphQL schema.
+            If the constructor parameter is specified, the argument will be marked as deprecated in the GraphQL schema.
             The reason will be the value of this parameter.
         </td>
     </tr>
@@ -224,7 +224,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
 > }
 > ```
 
-## <a id="argument-via-interface">Определение аргумента с помощью интерфейса</a>
+## <a id="argument-via-interface">Defining an Argument Using an Interface</a>
 
 Implementation of the `Andi\GraphQL\Definition\Field\ArgumentInterface` interface may be required
 when implementing the `getArguments` method required in the interface
@@ -391,7 +391,7 @@ The <a id="argument-interface">`ArgumentInterface`</a> interface requires the im
         <td valign="top">
             Should return <code>true</code> if the argument has a default value. For determining
             default values ​​should implement the interface <code>DefaultValueAwareInterface</code>
-            (см. <a href="#default-value-aware-interface">ниже</a>).
+            (see <a href="#default-value-aware-interface">below</a>).
         </td>
     </tr>
 </table>
