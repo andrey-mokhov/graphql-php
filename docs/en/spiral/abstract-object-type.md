@@ -75,12 +75,12 @@ final class ExampleAbstractObjectType extends AbstractObjectType implements Reso
         <td valign="top">
             <p>Список полей объектного типа.</p>
             <p>
-                Требования к элементам итерируриемой структуры свойства
+                Требования к элементам итерируемой структуры свойства
                 <a href="#field-definition">изложены ниже</a>.
             </p>
             <p>
                 Значение свойства допустимо не определять в том случае, если вы уверены, что объектный
-                тип будет расширен (см. <a href="additional-field.md">Раширение типов</a>).
+                тип будет расширен (см. <a href="additional-field.md">Расширение типов</a>).
             </p>
         </td>
     </tr>
@@ -129,7 +129,7 @@ final class ExampleAbstractObjectType extends AbstractObjectType implements Reso
 ## <a id="field-definition">Определение итерируемой структуры `$fields`</a>
 
 ```php
-// Каждый элемент интерируемой структуры $fields может быть:
+// Каждый элемент итерируемой структуры $fields может быть:
 $this->fields = [
     // экземпляром класса Webonyx\FieldDefinition
     new Webonyx\FieldDefinition([...]),
@@ -137,7 +137,7 @@ $this->fields = [
     // экземпляром класса, реализующего интерфейс ObjectFieldInterface
     new class implements ObjectFieldInterface {...},
 
-    // ключ => значение. Данная структура интерпретируюется следующим образом:
+    // ключ => значение. Данная структура интерпретируется следующим образом:
     // ключ - имя поля; значение - тип поля.
     'firstname' => 'String',
 
@@ -221,7 +221,7 @@ $this->fields = [
                 // необходимо указать причину по которой данный аргумент использовать не рекомендуется.
                 'deprecationReason' => 'This field is deprecated. Do not use it.',
 
-                // Значение аргумента, используемое по умолчани. Если аргумент не имеет значения по умолчанию,
+                // Значение аргумента, используемое по умолчанию. Если аргумент не имеет значения по умолчанию,
                 // не определяйте данную опцию. т.к. null значение, это тоже значение по умолчанию.
                 'defaultValue' => 'hello',
             ],
@@ -259,7 +259,7 @@ $this->fields = [
                 <b>Обязательная опция</b>, определяющая тип поля.
             </p>
             <p>
-                Допустимыми значеними могут быть краткие имена GraphQL типов
+                Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип
                 (<code>StringType::class</code>, <code>IntType::class</code> и другие).
@@ -281,7 +281,7 @@ $this->fields = [
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строкове или <code>null</code>
+                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
                     значения поля.<br />
                     Эквивалент: <code>String</code>
                 </dd>
@@ -347,7 +347,7 @@ $this->fields = [
             <p>Допустимо определять как:</p>
             <ul>
                 <li>
-                    массив, иммитирующий <code>callable</code> структуру.<br />
+                    массив, имитирующий <code>callable</code> структуру.<br />
                     Например: <code>[self::class, 'method']</code>, где <code>method</code> не является
                     статичным методом;
                 </li>
@@ -425,7 +425,7 @@ $this->fields = [
                 <b>Обязательная опция</b>, определяющая тип аргумента.
             </p>
             <p>
-                Допустимыми значеними могут быть краткие имена GraphQL типов
+                Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип
                 (<code>StringType::class</code>, <code>IntType::class</code> и другие).

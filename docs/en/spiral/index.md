@@ -22,8 +22,8 @@ The following instructions are valid for `spiral/framework` versions 3.8 and lat
     - [`AbstractEnumType`](abstract-enum-type.md)
     - [`AbstractUnionType`](abstract-union-type.md)
     - [`AbstractScalarType`](abstract-scalar-type.md)
-9. Uploading files
-10. Development of middleware layers
-11. Additional GraphQL types
-    - `Date`
-    - `DateTime`
+9. [Uploading files](upload-file.md)
+10. [Development of middleware layers](middleware.md)
+11. [Additional GraphQL types](additional-types.md)
+    - [`DateTime`](additional-types.md#date)
+    - [`Date`](additional-types.md$date-time)

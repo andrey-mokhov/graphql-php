@@ -1,6 +1,6 @@
 # Реестр GraphQL типов
 
-В библиотеке используется единый реест GraphQL типов: `Andi\GraphQL\TypeRegistry`.
+В библиотеке используется единый реестр GraphQL типов: `Andi\GraphQL\TypeRegistry`.
 
 Реестр реализует интерфейс `Andi\GraphQL\TypeRegistryInterface`:
 
@@ -13,9 +13,9 @@ interface TypeRegistryInterface
 {
     public function has(string $type): bool;
 
-    public function get(string $type): Webonyx\Type;
+    public function get(string $type): Webonyx\Type&Webonyx\NamedType;
 
-    public function register(Webonyx\Type $type, string ...$aliases): void;
+    public function register(Webonyx\Type&Webonyx\NamedType $type, string ...$aliases): void;
 
     public function getTypes(): iterable;
 }
@@ -44,7 +44,7 @@ interface TypeRegistryInterface
     </tr>
     <tr>
         <td valign="top"><code>get</code></td>
-        <td valign="top"><code>Webonyx\Type</code></td>
+        <td valign="top"><code>Webonyx\Type & Webonyx\NamedType</code></td>
         <td valign="top">
             Для запрошенного имени возвращает определение GraphQL типа. Если имя GraphQL типа отсутствует
             в реестре - будет выброшено исключение.

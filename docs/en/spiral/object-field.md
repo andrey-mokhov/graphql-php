@@ -4,7 +4,7 @@
 [`FieldDefinion`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options).
 
 Определение поля объектного GraphQL типа возможно:
-- с помошью атрибута `Andi\GraphQL\Attribute\ObjectField` ([ссылка](#object-field-via-attribute));
+- с помощью атрибута `Andi\GraphQL\Attribute\ObjectField` ([ссылка](#object-field-via-attribute));
 - путем реализации интерфейса `Andi\GraphQL\Definition\Field\ObjectFieldInterface` ([ссылка](#object-field-via-interface));
 - с помощью атрибута `Andi\GraphQL\Attribute\AdditionalField` ([ссылка](additional-field.md)).
 
@@ -70,7 +70,7 @@ class User
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип поля. Допустимыми значеними могут быть краткие имена GraphQL типов
+                Тип поля. Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип
                 (<code>StringType::class</code>, <code>IntType::class</code> и другие).
@@ -120,7 +120,7 @@ class User
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>
@@ -148,7 +148,7 @@ class User
             Если параметр задан, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
             причины будет указано значение данного параметра. Если параметр не задан, но в
             docBlock (свойства/метода) есть тэг <code>@deprecated</code>, то будет использован
-            комментарий этого тэга.
+            комментарий этого тега.
         </td>
     </tr>
 </table>
@@ -272,7 +272,7 @@ final class UserFullName implements ObjectFieldInterface
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возращать имя поля.</td>
+        <td valign="top">Должен возвращать имя поля.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
@@ -296,7 +296,7 @@ final class UserFullName implements ObjectFieldInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип данных поля. Допустимыми значеними могут быть краткие имена
+                Должен вернуть тип данных поля. Допустимыми значениями могут быть краткие имена
                 GraphQL типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
                 <code>IntType::class</code> и другие).</p>
@@ -337,7 +337,7 @@ final class UserFullName implements ObjectFieldInterface
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>

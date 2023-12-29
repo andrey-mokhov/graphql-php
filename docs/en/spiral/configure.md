@@ -13,14 +13,14 @@ return [
     /**
      * URL адрес на вызов которого будет реагировать middleware слой
      */
-    'url'          => getenv('GRAPHQL_URL') ?: '/api/graphql',
+    'url' => getenv('GRAPHQL_URL') ?: '/api/graphql',
 
     /**
      * Имя объектного GraphQL типа, используемого для обработки query запросов, по умолчанию `Query`.
      * Для 'Query' типа используется: Andi\GraphQL\Type\QueryType::class
      * Допустимо использование FQCN записи, например: App\GraphQL\Type\Query::class
      */
-    'queryType'    => GraphQLConfig::DEFAULT_QUERY_TYPE,
+    'queryType' => GraphQLConfig::DEFAULT_QUERY_TYPE,
 
     /**
      * По умолчанию mutation запросы отключены!
@@ -32,25 +32,50 @@ return [
     'mutationType' => null,
 
     /**
-     * Имя сервиса, экземпляр которого будет использован в качестве корневого значения при вызове
-     * обработчиков полей для GraphQL типа Query.
-     * Экземпляр класса должен быть выставлен в скопе DI-контейнера
-     * до вызова Andi\GraphQL\Spiral\Middleware\GraphQLMiddleware::class
+     * Имя класса, экземпляр которого будет использован в качестве корневого значения при вызове
+     * обработчиков полей для типов Query и Mutation.
+     *
+     * Если класс реализует магический метод __invoke, то в качестве корневого значения будет
+     * использован результат вызова этого метода.
+     *
+     * Метод __invoke может содержать любые параметры, при условии, что DI контейнер сможет создать
+     * экземпляры классов для них. Кроме того, в методе могут быть использованы следующие параметры:
+     *   - string $operationType будет выставлено значение (query или mutation) соответствующее
+     *     типу GraphQL запроса.
+     *     Важно! Параметр должен называться именно так: $operationType;
+     *   - GraphQL\Server\OperationParams $params параметры GraphQL запроса;
+     *   - GraphQL\Language\AST\DocumentNode $doc GraphQL запрос в виде AST документа
      */
     'rootValue' => null,
 
     /**
-     * Имя сервиса, экземпляр которого будет использован в качестве контекста вызова и передан
+     * Имя класса, экземпляр которого будет использован в качестве контекста вызова и передан
      * в каждый GraphQL обработчик.
-     * Экземпляр класса должен быть выставлен в скопе DI-контейнера
-     * до вызова Andi\GraphQL\Spiral\Middleware\GraphQLMiddleware::class
      *
-     * Например: Spiral\Auth\AuthContext::class
+     * Если класс реализует магический метод __invoke, то в качестве контекста будет использован
+     * результат вызова этого метода.
+     *
+     * Метод __invoke может содержать любые параметры, при условии, что DI контейнер сможет создать
+     * экземпляры классов для них. Кроме того, в методе могут быть использованы следующие параметры:
+     *   - string $operationType будет выставлено значение (query или mutation) соответствующее
+     *     типу GraphQL запроса.
+     *     Важно! Параметр должен называться именно так: $operationType;
+     *   - GraphQL\Server\OperationParams $params параметры GraphQL запроса;
+     *   - GraphQL\Language\AST\DocumentNode $doc GraphQL запрос в виде AST документа
      */
-    'context'      => null,
+    'context' => null,
 
     /**
-     * Определение GraphQL типа данных с использованием middleware конвеера,
+     * Уровень детализации ошибок, возникших при обработке GraphQL запроса.
+     *
+     * По умолчанию: GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE
+     *
+     * @see https://webonyx.github.io/graphql-php/class-reference/#graphqlserverserverconfig-methods
+     */
+    'debugFlag' => null,
+
+    /**
+     * Определение GraphQL типа данных с использованием middleware конвейера,
      * основанного на приоритезированной очереди.
      *
      * Имя middleware слоя определяется ключем массива, а приоритет исполнения - значением. Чем
@@ -58,49 +83,49 @@ return [
      * приоритеты которых равны, будут вызваны в порядке их объявления в данном массиве (чем раньше указан,
      * тем раньше будет вызван).
      *
-     * Данные правила справедливы для последующих middleware конвееров.
+     * Данные правила справедливы для последующих middleware конвейеров.
      */
     'typeResolverMiddlewares' => [
-        Types\EnumTypeMiddleware::class              => Types\EnumTypeMiddleware::PRIORITY,
-        Types\WebonyxGraphQLTypeMiddleware::class    => Types\WebonyxGraphQLTypeMiddleware::PRIORITY,
-        Types\GraphQLTypeMiddleware::class           => Types\GraphQLTypeMiddleware::PRIORITY,
+        Types\EnumTypeMiddleware::class => Types\EnumTypeMiddleware::PRIORITY,
+        Types\WebonyxGraphQLTypeMiddleware::class => Types\WebonyxGraphQLTypeMiddleware::PRIORITY,
+        Types\GraphQLTypeMiddleware::class => Types\GraphQLTypeMiddleware::PRIORITY,
         Types\AttributedGraphQLTypeMiddleware::class => Types\AttributedGraphQLTypeMiddleware::PRIORITY,
     ],
 
     /**
      * Определение поля (FieldDefinition) для объектного или интерфейсного GraphQL типа
-     * (ObjectType или InterfaceType) с использованием middleware конвеера, основанного
-     * на приоритизированной очереди.
+     * (ObjectType или InterfaceType) с использованием middleware конвейера, основанного
+     * на приоритезированной очереди.
      */
     'objectFieldResolverMiddlewares' => [
-        Objects\QueryFieldByReflectionMethodMiddleware::class      => Objects\QueryFieldByReflectionMethodMiddleware::PRIORITY,
-        Objects\MutationFieldByReflectionMethodMiddleware::class   => Objects\MutationFieldByReflectionMethodMiddleware::PRIORITY,
+        Objects\QueryFieldByReflectionMethodMiddleware::class => Objects\QueryFieldByReflectionMethodMiddleware::PRIORITY,
+        Objects\MutationFieldByReflectionMethodMiddleware::class => Objects\MutationFieldByReflectionMethodMiddleware::PRIORITY,
         Objects\AdditionalFieldByReflectionMethodMiddleware::class => Objects\AdditionalFieldByReflectionMethodMiddleware::PRIORITY,
-        Objects\InterfaceFieldByReflectionMethodMiddleware::class  => Objects\InterfaceFieldByReflectionMethodMiddleware::PRIORITY,
-        Objects\ObjectFieldByReflectionMethodMiddleware::class     => Objects\ObjectFieldByReflectionMethodMiddleware::PRIORITY,
-        Objects\ObjectFieldByReflectionPropertyMiddleware::class   => Objects\ObjectFieldByReflectionPropertyMiddleware::PRIORITY,
-        Objects\ObjectFieldMiddleware::class                       => Objects\ObjectFieldMiddleware::PRIORITY,
-        Objects\WebonyxObjectFieldMiddleware::class                => Objects\WebonyxObjectFieldMiddleware::PRIORITY,
+        Objects\InterfaceFieldByReflectionMethodMiddleware::class => Objects\InterfaceFieldByReflectionMethodMiddleware::PRIORITY,
+        Objects\ObjectFieldByReflectionMethodMiddleware::class => Objects\ObjectFieldByReflectionMethodMiddleware::PRIORITY,
+        Objects\ObjectFieldByReflectionPropertyMiddleware::class => Objects\ObjectFieldByReflectionPropertyMiddleware::PRIORITY,
+        Objects\ObjectFieldMiddleware::class => Objects\ObjectFieldMiddleware::PRIORITY,
+        Objects\WebonyxObjectFieldMiddleware::class => Objects\WebonyxObjectFieldMiddleware::PRIORITY,
     ],
 
     /**
      * Определение поля (InputObjectField) для входящего объектного GraphQL типа (InputObjectType)
-     * с использованием middleware конвеера, основанного на приоритизированной очереди.
+     * с использованием middleware конвейера, основанного на приоритезированной очереди.
      */
     'inputObjectFieldResolverMiddlewares' => [
-        Inputs\ReflectionPropertyMiddleware::class      => Inputs\ReflectionPropertyMiddleware::PRIORITY,
-        Inputs\ReflectionMethodMiddleware::class        => Inputs\ReflectionMethodMiddleware::PRIORITY,
-        Inputs\InputObjectFieldMiddleware::class        => Inputs\InputObjectFieldMiddleware::PRIORITY,
+        Inputs\ReflectionPropertyMiddleware::class => Inputs\ReflectionPropertyMiddleware::PRIORITY,
+        Inputs\ReflectionMethodMiddleware::class => Inputs\ReflectionMethodMiddleware::PRIORITY,
+        Inputs\InputObjectFieldMiddleware::class => Inputs\InputObjectFieldMiddleware::PRIORITY,
         Inputs\WebonyxInputObjectFieldMiddleware::class => Inputs\WebonyxInputObjectFieldMiddleware::PRIORITY,
     ],
 
     /**
      * Определение конфигурации аргумента объектных или интерфейсных полей GraphQL типа
-     * с использованием middleware конвеера, основанного на приоритизированной очереди.
+     * с использованием middleware конвейера, основанного на приоритезированной очереди.
      */
     'argumentResolverMiddlewares' => [
-        Argument\ReflectionParameterMiddleware::class   => Argument\ReflectionParameterMiddleware::PRIORITY,
-        Argument\ArgumentMiddleware::class              => Argument\ArgumentMiddleware::PRIORITY,
+        Argument\ReflectionParameterMiddleware::class => Argument\ReflectionParameterMiddleware::PRIORITY,
+        Argument\ArgumentMiddleware::class => Argument\ArgumentMiddleware::PRIORITY,
         Argument\ArgumentConfigurationMiddleware::class => Argument\ArgumentConfigurationMiddleware::PRIORITY,
     ],
 
