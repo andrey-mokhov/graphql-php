@@ -50,5 +50,7 @@ return [
 
     'additionalTypes' => [
         \GraphQL\Upload\UploadType::class => \Nyholm\Psr7\UploadedFile::class,
+        \Andi\GraphQL\Type\DateTime::class => [\DateTimeImmutable::class, \DateTimeInterface::class],
+        \Andi\GraphQL\Type\Date::class,
     ],
 ];

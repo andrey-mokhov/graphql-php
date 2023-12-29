@@ -1,7 +1,7 @@
 # Определение Query полей
 
 По соглашению сообщества, обращения к полям `Query` не должны приводить к изменению состояния системы
-(допустимо только чтение данных). GraphQL тип `Query` является объектным типом, следовательно его можно
+(допустимо только чтение данных). GraphQL тип `Query` является объектным типом, следовательно, его можно
 определить тем же образом как и любой другой [ObjectType](object-type.md).
 
 В библиотеке подготовлен `Query` тип, возможностей которого достаточно для определения полей.
@@ -55,7 +55,7 @@ php-атрибут `#[QueryField]` применим к методам класс
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип поля. Допустимыми значеними могут быть краткие имена GraphQL типов
+                Тип поля. Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип
                 (<code>StringType::class</code>, <code>IntType::class</code> и другие).
@@ -105,7 +105,7 @@ php-атрибут `#[QueryField]` применим к методам класс
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>
@@ -133,7 +133,7 @@ php-атрибут `#[QueryField]` применим к методам класс
             Если параметр конструктора задан, то в GraphQL схеме поле будет помечено устаревшим.
             В качестве причины будет указано значение данного параметра. Если параметр не задан, но
             в docBlock метода есть тэг <code>@deprecated</code>, то будет использован комментарий
-            этого тэга.
+            этого тега.
         </td>
     </tr>
 </table>
@@ -193,7 +193,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возращать имя Query поля.</td>
+        <td valign="top">Должен возвращать имя Query поля.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
@@ -217,7 +217,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип данных поля. Допустимыми значеними могут быть краткие имена
+                Должен вернуть тип данных поля. Допустимыми значениями могут быть краткие имена
                 GraphQL типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
                 <code>IntType::class</code> и другие).</p>
@@ -258,7 +258,7 @@ final class ConcatService implements QueryFieldInterface, MutationFieldInterface
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
                     Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачением поля
+                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
                     может быть: <code>null</code> значение или непустой список со строковыми
                     значениями.<br />
                     Эквивалент: <code>[String!]</code>

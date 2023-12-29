@@ -40,7 +40,7 @@ return [
      *
      * Метод __invoke может содержать любые параметры, при условии, что DI контейнер сможет создать
      * экземпляры классов для них. Кроме того, в методе могут быть использованы следующие параметры:
-     *   - string $operationType будет высталено значение (query или mutation) соответствующее
+     *   - string $operationType будет выставлено значение (query или mutation) соответствующее
      *     типу GraphQL запроса.
      *     Важно! Параметр должен называться именно так: $operationType;
      *   - GraphQL\Server\OperationParams $params параметры GraphQL запроса;
@@ -57,7 +57,7 @@ return [
      *
      * Метод __invoke может содержать любые параметры, при условии, что DI контейнер сможет создать
      * экземпляры классов для них. Кроме того, в методе могут быть использованы следующие параметры:
-     *   - string $operationType будет высталено значение (query или mutation) соответствующее
+     *   - string $operationType будет выставлено значение (query или mutation) соответствующее
      *     типу GraphQL запроса.
      *     Важно! Параметр должен называться именно так: $operationType;
      *   - GraphQL\Server\OperationParams $params параметры GraphQL запроса;
@@ -75,7 +75,7 @@ return [
     'debugFlag' => null,
 
     /**
-     * Определение GraphQL типа данных с использованием middleware конвеера,
+     * Определение GraphQL типа данных с использованием middleware конвейера,
      * основанного на приоритезированной очереди.
      *
      * Имя middleware слоя определяется ключем массива, а приоритет исполнения - значением. Чем
@@ -83,7 +83,7 @@ return [
      * приоритеты которых равны, будут вызваны в порядке их объявления в данном массиве (чем раньше указан,
      * тем раньше будет вызван).
      *
-     * Данные правила справедливы для последующих middleware конвееров.
+     * Данные правила справедливы для последующих middleware конвейеров.
      */
     'typeResolverMiddlewares' => [
         Types\EnumTypeMiddleware::class => Types\EnumTypeMiddleware::PRIORITY,
@@ -94,8 +94,8 @@ return [
 
     /**
      * Определение поля (FieldDefinition) для объектного или интерфейсного GraphQL типа
-     * (ObjectType или InterfaceType) с использованием middleware конвеера, основанного
-     * на приоритизированной очереди.
+     * (ObjectType или InterfaceType) с использованием middleware конвейера, основанного
+     * на приоритезированной очереди.
      */
     'objectFieldResolverMiddlewares' => [
         Objects\QueryFieldByReflectionMethodMiddleware::class => Objects\QueryFieldByReflectionMethodMiddleware::PRIORITY,
@@ -110,7 +110,7 @@ return [
 
     /**
      * Определение поля (InputObjectField) для входящего объектного GraphQL типа (InputObjectType)
-     * с использованием middleware конвеера, основанного на приоритизированной очереди.
+     * с использованием middleware конвейера, основанного на приоритезированной очереди.
      */
     'inputObjectFieldResolverMiddlewares' => [
         Inputs\ReflectionPropertyMiddleware::class => Inputs\ReflectionPropertyMiddleware::PRIORITY,
@@ -121,7 +121,7 @@ return [
 
     /**
      * Определение конфигурации аргумента объектных или интерфейсных полей GraphQL типа
-     * с использованием middleware конвеера, основанного на приоритизированной очереди.
+     * с использованием middleware конвейера, основанного на приоритезированной очереди.
      */
     'argumentResolverMiddlewares' => [
         Argument\ReflectionParameterMiddleware::class => Argument\ReflectionParameterMiddleware::PRIORITY,

@@ -22,8 +22,8 @@
     - [`AbstractEnumType`](abstract-enum-type.md)
     - [`AbstractUnionType`](abstract-union-type.md)
     - [`AbstractScalarType`](abstract-scalar-type.md)
-9. Загрузка файлов
+9. [Загрузка файлов](upload-file.md)
 10. [Разработка middleware слоев](middleware.md)
-11. Дополнительные GraphQL типы
-    - `Date`
-    - `DateTime`
+11. [Дополнительные GraphQL типы](additional-types.md)
+    - [`DateTime`](additional-types.md#date)
+    - [`Date`](additional-types.md$date-time)

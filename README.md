@@ -63,10 +63,11 @@ Telegram group: [GraphQL library for PHP](https://t.me/andi_lab_graphql)
 
 ## Roadmap
 
-- [ ] release 1.0
-  - [ ] documentation of the development of middleware layers, with an example
-  - [ ] documentation and example of connecting the
-    [Ecodev/graphql-upload](https://github.com/Ecodev/graphql-upload) library for uploading files
+- [x] release 1.0
+  - [x] documentation of the development of middleware layers, with an example
+  - [x] documentation and example of connecting the
+    [`ecodev/graphql-upload`](https://github.com/Ecodev/graphql-upload) library for uploading files
+  - [ ] support multiple schemas for `andi-lab/graphql-php-spiral`
 - [ ] release 1.1
   - [ ] mockup types and fields
 - [ ] other release

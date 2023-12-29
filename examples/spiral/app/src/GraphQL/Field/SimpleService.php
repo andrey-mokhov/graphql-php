@@ -99,4 +99,16 @@ final class SimpleService
     {
         return (bool) (random_int(0, 9) & 1);
     }
+
+    #[QueryField]
+    public function currentTime(): \DateTimeInterface
+    {
+        return new \DateTimeImmutable();
+    }
+
+    #[QueryField(type: 'Date!')]
+    public function currentDate(): \DateTimeInterface
+    {
+        return new \DateTimeImmutable();
+    }
 }

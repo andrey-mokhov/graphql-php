@@ -94,7 +94,7 @@ final class ExampleAbstractUnionType extends AbstractUnionType implements Resolv
         <td valign="top">
             Метод должен проанализировать структуру первого параметра <code>$value</code> и вернуть
             имя объектного GraphQL типа, ассоциированного с этой структурой. Допустимо краткое имя
-            объектного GraphQL типа или имя php-класса, реализующего cсоответствующий объектный тип.
+            объектного GraphQL типа или имя php-класса, реализующего соответствующий объектный тип.
         </td>
     </tr>
 </table>

@@ -1,6 +1,6 @@
 # Реестр GraphQL типов
 
-В библиотеке используется единый реест GraphQL типов: `Andi\GraphQL\TypeRegistry`.
+В библиотеке используется единый реестр GraphQL типов: `Andi\GraphQL\TypeRegistry`.
 
 Реестр реализует интерфейс `Andi\GraphQL\TypeRegistryInterface`:
 

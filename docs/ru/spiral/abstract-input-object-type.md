@@ -71,7 +71,7 @@ final class RegistrationRequest extends AbstractInputObjectType implements Parse
         <td valign="top">
             <p>Список полей входящего объектного типа.</p>
             <p>
-                Требования к элементам итерируриемой структуры свойства
+                Требования к элементам итерируемой структуры свойства
                 <a href="#field-definition">изложены ниже</a>.
             </p>
         </td>
@@ -99,7 +99,7 @@ final class RegistrationRequest extends AbstractInputObjectType implements Parse
 ## <a id="field-definition">Определение итерируемой структуры `$fields`</a>
 
 ```php
-// Каждый элемент интерируемой структуры $fields может быть:
+// Каждый элемент итерируемой структуры $fields может быть:
 $this->fields = [
     // экземпляром класса Webonyx\InputObjectField
     new Webonyx\InputObjectField([...]),
@@ -107,7 +107,7 @@ $this->fields = [
     // экземпляром класса, реализующего интерфейс InputObjectFieldInterface
     new class implements InputObjectFieldInterface {...},
 
-    // ключ => значение. Данная структура интерпретируюется следующим образом:
+    // ключ => значение. Данная структура интерпретируется следующим образом:
     // ключ - имя поля; значение - тип поля.
     'firstname' => 'String',
 
@@ -167,7 +167,7 @@ $this->fields = [
                 <b>Обязательная опция</b>, определяющая тип поля.
             </p>
             <p>
-                Допустимыми значеними могут быть краткие имена GraphQL типов
+                Допустимыми значениями могут быть краткие имена GraphQL типов
                 (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
                 реализующих соответствующий GraphQL тип
                 (<code>StringType::class</code>, <code>IntType::class</code> и другие).
@@ -188,7 +188,7 @@ $this->fields = [
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строкове или <code>null</code>
+                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
                     значения поля.<br />
                     Эквивалент: <code>String</code>
                 </dd>
