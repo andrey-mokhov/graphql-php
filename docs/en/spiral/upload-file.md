@@ -1,16 +1,16 @@
-# Загрузка файлов
+# Uploading files
 
-Для загрузки и обработки файлов в вашем приложении, с использованием GraphQL запросов, следует
-использовать библиотеку [ecodev/graphql-upload](https://github.com/Ecodev/graphql-upload).
+To load and process files in your application using GraphQL queries, you should
+use the library [ecodev/graphql-upload](https://github.com/Ecodev/graphql-upload).
 
-Установка библиотеки осуществляется командой:
+The library is installed with the command:
 ```shell
 composer require ecodev/graphql-upload
 ```
 
-Для подключения middleware слоя, отвечающего за загрузку файла, измените конфигурацию middleware слоев.
+To connect the middleware layer responsible for downloading the file, change the configuration of the middleware layers.
 
-Пример конфигурации middleware слоев для проекта [`spiral/app`](https://github.com/spiral/app)
+Example configuration of middleware layers for a project [`spiral/app`](https://github.com/spiral/app)
 
 ```php
 namespace App\Application\Bootloader;
@@ -49,12 +49,12 @@ final class RoutesBootloader extends BaseRoutesBootloader
 }
 ```
 
-Middleware слой `UploadMiddleware::class` должен быть указан после слоя `JsonPayloadMiddleware::class`
-и до `GraphQLMiddleware::class`, который подключается в `GraphQLBootloader` (об этом было написано
-в разделе [Установка и настройка](install.md#bootloader)).
+The middleware layer `UploadMiddleware::class` must be listed after the `JsonPayloadMiddleware::class` layer
+and up to `GraphQLMiddleware::class`, which is connected to `GraphQLBootloader` (this was written about
+in the [Installation and configuration](install.md#bootloader) section.
 
-Кроме этого, следует зарегистрировать в реестре типов скалярный GraphQL тип `Upload`, определенный в
-библиотеке `ecodev/graphql-upload`. Для этого измените [настройки конфигурации](configure.md)
+In addition, you should register the scalar GraphQL type `Upload`, defined in
+library `ecodev/graphql-upload`. To do this, change [configuration settings](configure.md)
 `config/graphql.php`:
 
 ```php
@@ -67,14 +67,14 @@ return [
 ];
 ```
 
-> :point_right: **Обратите внимание!**
+> :point_right: **Note!**
 >
-> В качестве значения для `UploadType::class` указан псевдоним GraphQL типа
-> `\Nyholm\Psr7\UploadedFile::class`. Таким образом библиотека, при определении типа поля
-> (в примере ниже), будет автоматически сопоставлять php класс `UploadedFile` с GraphQL типом `Upload`
-> (объявлен в классе `\GraphQL\Upload\UploadType::class`).
+> The value for `UploadType::class` is an alias of the GraphQL type
+> `\Nyholm\Psr7\UploadedFile::class`. Thus, the library, when defining a field type
+> (in the example below), will automatically map the php class `UploadedFile` to the GraphQL type `Upload`
+> (declared in class `\GraphQL\Upload\UploadType::class`).
 
-Пример мутации, принимающей в качестве аргумента загруженный файл:
+An example of a mutation that takes a loaded file as an argument:
 
 ```php
 namespace App\GraphQL\Field;
@@ -95,8 +95,8 @@ final class ExampleUploadFile
 }
 ```
 
-Пример вспомогательного объектного GraphQL типа, используемого для отображения информации о
-загруженном файле:
+An example of a GraphQL object helper type used to display information about
+downloaded file:
 
 ```php
 namespace App\GraphQL\Type;
