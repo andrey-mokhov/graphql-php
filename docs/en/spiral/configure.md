@@ -11,79 +11,79 @@ use Andi\GraphQL\TypeResolver\Middleware as Types;
 
 return [
     /**
-     * URL адрес на вызов которого будет реагировать middleware слой
+     * URL address to which the middleware layer will respond
      */
     'url' => getenv('GRAPHQL_URL') ?: '/api/graphql',
 
     /**
-     * Имя объектного GraphQL типа, используемого для обработки query запросов, по умолчанию `Query`.
-     * Для 'Query' типа используется: Andi\GraphQL\Type\QueryType::class
-     * Допустимо использование FQCN записи, например: App\GraphQL\Type\Query::class
+     * The name of the GraphQL object type used to process query requests, defaults to `Query`.
+     * For 'Query' type use: Andi\GraphQL\Type\QueryType::class
+     * It is acceptable to use an FQCN record, for example: App\GraphQL\Type\Query::class
      */
     'queryType' => GraphQLConfig::DEFAULT_QUERY_TYPE,
 
     /**
-     * По умолчанию mutation запросы отключены!
-     * Для включения обработки mutation запросов следует указать имя соответствующего GraphQL типа.
-     * Для 'Mutation' типа (соответствует значению константы GraphQLConfig::DEFAULT_MUTATION_TYPE)
-     * используется: Andi\GraphQL\Type\MutationType::class
-     * Допустимо использование FQCN записи, например: App\GraphQL\Type\Mutation::class
+     * By default, mutation requests are disabled!
+     * To enable processing of mutation requests, you must specify the name of the corresponding GraphQL type.
+     * For 'Mutation' type (corresponds to the value of the GraphQLConfig::DEFAULT_MUTATION_TYPE constant)
+     * used: Andi\GraphQL\Type\MutationType::class
+     * It is acceptable to use an FQCN record, for example: App\GraphQL\Type\Mutation::class
      */
     'mutationType' => null,
 
     /**
-     * Имя класса, экземпляр которого будет использован в качестве корневого значения при вызове
-     * обработчиков полей для типов Query и Mutation.
+     * The name of the class whose instance will be used as the root value when calling
+     * field handlers for Query and Mutation types.
      *
-     * Если класс реализует магический метод __invoke, то в качестве корневого значения будет
-     * использован результат вызова этого метода.
+     * If a class implements the __invoke magic method, then the root value will be
+     * the result of calling this method is used.
      *
-     * Метод __invoke может содержать любые параметры, при условии, что DI контейнер сможет создать
-     * экземпляры классов для них. Кроме того, в методе могут быть использованы следующие параметры:
-     *   - string $operationType будет выставлено значение (query или mutation) соответствующее
-     *     типу GraphQL запроса.
-     *     Важно! Параметр должен называться именно так: $operationType;
-     *   - GraphQL\Server\OperationParams $params параметры GraphQL запроса;
-     *   - GraphQL\Language\AST\DocumentNode $doc GraphQL запрос в виде AST документа
+     * The __invoke method can contain any parameters, provided that the DI container can create
+     * instances of classes for them. In addition, the method can use the following parameters:
+     *   - string $operationType the corresponding value (query or mutation) will be set
+     *     GraphQL request type.
+     *     Important! The parameter should be named exactly like this: $operationType;
+     *   - GraphQL\Server\OperationParams $params GraphQL query parameters;
+     *   - GraphQL\Language\AST\DocumentNode $doc GraphQL query as an AST document
      */
     'rootValue' => null,
 
     /**
-     * Имя класса, экземпляр которого будет использован в качестве контекста вызова и передан
-     * в каждый GraphQL обработчик.
+     * The name of the class whose instance will be used as the calling context and passed
+     * into each GraphQL handler.
      *
-     * Если класс реализует магический метод __invoke, то в качестве контекста будет использован
-     * результат вызова этого метода.
+     * If a class implements the __invoke magic method, then the context will be used
+     * the result of calling this method.
      *
-     * Метод __invoke может содержать любые параметры, при условии, что DI контейнер сможет создать
-     * экземпляры классов для них. Кроме того, в методе могут быть использованы следующие параметры:
-     *   - string $operationType будет выставлено значение (query или mutation) соответствующее
-     *     типу GraphQL запроса.
-     *     Важно! Параметр должен называться именно так: $operationType;
-     *   - GraphQL\Server\OperationParams $params параметры GraphQL запроса;
-     *   - GraphQL\Language\AST\DocumentNode $doc GraphQL запрос в виде AST документа
+     * The __invoke method can contain any parameters, provided that the DI container can create
+     * instances of classes for them. In addition, the method can use the following parameters:
+     *   - string $operationType the corresponding value (query or mutation) will be set
+     *     GraphQL request type.
+     *     Important! The parameter should be named exactly like this: $operationType;
+     *   - GraphQL\Server\OperationParams $params GraphQL query parameters;
+     *   - GraphQL\Language\AST\DocumentNode $doc GraphQL query as an AST document
      */
     'context' => null,
 
     /**
-     * Уровень детализации ошибок, возникших при обработке GraphQL запроса.
+     * Level of detail of errors encountered while processing a GraphQL request.
      *
-     * По умолчанию: GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE
+     * Default: GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE
      *
      * @see https://webonyx.github.io/graphql-php/class-reference/#graphqlserverserverconfig-methods
      */
     'debugFlag' => null,
 
     /**
-     * Определение GraphQL типа данных с использованием middleware конвейера,
-     * основанного на приоритезированной очереди.
+     * Defining a GraphQL data type using pipeline middleware,
+     * based on a priority queue.
      *
-     * Имя middleware слоя определяется ключем массива, а приоритет исполнения - значением. Чем
-     * больше значение приоритета, тем раньше будет вызван middleware слой. Middleware слои,
-     * приоритеты которых равны, будут вызваны в порядке их объявления в данном массиве (чем раньше указан,
-     * тем раньше будет вызван).
+     * The name of the middleware layer is determined by the array key, and the execution priority is determined by the value. How
+     * the higher the priority value, the earlier the middleware layer will be called. Middleware layers,
+     * whose priorities are equal will be called in the order of their declaration in this array (the earlier specified,
+     * the sooner it will be called).
      *
-     * Данные правила справедливы для последующих middleware конвейеров.
+     * These rules are valid for subsequent middleware pipelines.
      */
     'typeResolverMiddlewares' => [
         Types\EnumTypeMiddleware::class => Types\EnumTypeMiddleware::PRIORITY,
@@ -93,9 +93,9 @@ return [
     ],
 
     /**
-     * Определение поля (FieldDefinition) для объектного или интерфейсного GraphQL типа
-     * (ObjectType или InterfaceType) с использованием middleware конвейера, основанного
-     * на приоритезированной очереди.
+     * Definition of a field (FieldDefinition) for an object or interface GraphQL type
+     * (ObjectType or InterfaceType) using pipeline middleware based
+     * on a priority queue.
      */
     'objectFieldResolverMiddlewares' => [
         Objects\QueryFieldByReflectionMethodMiddleware::class => Objects\QueryFieldByReflectionMethodMiddleware::PRIORITY,
@@ -109,8 +109,8 @@ return [
     ],
 
     /**
-     * Определение поля (InputObjectField) для входящего объектного GraphQL типа (InputObjectType)
-     * с использованием middleware конвейера, основанного на приоритезированной очереди.
+     * Defining a field (InputObjectField) for the incoming GraphQL object type (InputObjectType)
+     * using pipeline middleware based on a priority queue.
      */
     'inputObjectFieldResolverMiddlewares' => [
         Inputs\ReflectionPropertyMiddleware::class => Inputs\ReflectionPropertyMiddleware::PRIORITY,
@@ -120,8 +120,8 @@ return [
     ],
 
     /**
-     * Определение конфигурации аргумента объектных или интерфейсных полей GraphQL типа
-     * с использованием middleware конвейера, основанного на приоритезированной очереди.
+     * Defining Argument Configuration for GraphQL Object or Interface Type Fields
+     * using pipeline middleware based on a priority queue.
      */
     'argumentResolverMiddlewares' => [
         Argument\ReflectionParameterMiddleware::class => Argument\ReflectionParameterMiddleware::PRIORITY,
@@ -130,14 +130,14 @@ return [
     ],
 
     /**
-     * Перечень дополнительных GraphQL типов, не относящихся непосредственно к приложению
-     * (например объявленных в сторонних библиотеках).
+     * List of additional GraphQL types not directly related to the application
+     * (for example, declared in third-party libraries).
      *
-     * Например: [Andi\GraphQL\Type\DateTime::class, Andi\GraphQL\Type\Date::class]
+     * For example: [Andi\GraphQL\Type\DateTime::class, Andi\GraphQL\Type\Date::class]
      */
     'additionalTypes' => [
     ],
 ];
 ```
 
-> По умолчанию конфигурационный файл отсутствует, его можно создать [консольной командой](install.md#настройка-конфигурационных-файлов).
+> By default, there is no configuration file, it can be created [console command](install.md#setting-configuration-files).
