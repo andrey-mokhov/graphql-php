@@ -50,8 +50,8 @@ final class RoutesBootloader extends BaseRoutesBootloader
 ```
 
 The middleware layer `UploadMiddleware::class` must be listed after the `JsonPayloadMiddleware::class` layer
-and up to `GraphQLMiddleware::class`, which is connected to `GraphQLBootloader` (this was written about
-in the [Installation and configuration](install.md#bootloader) section.
+and before `GraphQLMiddleware::class`, which is connected to `GraphQLBootloader` (this was written about
+in the [Installation and configuration](install.md#bootloader) page.
 
 In addition, you should register the scalar GraphQL type `Upload`, defined in
 library `ecodev/graphql-upload`. To do this, change [configuration settings](configure.md)
@@ -71,7 +71,7 @@ return [
 >
 > The value for `UploadType::class` is an alias of the GraphQL type
 > `\Nyholm\Psr7\UploadedFile::class`. Thus, the library, when defining a field type
-> (in the example below), will automatically map the php class `UploadedFile` to the GraphQL type `Upload`
+> (in the example below), will automatically map the php class `UploadedFile` with scalar GraphQL type `Upload`
 > (declared in class `\GraphQL\Upload\UploadType::class`).
 
 An example of a mutation that takes a loaded file as an argument:
@@ -95,8 +95,8 @@ final class ExampleUploadFile
 }
 ```
 
-An example of a GraphQL object helper type used to display information about
-downloaded file:
+An example of a GraphQL helper ObjectType used to display information about
+uploaded file:
 
 ```php
 namespace App\GraphQL\Type;
