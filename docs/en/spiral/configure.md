@@ -16,7 +16,7 @@ return [
     'url' => getenv('GRAPHQL_URL') ?: '/api/graphql',
 
     /**
-     * The name of the GraphQL object type used to process query requests, defaults to `Query`.
+     * The name of the GraphQL ObjectType used to process query requests, defaults to `Query`.
      * For 'Query' type use: Andi\GraphQL\Type\QueryType::class
      * It is acceptable to use an FQCN record, for example: App\GraphQL\Type\Query::class
      */
@@ -33,7 +33,7 @@ return [
 
     /**
      * The name of the class whose instance will be used as the root value when calling
-     * field handlers for Query and Mutation types.
+     * field resolvers for Query and Mutation types.
      *
      * If a class implements the __invoke magic method, then the root value will be
      * the result of calling this method is used.
@@ -50,7 +50,7 @@ return [
 
     /**
      * The name of the class whose instance will be used as the calling context and passed
-     * into each GraphQL handler.
+     * into each GraphQL resolver.
      *
      * If a class implements the __invoke magic method, then the context will be used
      * the result of calling this method.
