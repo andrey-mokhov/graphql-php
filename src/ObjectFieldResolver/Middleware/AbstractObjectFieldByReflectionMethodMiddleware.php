@@ -38,7 +38,7 @@ abstract class AbstractObjectFieldByReflectionMethodMiddleware extends AbstractF
      */
     protected function buildField(array $config, ReflectionMethod $method): Webonyx\FieldDefinition
     {
-        $config['args'] = iterator_to_array($iterator = $this->getFieldArguments($method));
+        $config['args'] = \iterator_to_array($iterator = $this->getFieldArguments($method));
 
         return new ObjectField(
             $config,

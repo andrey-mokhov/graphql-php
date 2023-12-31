@@ -50,11 +50,11 @@ class InterfaceType extends Webonyx\InterfaceType implements DynamicObjectTypeIn
     {
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (isset($this->nativeFields)) {
-            $fields = is_callable($this->nativeFields)
-                ? call_user_func($this->nativeFields)
+            $fields = \is_callable($this->nativeFields)
+                ? \call_user_func($this->nativeFields)
                 : $this->nativeFields;
 
-            if (is_iterable($fields)) {
+            if (\is_iterable($fields)) {
                 foreach ($fields as $field) {
                     yield $this->objectFieldResolver->resolve($field);
                 }

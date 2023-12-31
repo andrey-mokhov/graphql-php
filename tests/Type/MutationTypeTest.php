@@ -45,7 +45,7 @@ class MutationTypeTest extends TestCase
         $result = $instance->getFields();
 
         if ($result instanceof \Traversable) {
-            $result = iterator_to_array($result, false);
+            $result = \iterator_to_array($result, false);
         }
 
         self::assertSame($fields, $result);

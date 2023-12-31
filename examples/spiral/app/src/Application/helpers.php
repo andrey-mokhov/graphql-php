@@ -20,7 +20,7 @@ if (!\function_exists('dumprr')) {
         if (!\defined('STDERR')) {
             \define('STDERR', \fopen('php://stderr', 'wb'));
         }
-        static $dumper = new CliDumper(STDERR);
+        static $dumper = new CliDumper(\STDERR);
 
         //
         // Output modifiers

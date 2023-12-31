@@ -7,11 +7,11 @@ namespace Andi\GraphQL\TypeResolver\Middleware;
 use Andi\GraphQL\Attribute;
 use Andi\GraphQL\Common\DefinitionAwareTrait;
 use Andi\GraphQL\Common\InputObjectFactory;
-use Andi\GraphQL\Common\LazyTypeResolver;
-use Andi\GraphQL\Common\ResolveType;
 use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
 use Andi\GraphQL\Common\LazyTypeIterator;
+use Andi\GraphQL\Common\LazyTypeResolver;
+use Andi\GraphQL\Common\ResolveType;
 use Andi\GraphQL\Definition\Type\FieldsAwareInterface;
 use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
 use Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface;
@@ -20,9 +20,9 @@ use Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface;
 use Andi\GraphQL\Definition\Type\ResolveTypeAwareInterface;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
-use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use Andi\GraphQL\TypeResolver\TypeResolverInterface;
+use Andi\GraphQL\Type\DynamicObjectTypeInterface;
 use Andi\GraphQL\WebonyxType\InputObjectType;
 use Andi\GraphQL\WebonyxType\InterfaceType;
 use Andi\GraphQL\WebonyxType\ObjectType;
@@ -49,7 +49,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        $class = is_string($type) && class_exists($type)
+        $class = \is_string($type) && \class_exists($type)
             ? new \ReflectionClass($type)
             : $type;
 
@@ -60,10 +60,10 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $attributes = $class->getAttributes(Attribute\AbstractType::class, \ReflectionAttribute::IS_INSTANCEOF);
         foreach ($attributes as $attribute) {
             $webonyxType = match ($attribute->getName()) {
-                Attribute\ObjectType::class      => $this->buildObjectType($class),
+                Attribute\ObjectType::class => $this->buildObjectType($class),
                 Attribute\InputObjectType::class => $this->buildInputObjectType($class),
-                Attribute\InterfaceType::class   => $this->buildInterfaceType($class),
-                default                          => null,
+                Attribute\InterfaceType::class => $this->buildInterfaceType($class),
+                default => null,
             };
 
             if (null !== $webonyxType) {
@@ -79,7 +79,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstClassMetadata($class, Attribute\ObjectType::class);
 
         $config = [
-            'name'        => $this->getTypeName($class, $attribute),
+            'name' => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
         ];
 
@@ -121,9 +121,9 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstClassMetadata($class, Attribute\InputObjectType::class);
 
         $config = [
-            'name'        => $this->getTypeName($class, $attribute),
+            'name' => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
-            'parseValue'  => $this->getTypeParseValue($class, $attribute),
+            'parseValue' => $this->getTypeParseValue($class, $attribute),
         ];
 
         if ($class->isSubclassOf(FieldsAwareInterface::class)) {
@@ -145,7 +145,7 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         $attribute = $this->reader->firstClassMetadata($class, Attribute\InterfaceType::class);
 
         $config = [
-            'name'        => $this->getTypeName($class, $attribute),
+            'name' => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
             'resolveType' => $this->getResolveTypeFn($class, $attribute),
         ];
@@ -159,13 +159,15 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
 
     private function getResolveTypeFn(\ReflectionClass $class, ?Attribute\InterfaceType $attribute): callable
     {
+        if ($attribute?->resolveType) {
+            return new LazyTypeResolver($this->container->get($attribute->resolveType), $this->typeRegistry);
+        }
+
         if (! $class->isInterface() && $class->isSubclassOf(ResolveTypeAwareInterface::class)) {
             return new LazyTypeResolver($class->getMethod('resolveType')->getClosure(), $this->typeRegistry);
         }
 
-        return $attribute?->resolveType
-            ? new LazyTypeResolver($this->container->get($attribute->resolveType), $this->typeRegistry)
-            : new ResolveType($this->typeRegistry);
+        return $this->container->get(ResolveType::class);
     }
 
     private function getTypeParseValue(\ReflectionClass $class, ?Attribute\InputObjectType $attribute): callable

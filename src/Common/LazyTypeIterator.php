@@ -22,7 +22,7 @@ final class LazyTypeIterator
 
     public function __invoke(): iterable
     {
-        foreach (call_user_func($this->types) as $type) {
+        foreach (\call_user_func($this->types) as $type) {
             yield $this->typeRegistry->get($type);
         }
     }

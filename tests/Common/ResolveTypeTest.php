@@ -31,7 +31,7 @@ final class ResolveTypeTest extends TestCase
         $typeRegistry->register(new FooObjectType([]), FooObjectType::class);
 
         $instance = new ResolveType($typeRegistry);
-        $type = (string) call_user_func($instance, $object, null, \Mockery::mock(Webonyx\ResolveInfo::class));
+        $type = (string) \call_user_func($instance, $object, null, \Mockery::mock(Webonyx\ResolveInfo::class));
 
         self::assertSame($expected, $type);
     }

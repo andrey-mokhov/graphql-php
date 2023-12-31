@@ -90,14 +90,14 @@ final class AbstractObjectTypeTest extends TestCase
             self::assertSame($expected['name'], $instance->getName());
         }
 
-        if (isset($expected['description']) || array_key_exists('description', $expected)) {
+        if (isset($expected['description']) || \array_key_exists('description', $expected)) {
             self::assertSame($expected['description'], $instance->getDescription());
         }
 
         if (isset($expected['interfaces'])) {
             $interfaces = $instance->getInterfaces();
             $interfaces = $interfaces instanceof \Traversable
-                ? iterator_to_array($interfaces)
+                ? \iterator_to_array($interfaces)
                 : $interfaces;
             self::assertSame($expected['interfaces'], $interfaces);
         }
@@ -115,7 +115,7 @@ final class AbstractObjectTypeTest extends TestCase
                     self::assertSame($expField['name'], $field->getName());
                 }
 
-                if (isset($expField['description']) || array_key_exists('description', $expField)) {
+                if (isset($expField['description']) || \array_key_exists('description', $expField)) {
                     self::assertSame($expField['description'], $field->description);
                 }
 
@@ -145,7 +145,7 @@ final class AbstractObjectTypeTest extends TestCase
                             self::assertFalse($arg->isDeprecated());
                         }
 
-                        if (isset($expArg['defaultValue']) || array_key_exists('defaultValue', $expArg)) {
+                        if (isset($expArg['defaultValue']) || \array_key_exists('defaultValue', $expArg)) {
                             self::assertTrue($arg->defaultValueExists());
                             self::assertSame($expArg['defaultValue'], $arg->defaultValue);
                         } else {
@@ -160,14 +160,14 @@ final class AbstractObjectTypeTest extends TestCase
 
                 if (isset($expField['resolve'])) {
                     self::assertIsCallable($field->resolveFn);
-                    self::assertSame($expField['resolve'], call_user_func_array($field->resolveFn, $this->resolveArgs));
+                    self::assertSame($expField['resolve'], \call_user_func_array($field->resolveFn, $this->resolveArgs));
                 } else {
                     self::assertNull($field->resolveFn);
                 }
 
                 if (isset($expField['complexity'])) {
                     self::assertIsCallable($field->complexityFn);
-                    self::assertSame($expField['complexity'], call_user_func($field->complexityFn, 1, []));
+                    self::assertSame($expField['complexity'], \call_user_func($field->complexityFn, 1, []));
                 } else {
                     self::assertNull($field->complexityFn);
                 }

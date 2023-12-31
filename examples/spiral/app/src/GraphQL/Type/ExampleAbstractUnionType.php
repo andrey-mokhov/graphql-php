@@ -23,7 +23,7 @@ final class ExampleAbstractUnionType extends AbstractUnionType implements Resolv
             return 'User';
         }
 
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return Pet::class;
         }
 

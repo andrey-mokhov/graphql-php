@@ -78,7 +78,7 @@ final class InputObjectFieldMiddlewareTest extends TestCase
             }
         }
 
-        if (! array_key_exists('defaultValue', $expected)) {
+        if (! \array_key_exists('defaultValue', $expected)) {
             self::assertFalse($inputObjectField->defaultValueExists());
         }
     }

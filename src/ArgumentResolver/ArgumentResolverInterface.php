@@ -11,7 +11,7 @@ interface ArgumentResolverInterface
     /**
      * @param mixed $argument
      *
-     * @return array{name: string, type: Webonyx\Type, description: ?string, defaultValue: mixed}
+     * @return array{name: string, type: Webonyx\Type, description: ?string, defaultValue?: mixed}
      */
     public function resolve(mixed $argument): array;
 }

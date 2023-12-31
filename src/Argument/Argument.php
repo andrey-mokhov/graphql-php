@@ -26,7 +26,7 @@ class Argument extends AbstractArgument implements DefaultValueAwareInterface, D
             $this->deprecationReason = $deprecationReason;
         }
 
-        if (func_num_args() >= 6) {
+        if (\func_num_args() >= 6) {
             $this->defaultValue = $defaultValue;
         }
     }

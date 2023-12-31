@@ -31,9 +31,9 @@ abstract class AbstractEnumType implements EnumTypeInterface
         foreach ($this->values as $name => $value) {
             if ($value instanceof EnumValueInterface) {
                 yield $value;
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 $valueName = $value['name'] ?? $name;
-                if (! is_string($valueName)) {
+                if (! \is_string($valueName)) {
                     throw new CantResolveEnumTypeException('Can\'t resolve EnumValue: wrong value configuration');
                 }
                 yield new EnumValue(
@@ -42,9 +42,9 @@ abstract class AbstractEnumType implements EnumTypeInterface
                     description: $value['description'] ?? null,
                     deprecationReason: $value['deprecationReason'] ?? null,
                 );
-            } elseif (is_string($name)) {
+            } elseif (\is_string($name)) {
                 yield new EnumValue(name: $name, value: $value);
-            } elseif (is_string($value)) {
+            } elseif (\is_string($value)) {
                 yield new EnumValue(name: $value, value: $value);
             } else {
                 throw new CantResolveEnumTypeException('Can\'t resolve EnumValue: wrong value configuration');

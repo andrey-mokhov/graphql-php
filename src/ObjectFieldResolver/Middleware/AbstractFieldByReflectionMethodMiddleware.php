@@ -50,9 +50,9 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         }
 
         $config = [
-            'name'              => $this->getFieldName($field, $attribute),
-            'description'       => $this->getFieldDescription($field, $attribute),
-            'type'              => $this->getFieldType($field, $attribute),
+            'name' => $this->getFieldName($field, $attribute),
+            'description' => $this->getFieldDescription($field, $attribute),
+            'type' => $this->getFieldType($field, $attribute),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
@@ -67,11 +67,11 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
         $name = $method->getName();
 
-        if (str_starts_with($name, 'get')) {
-            $name = substr($name, 3);
+        if (\str_starts_with($name, 'get')) {
+            $name = \substr($name, 3);
         }
 
-        return lcfirst($name);
+        return \lcfirst($name);
     }
 
     private function getFieldDescription(ReflectionMethod $method, AbstractField $attribute): ?string
@@ -95,7 +95,7 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         }
 
         if (! $method->hasReturnType()) {
-            throw new CantResolveGraphQLTypeException(sprintf(
+            throw new CantResolveGraphQLTypeException(\sprintf(
                 'Can\'t resolve GraphQL type for field "%s"',
                 $method->getName()
             ));

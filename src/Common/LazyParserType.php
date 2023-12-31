@@ -34,7 +34,7 @@ final class LazyParserType
         $type = $this->typeRegistry->get($this->type);
 
         if (TypeAwareInterface::ITEM_IS_REQUIRED === (TypeAwareInterface::ITEM_IS_REQUIRED & $this->mode)) {
-            assert($type instanceof Webonyx\NullableType);
+            \assert($type instanceof Webonyx\NullableType);
             $type = Webonyx\Type::nonNull($type);
         }
 
@@ -70,6 +70,6 @@ final class LazyParserType
             return Webonyx\Type::listOf($this->getType($node->type));
         }
 
-        throw new CantResolveGraphQLTypeException(sprintf('Can\'t resolve GraphQL type for "%s"', $this->type));
+        throw new CantResolveGraphQLTypeException(\sprintf('Can\'t resolve GraphQL type for "%s"', $this->type));
     }
 }

@@ -25,7 +25,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        $enum = is_string($type) && enum_exists($type)
+        $enum = \is_string($type) && \enum_exists($type)
             ? new \ReflectionEnum($type)
             : $type;
 
@@ -39,9 +39,9 @@ final class EnumTypeMiddleware implements MiddlewareInterface
     private function buildEnumType(\ReflectionEnum $class, ?Attribute\EnumType $attribute): Webonyx\EnumType
     {
         $config = [
-            'name'        => $this->getTypeName($class, $attribute),
+            'name' => $this->getTypeName($class, $attribute),
             'description' => $this->getTypeDescription($class, $attribute),
-            'values'      => [],
+            'values' => [],
         ];
 
         foreach ($class->getCases() as $case) {
@@ -60,7 +60,7 @@ final class EnumTypeMiddleware implements MiddlewareInterface
     private function getCaseName(\ReflectionEnumUnitCase $case, ?Attribute\EnumValue $attribute): string
     {
         if ($attribute?->name) {
-            assert($attribute->name !== null);
+            \assert($attribute->name !== null);
             return $attribute->name;
         }
 

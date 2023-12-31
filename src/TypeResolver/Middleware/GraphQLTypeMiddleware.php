@@ -40,31 +40,31 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        if (! is_string($type) || ! is_subclass_of($type, TypeInterface::class)) {
+        if (! \is_string($type) || ! \is_subclass_of($type, TypeInterface::class)) {
             return $typeResolver->resolve($type);
         }
 
-        if (is_subclass_of($type, ObjectTypeInterface::class)) {
+        if (\is_subclass_of($type, ObjectTypeInterface::class)) {
             return $this->buildObjectType($this->container->get($type));
         }
 
-        if (is_subclass_of($type, InputObjectTypeInterface::class)) {
+        if (\is_subclass_of($type, InputObjectTypeInterface::class)) {
             return $this->buildInputObjectType($this->container->get($type));
         }
 
-        if (is_subclass_of($type, InterfaceTypeInterface::class)) {
+        if (\is_subclass_of($type, InterfaceTypeInterface::class)) {
             return $this->buildInterfaceType($this->container->get($type));
         }
 
-        if (is_subclass_of($type, UnionTypeInterface::class)) {
+        if (\is_subclass_of($type, UnionTypeInterface::class)) {
             return $this->buildUnionType($this->container->get($type));
         }
 
-        if (is_subclass_of($type, EnumTypeInterface::class)) {
+        if (\is_subclass_of($type, EnumTypeInterface::class)) {
             return $this->buildEnumType($this->container->get($type));
         }
 
-        if (is_subclass_of($type, ScalarTypeInterface::class)) {
+        if (\is_subclass_of($type, ScalarTypeInterface::class)) {
             return $this->buildScalarType($this->container->get($type));
         }
 
@@ -76,9 +76,9 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $objectFieldResolver = $this->container->get(ObjectFieldResolverInterface::class);
 
         $config = [
-            'name'        => $type->getName(),
+            'name' => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => new LazyObjectFields($type, $objectFieldResolver),
+            'fields' => new LazyObjectFields($type, $objectFieldResolver),
         ];
 
         if ($type instanceof InterfacesAwareInterface) {
@@ -111,14 +111,14 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $fieldResolver = $this->container->get(InputObjectFieldResolverInterface::class);
 
         $config = [
-            'name'        => $type->getName(),
+            'name' => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => new LazyInputObjectFields($type, $fieldResolver),
+            'fields' => new LazyInputObjectFields($type, $fieldResolver),
         ];
 
         if ($type instanceof ParseValueAwareInterface) {
             /** @psalm-suppress UndefinedMethod */
-            $config['parseValue'] = $type->parseValue(...);
+            $config['parseValue'] = $type::parseValue(...);
         }
 
         return new Webonyx\InputObjectType($config);
@@ -129,15 +129,15 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $objectFieldResolver = $this->container->get(ObjectFieldResolverInterface::class);
 
         $config = [
-            'name'        => $type->getName(),
+            'name' => $type->getName(),
             'description' => $type->getDescription(),
-            'fields'      => new LazyObjectFields($type, $objectFieldResolver),
+            'fields' => new LazyObjectFields($type, $objectFieldResolver),
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
             $typeRegistry = $this->container->get(TypeRegistryInterface::class);
             /** @psalm-suppress UndefinedMethod */
-            $config['resolveType'] = new LazyTypeResolver($type->resolveType(...), $typeRegistry);
+            $config['resolveType'] = new LazyTypeResolver($type::resolveType(...), $typeRegistry);
         }
 
         return new Webonyx\InterfaceType($config);
@@ -148,9 +148,9 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
         $typeRegistry = $this->container->get(TypeRegistryInterface::class);
 
         $config = [
-            'name'        => $type->getName(),
+            'name' => $type->getName(),
             'description' => $type->getDescription(),
-            'types'       => new LazyTypeIterator($type->getTypes(...), $typeRegistry),
+            'types' => new LazyTypeIterator($type->getTypes(...), $typeRegistry),
         ];
 
         if ($type instanceof ResolveTypeAwareInterface) {
@@ -164,14 +164,14 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
     private function buildEnumType(EnumTypeInterface $type): Webonyx\EnumType
     {
         return new Webonyx\EnumType([
-            'name'        => $type->getName(),
+            'name' => $type->getName(),
             'description' => $type->getDescription(),
-            'values'      => static function () use ($type): iterable {
+            'values' => static function () use ($type): iterable {
                 foreach ($type->getValues() as $value) {
                     yield $value->getName() => [
-                        'name'              => $value->getName(),
-                        'description'       => $value->getDescription(),
-                        'value'             => $value->getValue(),
+                        'name' => $value->getName(),
+                        'description' => $value->getDescription(),
+                        'value' => $value->getValue(),
                         'deprecationReason' => $value->getDeprecationReason(),
                     ];
                 }
@@ -182,10 +182,10 @@ final class GraphQLTypeMiddleware implements MiddlewareInterface
     private function buildScalarType(ScalarTypeInterface $type): Webonyx\CustomScalarType
     {
         return new Webonyx\CustomScalarType([
-            'name'         => $type->getName(),
-            'description'  => $type->getDescription(),
-            'serialize'    => $type->serialize(...),
-            'parseValue'   => $type->parseValue(...),
+            'name' => $type->getName(),
+            'description' => $type->getDescription(),
+            'serialize' => $type->serialize(...),
+            'parseValue' => $type->parseValue(...),
             'parseLiteral' => $type->parseLiteral(...),
         ]);
     }

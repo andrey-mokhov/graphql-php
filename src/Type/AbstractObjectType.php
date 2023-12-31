@@ -64,7 +64,7 @@ abstract class AbstractObjectType extends AbstractType implements
                 continue;
             }
 
-            if (is_string($field) || is_array($field)) {
+            if (\is_string($field) || \is_array($field)) {
                 yield $this->getObjectField($name, $field);
 
                 continue;
@@ -93,17 +93,17 @@ abstract class AbstractObjectType extends AbstractType implements
     {
         $fieldName = $field['name'] ?? $name;
 
-        if (! is_string($fieldName)) {
+        if (! \is_string($fieldName)) {
             throw new CantResolveObjectFieldException(
                 'Can\'t resolve ObjectField: wrong configuration - undefined name',
             );
         }
 
-        if (is_string($field)) {
+        if (\is_string($field)) {
             return $this->makeObjectField($fieldName, ['type' => $field]);
         }
 
-        if (! isset($field['type']) || ! is_string($field['type'])) {
+        if (! isset($field['type']) || ! \is_string($field['type'])) {
             throw new CantResolveObjectFieldException(
                 'Can\'t resolve ObjectField: wrong configuration - undefined type',
             );
@@ -172,13 +172,13 @@ abstract class AbstractObjectType extends AbstractType implements
             return $callable;
         }
 
-        if (is_callable($callable)) {
+        if (\is_callable($callable)) {
             return \Closure::fromCallable($callable);
         }
 
-        if (is_array($callable)) {
+        if (\is_array($callable)) {
             if (! isset($callable[0], $callable[1])) {
-                throw new CantResolveObjectFieldException(sprintf(
+                throw new CantResolveObjectFieldException(\sprintf(
                     'Can\'t resolve ObjectField: wrong configuration - %s must be callable',
                     $option
                 ));
@@ -188,7 +188,7 @@ abstract class AbstractObjectType extends AbstractType implements
                 $method = new \ReflectionMethod($callable[0], $callable[1]);
             } catch (\ReflectionException $exception) {
                 throw new CantResolveObjectFieldException(
-                    sprintf('Can\'t resolve ObjectField: wrong configuration - %s must be callable', $option),
+                    \sprintf('Can\'t resolve ObjectField: wrong configuration - %s must be callable', $option),
                     $exception->getCode(),
                     $exception,
                 );
@@ -197,14 +197,14 @@ abstract class AbstractObjectType extends AbstractType implements
             return $method->getClosure($this);
         }
 
-        if (is_string($callable)) {
+        if (\is_string($callable)) {
             try {
-                $method = str_contains($callable, '::')
-                    ? new \ReflectionMethod(...explode('::', $callable, 2))
+                $method = \str_contains($callable, '::')
+                    ? new \ReflectionMethod(...\explode('::', $callable, 2))
                     : new \ReflectionMethod($this, $callable);
             } catch (\ReflectionException $exception) {
                 throw new CantResolveObjectFieldException(
-                    sprintf('Can\'t resolve ObjectField: wrong configuration - %s must be callable', $option),
+                    \sprintf('Can\'t resolve ObjectField: wrong configuration - %s must be callable', $option),
                     $exception->getCode(),
                     $exception,
                 );

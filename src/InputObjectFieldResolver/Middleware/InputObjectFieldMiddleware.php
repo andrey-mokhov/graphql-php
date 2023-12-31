@@ -34,9 +34,9 @@ final class InputObjectFieldMiddleware implements MiddlewareInterface
 
         /** @var InputObjectFieldConfig $config */
         $config = [
-            'name'              => $field->getName(),
-            'description'       => $field->getDescription(),
-            'type'              => new LazyType($field, $this->typeRegistry),
+            'name' => $field->getName(),
+            'description' => $field->getDescription(),
+            'type' => new LazyType($field, $this->typeRegistry),
         ];
 
         if ($field instanceof DeprecationReasonAwareInterface) {

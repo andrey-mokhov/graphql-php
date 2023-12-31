@@ -64,10 +64,10 @@ abstract class AbstractObjectField implements ObjectFieldInterface, ArgumentsAwa
         foreach ($this->arguments ?? [] as $name => $argument) {
             if ($argument instanceof ArgumentInterface || $argument instanceof Webonyx\Type) {
                 yield $argument;
-            } elseif (is_string($argument)) {
+            } elseif (\is_string($argument)) {
                 yield new Argument($name, $argument);
-            } elseif (is_array($argument)) {
-                if (is_string($name)) {
+            } elseif (\is_array($argument)) {
+                if (\is_string($name)) {
                     $argument['name'] ??= $name;
                 }
 

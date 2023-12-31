@@ -52,7 +52,7 @@ abstract class AbstractInterfaceType extends AbstractType implements InterfaceTy
                 continue;
             }
 
-            if (is_string($field) || is_array($field)) {
+            if (\is_string($field) || \is_array($field)) {
                 yield $this->getObjectField($name, $field);
 
                 continue;
@@ -77,17 +77,17 @@ abstract class AbstractInterfaceType extends AbstractType implements InterfaceTy
     {
         $fieldName = $field['name'] ?? $name;
 
-        if (! is_string($fieldName)) {
+        if (! \is_string($fieldName)) {
             throw new CantResolveObjectFieldException(
                 'Can\'t resolve ObjectField: wrong configuration - undefined name',
             );
         }
 
-        if (is_string($field)) {
+        if (\is_string($field)) {
             return $this->makeObjectField($fieldName, ['type' => $field]);
         }
 
-        if (! isset($field['type']) || ! is_string($field['type'])) {
+        if (! isset($field['type']) || ! \is_string($field['type'])) {
             throw new CantResolveObjectFieldException(
                 'Can\'t resolve ObjectField: wrong configuration - undefined type',
             );

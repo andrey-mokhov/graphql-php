@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Andi\GraphQL\Common;
 
 use Andi\GraphQL\TypeRegistryInterface;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition as Webonyx;
 
 final class ResolveType
@@ -15,9 +14,9 @@ final class ResolveType
     ) {
     }
 
-    public function __invoke(mixed $value, mixed $context, ResolveInfo $info): ?Webonyx\ObjectType
+    public function __invoke(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?Webonyx\ObjectType
     {
-        if (! is_object($value)) {
+        if (! \is_object($value)) {
             return null;
         }
 

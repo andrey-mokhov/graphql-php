@@ -91,12 +91,12 @@ final class ObjectFieldMiddlewareTest extends TestCase
 
         if (isset($expected['resolve'])) {
             self::assertIsCallable($objectField->resolveFn);
-            self::assertSame($expected['resolve'], call_user_func($objectField->resolveFn, null, [], null, $info));
+            self::assertSame($expected['resolve'], \call_user_func($objectField->resolveFn, null, [], null, $info));
         }
 
         if (isset($expected['complexity'])) {
             self::assertIsCallable($objectField->complexityFn);
-            self::assertSame($expected['complexity'], call_user_func($objectField->complexityFn, 0, []));
+            self::assertSame($expected['complexity'], \call_user_func($objectField->complexityFn, 0, []));
         }
     }
 

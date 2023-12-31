@@ -23,15 +23,15 @@ abstract class AbstractAnonymousObjectField extends AbstractObjectField
         $this->type = $field['type'];
         $this->mode = $field['mode'] ?? 0;
 
-        if (isset($field['description']) && is_string($field['description'])) {
+        if (isset($field['description']) && \is_string($field['description'])) {
             $this->description = $field['description'];
         }
 
-        if (isset($field['deprecationReason']) && is_string($field['deprecationReason'])) {
+        if (isset($field['deprecationReason']) && \is_string($field['deprecationReason'])) {
             $this->deprecationReason = $field['deprecationReason'];
         }
 
-        if (isset($field['arguments']) && is_iterable($field['arguments'])) {
+        if (isset($field['arguments']) && \is_iterable($field['arguments'])) {
             $this->arguments = $field['arguments'];
         }
 

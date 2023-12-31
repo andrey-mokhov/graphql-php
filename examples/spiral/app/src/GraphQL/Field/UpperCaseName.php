@@ -18,6 +18,6 @@ final class UpperCaseName
         /** @var User $user */
         $user = $arguments->object;
 
-        return strtoupper($user->getDisplayName());
+        return \strtoupper($user->getDisplayName());
     }
 }

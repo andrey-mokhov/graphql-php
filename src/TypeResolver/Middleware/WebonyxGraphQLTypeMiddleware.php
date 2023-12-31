@@ -19,7 +19,7 @@ final class WebonyxGraphQLTypeMiddleware implements MiddlewareInterface
 
     public function process(mixed $type, TypeResolverInterface $typeResolver): Webonyx\Type
     {
-        return is_string($type) && is_subclass_of($type, Webonyx\Type::class)
+        return \is_string($type) && \is_subclass_of($type, Webonyx\Type::class)
             ? $this->container->get($type)
             : $typeResolver->resolve($type);
     }

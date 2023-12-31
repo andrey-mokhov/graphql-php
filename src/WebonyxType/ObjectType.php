@@ -49,11 +49,11 @@ class ObjectType extends Webonyx\ObjectType implements DynamicObjectTypeInterfac
     private function extractFields(): iterable
     {
         if (isset($this->nativeFields)) {
-            $fields = is_callable($this->nativeFields)
-                ? call_user_func($this->nativeFields)
+            $fields = \is_callable($this->nativeFields)
+                ? \call_user_func($this->nativeFields)
                 : $this->nativeFields;
 
-            if (is_iterable($fields)) {
+            if (\is_iterable($fields)) {
                 foreach ($fields as $field) {
                     yield $this->objectFieldResolver->resolve($field);
                 }

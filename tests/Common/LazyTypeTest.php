@@ -40,7 +40,7 @@ final class LazyTypeTest extends TestCase
     public function testInvoke(string $expected, TypeAwareInterface $class): void
     {
         $instance = new LazyType($class, new TypeRegistry());
-        $type = (string) call_user_func($instance);
+        $type = (string) \call_user_func($instance);
 
         self::assertSame($expected, $type);
     }

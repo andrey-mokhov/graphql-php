@@ -16,8 +16,8 @@ final class InterfaceType extends AbstractType
      * @param class-string|null $resolveType Class must have method: __invoke(mixed $value, mixed $context, ResolveInfo $info): ?string
      */
     public function __construct(
-        ?string                 $name = null,
-        ?string                 $description = null,
+        ?string $name = null,
+        ?string $description = null,
         public readonly ?string $resolveType = null,
     ) {
         parent::__construct($name, $description);

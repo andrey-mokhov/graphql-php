@@ -36,10 +36,10 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
         $attribute = $this->reader->firstPropertyMetadata($field, ObjectField::class);
 
         $config = [
-            'name'              => $this->getName($field, $attribute),
-            'description'       => $this->getFieldDescription($field, $attribute),
-            'type'              => $this->getFieldType($field, $attribute),
-            'resolve'           => $this->getFieldResolver($field),
+            'name' => $this->getName($field, $attribute),
+            'description' => $this->getFieldDescription($field, $attribute),
+            'type' => $this->getFieldType($field, $attribute),
+            'resolve' => $this->getFieldResolver($field),
             'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
         ];
 
@@ -81,7 +81,7 @@ final class ObjectFieldByReflectionPropertyMiddleware implements MiddlewareInter
         }
 
         if (! $property->hasType()) {
-            throw new CantResolveGraphQLTypeException(sprintf(
+            throw new CantResolveGraphQLTypeException(\sprintf(
                 'Can\'t resolve GraphQL type for field "%s"',
                 $property->getName()
             ));

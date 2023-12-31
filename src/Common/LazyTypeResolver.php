@@ -27,6 +27,6 @@ final class LazyTypeResolver
 
     public function __invoke(mixed $value, mixed $context, Webonyx\ResolveInfo $info): ?Webonyx\ObjectType
     {
-        return $this->typeRegistry->get(call_user_func($this->type, $value, $context, $info));
+        return $this->typeRegistry->get(\call_user_func($this->type, $value, $context, $info));
     }
 }

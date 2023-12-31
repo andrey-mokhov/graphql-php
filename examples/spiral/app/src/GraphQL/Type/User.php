@@ -36,7 +36,7 @@ class User implements UserInterface, InterfacesAwareInterface, FieldsAwareInterf
     #[ObjectField]
     public function getDisplayName(): string
     {
-        return sprintf('%1$s %2$.1s. %3$s',
+        return \sprintf('%1$s %2$.1s. %3$s',
             $this->firstname,
             $this->middlename,
             $this->lastname,

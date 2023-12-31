@@ -27,9 +27,9 @@ final class ArgumentMiddleware implements MiddlewareInterface
         }
 
         $config = [
-            'name'        => $argument->getName(),
+            'name' => $argument->getName(),
             'description' => $argument->getDescription(),
-            'type'        => new LazyType($argument, $this->typeRegistry),
+            'type' => new LazyType($argument, $this->typeRegistry),
         ];
 
         if ($argument instanceof DeprecationReasonAwareInterface) {

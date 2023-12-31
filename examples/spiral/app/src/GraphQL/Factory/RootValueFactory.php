@@ -11,6 +11,6 @@ final class RootValueFactory
 {
     public function __invoke(string $operationType, OperationParams $params, DocumentNode $doc): array
     {
-        return compact('operationType', 'params', 'doc');
+        return \compact('operationType', 'params', 'doc');
     }
 }

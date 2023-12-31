@@ -98,7 +98,7 @@ final class ObjectFieldByReflectionPropertyMiddlewareTest extends TestCase
 
         if (isset($expected['resolve'])) {
             self::assertIsCallable($objectField->resolveFn);
-            self::assertSame($expected['resolve'], call_user_func($objectField->resolveFn, $object, [], null, $info));
+            self::assertSame($expected['resolve'], \call_user_func($objectField->resolveFn, $object, [], null, $info));
         }
     }
 

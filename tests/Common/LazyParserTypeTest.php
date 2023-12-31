@@ -41,7 +41,7 @@ final class LazyParserTypeTest extends TestCase
         if (null !== $exception) {
             $this->expectException($exception);
         }
-        $parsedType = call_user_func($instance);
+        $parsedType = \call_user_func($instance);
 
         self::assertSame($expected, (string) $parsedType);
     }
