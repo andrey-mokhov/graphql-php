@@ -1,13 +1,13 @@
-# Подключение дополнительных GraphQL типов
+# Connecting additional GraphQL types
 
-Библиотека предоставляет возможность регистрации в реестре дополнительных GraphQL типов для их
-последующего использования в вашем приложении. Это бывает полезно, если вам необходимо использовать
-сторонние библиотеки.
+The library provides the ability to register additional GraphQL types in the registry for their
+later use in your application. This is useful if you need to use
+third party libraries.
 
-Для автоматической регистрации вы можете [расширить перечень директорий](https://spiral.dev/docs/advanced-tokenizer/current#customizing-search-directories),
-которые будет сканировать Tokenizer или перечислить GraphQL типы в конфигурации самостоятельно.
+For automatic registration, you can [expand the list of directories](https://spiral.dev/docs/advanced-tokenizer/current#customizing-search-directories),
+which Tokenizer will scan or list GraphQL types in the configuration yourself.
 
-Пример конфигурации `config/graphql.php`:
+Configuration example `config/graphql.php`:
 
 ```php
 return [
@@ -21,14 +21,14 @@ return [
 ];
 ```
 
-Опция конфигурации `'additionalTypes'` должна быть массивом и содержать значения с числовыми или
-строковыми ключами. Если ключ является числом, то в качестве значения ожидается строка - имя класса,
-определяющий GraphQL тип. Если ключ - строка, то ключ интерпретируется библиотекой как имя класса,
-определяющий GraphQL тип, а значение(я) ключа - как псевдоним(ы) GraphQL типа, причем псевдонимов может
-быть несколько.
+The `'additionalTypes'` configuration option must be an array and contain values ​​with numeric or
+string keys. If the key is a number, then the value is expected to be a string - the name of the class,
+defining a GraphQL type. If the key is a string, then the key is interpreted by the library as a class name,
+defining a GraphQL type, and the key value(s) as an alias(s) of the GraphQL type, and aliases can
+be several.
 
-Псевдонимы используются библиотекой для автоматического сопоставления GraphQL типа по соответствующему
-определению метода/аргумента.
+Aliases are used by the library to automatically match GraphQL types to the appropriate
+method/argument definition.
 
 ```php
 namespace App\GraphQL\Field;
@@ -47,46 +47,46 @@ final class SimpleService
 }
 ```
 
-В примере выше библиотека автоматически определит тип поля как `DateTimeInterface` и по
-указанному в реестре псевдониму найдет соответствующий GraphQL тип поля - `DateTime`, определенного
-в классе `Andi\GraphQL\Type\DateTime`.
+In the example above, the library will automatically detect the field type as `DateTimeInterface` and
+the alias specified in the registry will find the corresponding GraphQL field type - `DateTime`, defined
+in class `Andi\GraphQL\Type\DateTime`.
 
-## <a id="date-time">Скалярный тип `DateTime`</a>
+## <a id="date-time">Scalar type `DateTime`</a>
 
-Библиотека включает в себя скалярный GraphQL тип `DateTime`, определенный в классе
-`Andi\GraphQL\Type\DateTime`. При использовании данного типа в GraphQL запросе (в качестве аргумента
-или поля входящего объектного типа) допустимо использование строковых значений следующих форматов:
-- `Y-m-d` - запись дня в формате ISO-8601, в этом случае часы, минуты и секунды будут выставлены в
-  нулевое значение, а часовой пояс `UTC`;
-- `Y-m-d\TH:i:s` - запись даты-времени в формате ISO-8601 без часового пояса, в этом случае часовой
-  пояс будет выставлен `UTC`;
-- `Y-m-d\TH:i:sP` - полная запись даты времени с указанным часовым поясом в формате ISO-8601.
+The library includes a scalar GraphQL type `DateTime` defined in the class
+`Andi\GraphQL\Type\DateTime`. When using this type in a GraphQL request (as an argument
+or fields of an incoming object type), it is acceptable to use string values ​​in the following formats:
+- `Y-m-d` - record the day in ISO-8601 format, in this case the hours, minutes and seconds will be set in
+  null value, and time zone `UTC`;
+- `Y-m-d\TH:i:s` - record date-time in ISO-8601 format without time zone, in this case time zone
+  the zone will be set to `UTC`;
+- `Y-m-d\TH:i:sP` - full record of the date and time with the specified time zone in ISO-8601 format.
 
-При этом, для параметров php методов, значений свойств классов, переданное в GraphQL запросе строковое
-значение будет преобразовано в `\DateTimeImmutable` объект.
+At the same time, for parameters of php methods, values ​​of class properties, the string passed in the GraphQL request
+the value will be converted to a `\DateTimeImmutable` object.
 
-> :point_right: **Важно!** :point_left:
+> :point_right: **Important!** :point_left:
 >
-> Не используйте класс `\DateTime` в качестве типа для параметров методов, свойств классов или
-> типа возвращаемого значения метода. Вместо этого используйте `\DateTimeImmutable` или
+> Do not use the class `\DateTime` as a type for method parameters, class properties, or
+> method return value type. Instead use `\DateTimeImmutable` or
 > `\DateTimeInterface`.
 
-По умолчанию данный скалярный GraphQL тип не зарегистрирован в реестре типов. Его необходимо
-подключить одним из способов, указанных в начале данной статьи.
+By default, this GraphQL scalar type is not registered in the type registry. It's necessary
+connect using one of the methods indicated at the beginning of this article.
 
-## <a id="date">Скалярный тип `Date`</a>
+## <a id="date">Scalar type `Date`</a>
 
-Библиотека включает в себя скалярный GraphQL тип `Date`, определенный в классе
-`Andi\GraphQL\Type\Date`. При использовании данного типа в GraphQL запросе (в качестве аргумента
-или поля входящего объектного типа) допустимо использование строковых значений формата `Y-m-d`.
+The library includes a scalar GraphQL type `Date` defined in the class
+`Andi\GraphQL\Type\Date`. When using this type in a GraphQL request (as an argument
+or fields of an incoming object type), string values ​​of the `Y-m-d` format are acceptable.
 
-При этом, для параметров php методов, значений свойств классов, переданное в GraphQL запросе строковое
-значение будет преобразовано в `\DateTimeImmutable` объект. При этом часы, минуты и секунды будут иметь
-нулевые значения, а часовой пояс `UTC`.
+At the same time, for parameters of php methods, values ​​of class properties, the string passed in the GraphQL request
+the value will be converted to a `\DateTimeImmutable` object. In this case, hours, minutes and seconds will have
+zero values, and the time zone is `UTC`.
 
-> :point_right: **Важно!** :point_left:
+> :point_right: **Important!** :point_left:
 >
-> Как и для скалярного GraphQL типа `DateTime` не используйте php класс `DateTime`.
+> As with the scalar GraphQL type `DateTime`, do not use the php class `DateTime`.
 
-По умолчанию данный скалярный GraphQL тип не зарегистрирован в реестре типов. Его необходимо
-подключить одним из способов, указанных в начале данной статьи.
+By default, this GraphQL scalar type is not registered in the type registry. It's necessary
+connect using one of the methods indicated at the beginning of this article.
