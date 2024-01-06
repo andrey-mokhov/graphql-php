@@ -7,7 +7,7 @@ It is possible to define enum types:
 ## <a id="enum-type-via-attribute">Defining using an attribute</a>
 
 To define an enum type, use the `#[EnumType]` attribute, this attribute applies to
-php transfers:
+php-enums:
 
 ```php
 namespace App\GraphQL\Type;
@@ -42,7 +42,7 @@ The `#[EnumType]` attribute can contain the following constructor parameters:
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            A description of the enumerated type as displayed in the GraphQL schema.
+            A description of the EnumType as displayed in the GraphQL schema.
             If not specified, the php enum description specified in docBlock is used.
         </td>
     </tr>
@@ -50,10 +50,10 @@ The `#[EnumType]` attribute can contain the following constructor parameters:
 
 > :point_right: **Note!**
 >
-> Valid values ​​for a GraphQL enum type are **all** (without exception) values
+> Values ​​for a GraphQL EnumType are **all** (without exception) values
 > corresponding php enum.
 
-Valid enum values ​​can have the `Andi\GraphQL\Attribute\EnumValue` attribute set.
+Enum values ​​can have the `Andi\GraphQL\Attribute\EnumValue` attribute set.
 
 The `#[EnumValue]` attribute can contain the following constructor parameters:
 
@@ -82,7 +82,7 @@ The `#[EnumValue]` attribute can contain the following constructor parameters:
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            If the parameter is specified, then in the GraphQL schema this value will be marked as obsolete. As
+            If the parameter is specified, then in the GraphQL schema this value will be marked as deprecated. As
             the reason will be indicated by the value of this parameter. If the parameter is not specified, but in docBlock
             php values ​​contain the <code>@deprecated</code> tag, then the comment of this tag will be used.
         </td>
@@ -162,7 +162,7 @@ The `EnumTypeInterface` interface requires the following methods to be implement
         <td valign="top">
             <p>
                 The method must return an iterable structure (<code>array</code> or
-                <code>\Traversable</code>) (an empty structure is not allowed) - list of valid values
+                <code>\Traversable</code>) (an empty structure is not allowed) - list of enum value
                 transfers.
             </p>
             <p>
@@ -173,12 +173,12 @@ The `EnumTypeInterface` interface requires the following methods to be implement
     </tr>
 </table>
 
-Valid values ​​of a GraphQL enum type must be implemented using an interface<br />
+Values ​​of a GraphQL enum type must be implemented using an interface<br />
 ` Andi\GraphQL\Definition\Field\EnumValueInterface`.
 
 > :point_right: **Рекомендация!**
 >
-> To define a valid enum type value, use the class
+> To define the enum type value, use the class
 > [`Andi\GraphQL\Field\EnumValue`](abstract-enum-type.md#enum-value). It has already been implemented
 > required methods.
 
