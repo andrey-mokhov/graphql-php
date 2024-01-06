@@ -1,6 +1,6 @@
-# Настройка GraphQL схемы
+# Setting up a GraphQL schema
 
-Конфигурационный файл `config/graphql.php` содержит следующие настройки:
+The configuration file `config/graphql.php` contains the following settings:
 
 ```php
 use Andi\GraphQL\ArgumentResolver\Middleware as Argument;

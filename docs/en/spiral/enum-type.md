@@ -1,13 +1,13 @@
-# Определение EnumType
+# Defining EnumType
 
-Определение перечислимых типов возможно:
-- с помощью атрибута `Andi\GraphQL\Attribute\EnumType` ([ссылка](#enum-type-via-attribute));
-- путем реализации интерфейса `Andi\GraphQL\Definition\Type\EnumTypeInterface` ([ссылка](#enum-type-via-interface)).
+It is possible to define enum types:
+- using the `Andi\GraphQL\Attribute\EnumType` attribute ([link](#enum-type-via-attribute));
+- by implementing the `Andi\GraphQL\Definition\Type\EnumTypeInterface` interface ([link](#enum-type-via-interface)).
 
-## <a id="enum-type-via-attribute">Определение с помощью атрибута</a>
+## <a id="enum-type-via-attribute">Defining using an attribute</a>
 
-Для определения перечислимого типа используйте атрибут `#[EnumType]`, данный атрибут применим к
-php-перечислениям:
+To define an enum type, use the `#[EnumType]` attribute, this attribute applies to
+php transfers:
 
 ```php
 namespace App\GraphQL\Type;
@@ -23,83 +23,83 @@ enum DirectionEnum: string
 }
 ```
 
-Атрибут `#[EnumType]` может содержать следующие параметры конструктора:
+The `#[EnumType]` attribute can contain the following constructor parameters:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя перечислимого типа. Если не указано, используется краткое имя php-перечисления.
+            The name of the enum type. If not specified, the short name of the php enum is used.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание перечислимого типа, отображаемое в GraphQL схеме.
-            Если не указано, используется описание php-перечисления, указанное в docBlock.
+            A description of the enumerated type as displayed in the GraphQL schema.
+            If not specified, the php enum description specified in docBlock is used.
         </td>
     </tr>
 </table>
 
-> :point_right: **Обратите внимание!**
+> :point_right: **Note!**
 >
-> Допустимыми значениями перечислимого GraphQL типа являются **все** (без исключения) значения
-> соответствующего php-перечисления.
+> Valid values ​​for a GraphQL enum type are **all** (without exception) values
+> corresponding php enum.
 
-Для допустимых значений перечисления может быть задан атрибут `Andi\GraphQL\Attribute\EnumValue`.
+Valid enum values ​​can have the `Andi\GraphQL\Attribute\EnumValue` attribute set.
 
-Атрибут `#[EnumValue]` может содержать следующие параметры конструктора:
+The `#[EnumValue]` attribute can contain the following constructor parameters:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя допустимого значения. Если не указано, используется краткое имя php-значения.
+            The name of the valid value. If not specified, the short name of the php value is used.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание допустимого значения, отображаемое в GraphQL схеме.
-            Если не указано, используется описание php-значения, указанное в docBlock.
+            A description of the valid value displayed in the GraphQL schema.
+            If not specified, the php value description specified in docBlock is used.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если параметр задан, то в GraphQL схеме данное значение будет помечено устаревшим. В качестве
-            причины будет указано значение данного параметра. Если параметр не задан, но в docBlock
-            php-значения есть тэг <code>@deprecated</code>, то будет использован комментарий этого тега.
+            If the parameter is specified, then in the GraphQL schema this value will be marked as obsolete. As
+            the reason will be indicated by the value of this parameter. If the parameter is not specified, but in docBlock
+            php values ​​contain the <code>@deprecated</code> tag, then the comment of this tag will be used.
         </td>
     </tr>
 </table>
 
-## <a id="enum-type-via-interface">Определение путем реализации интерфейса</a>
+## <a id="enum-type-via-interface">Definition by implementing an interface</a>
 
-> :point_right: **Рекомендация!**
+> :point_right: **Recommendation!**
 >
-> Воспользуйтесь абстрактным классом [`Andi\GraphQL\Type\AbstractEnumType`](abstract-enum-type.md).
-> В нём уже реализованы требуемые методы.
+> Use the abstract class [`Andi\GraphQL\Type\AbstractEnumType`](abstract-enum-type.md).
+> It already implements the required methods.
 >
-> Библиотека позволяет определять GraphQL типы удобным для вас способом.
-> При этом, созданные структуры могут ссылаться друг на друга.
+> The library allows you to define GraphQL types in a way convenient for you.
+> At the same time, the created structures can refer to each other.
 
-Пример реализации интерфейса `EnumTypeInterface`:
+Example implementation of the `EnumTypeInterface` interface:
 
 ```php
 namespace App\GraphQL\Type;
@@ -135,25 +135,25 @@ final class AnimalEnum implements EnumTypeInterface
 }
 ```
 
-Интерфейс `EnumTypeInterface` требует реализации следующих методов:
+The `EnumTypeInterface` interface requires the following methods to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен вернуть имя перечислимого типа.</td>
+        <td valign="top">Should return the name of the enum type.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание перечислимого типа, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return a description of the enum type that is mapped to the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
@@ -161,28 +161,28 @@ final class AnimalEnum implements EnumTypeInterface
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
             <p>
-                Метод должен возвращать итерируемую структуру (<code>array</code> или
-                <code>\Traversable</code>) (пустая структура недопустима) - список допустимых значений
-                перечисления.
+                The method must return an iterable structure (<code>array</code> or
+                <code>\Traversable</code>) (an empty structure is not allowed) - list of valid values
+                transfers.
             </p>
             <p>
-                Каждый элемент структуры должен быть экземпляром класса, реализующего интерфейс
+                Each element of the structure must be an instance of a class that implements the interface
                 <code>EnumValueInterface</code>
             </p>
         </td>
     </tr>
 </table>
 
-Допустимые значения перечислимого GraphQL типа должны быть реализованы с помощью интерфейса<br />
+Valid values ​​of a GraphQL enum type must be implemented using an interface<br />
 ` Andi\GraphQL\Definition\Field\EnumValueInterface`.
 
 > :point_right: **Рекомендация!**
 >
-> Для определения допустимого значения перечислимого типа воспользуйтесь классом
-> [`Andi\GraphQL\Field\EnumValue`](abstract-enum-type.md#enum-value). В нём уже реализованы
-> требуемые методы.
+> To define a valid enum type value, use the class
+> [`Andi\GraphQL\Field\EnumValue`](abstract-enum-type.md#enum-value). It has already been implemented
+> required methods.
 
-Пример реализации интерфейса `EnumValueInterface` (см. реализацию метода `getValues`):
+Example implementation of the `EnumValueInterface` interface (see implementation of the `getValues` method):
 
 ```php
 namespace App\GraphQL\Type;
@@ -228,42 +228,42 @@ final class AnimalEnum implements EnumTypeInterface
 }
 ```
 
-Интерфейс `EnumValueInterface` требует реализации следующих методов:
+The `EnumValueInterface` interface requires the following methods to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен вернуть имя значения для отображения в GraphQL схеме.</td>
+        <td valign="top">Should return the name of the value to display in the GraphQL schema.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание значение, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return the description value displayed in the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>getDeprecationReason</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен возвращать описание причины, для отображения в GraphQL схеме, по которой
-            значение перечислимого типа использовать не рекомендуется и <code>null</code>,
-            если такая причина отсутствует.
+            Should return a description of the reason for displaying in the GraphQL schema for which
+            It is not recommended to use a value of an enumerated type and <code>null</code>,
+            if there is no such reason.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>getValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            php-значение ассоциированное со значением перечислимого GraphQL типа.
-            Может быть любым типом данных.
+            php value associated with the value of the GraphQL enumerated type.
+            Can be any data type.
         </td>
     </tr>
 </table>
