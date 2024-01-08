@@ -52,12 +52,12 @@ The `#[InputObjectType]` attribute can contain the following constructor paramet
         <td valign="top">
             <p>
                 The name of the class factory that transforms incoming data into another structure (for example
-                to an instance of the class of the incoming object type).
+                to an instance of the class of the InputObjectType).
             </p>
             <p>
-                The class must implement the following method:<br />
+                The class of factory must implement the following method:<br />
                 <code>__invoke(array $arguments): mixed</code><br />
-                where <code>$arguments</code> is an associative array of fields (incoming object type).
+                where <code>$arguments</code> is an associative array of fields (InputObjectType).
             </p>
             <p>
                 If the constructor parameter is not specified, the factory will be used:
@@ -67,10 +67,10 @@ The `#[InputObjectType]` attribute can contain the following constructor paramet
     </tr>
 </table>
 
-Fields of an incoming object type can be set using the `#[InputObjectField]` attribute, about this
-is described in detail in [Defining fields of an incoming object type using an attribute](input-object-field.md#input-object-field-via-attribute).
+Fields of an InputObjectType can be set using the `#[InputObjectField]` attribute, about this
+is described in detail in [Defining fields of an InputObjectType using an attribute](input-object-field.md#input-object-field-via-attribute).
 
-A class with the `#[InputObjectType]` attribute can, among other things, implement auxiliary interfaces:
+A class with the `#[InputObjectType]` attribute can, among other things, implement additional interfaces:
 - [`FieldsAwareInterface`](#fields-aware-interface) to define additional fields;
 - [`ParseValueAwareInterface`](#parse-value-aware-interface) to define a method that converts
   incoming data into another structure.
@@ -126,13 +126,13 @@ The `InputObjectTypeInterface` interface requires implementation of the followin
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Should return the name of the incoming object type.</td>
+        <td valign="top">Should return the name of the InputObjectType.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Should return a description of the incoming object type that is mapped to the GraphQL schema.
+            Should return a description of the InputObjectType that is mapped to the GraphQL schema.
             Should return <code>null</code> if no description is required.
         </td>
     </tr>
@@ -142,8 +142,8 @@ The `InputObjectTypeInterface` interface requires implementation of the followin
         <td valign="top">
             <p>
                 The method must return an iterable structure (<code>array</code> or
-                <code>\Traversable</code>) (an empty structure is not allowed) - list of incoming fields
-                object type.
+                <code>\Traversable</code>) (an empty structure is not allowed) - field list of
+                InputObjectType.
             </p>
             <p>Each structure element must be:</p>
             <ul>
@@ -153,14 +153,14 @@ The `InputObjectTypeInterface` interface requires implementation of the followin
                 </li>
                 <li>
                     an instance of a class that implements the <code>InputObjectFieldInterface</code> interface
-                    (See <a href="input-object-field.md#input-object-field-via-interface">Defining fields of an input object type by implementing an interface</a>).
+                    (see <a href="input-object-field.md#input-object-field-via-interface">Defining fields of an InputObjectType by implementing an interface</a>).
                 </li>
             </ul>
         </td>
     </tr>
 </table>
 
-### <a id="input-object-type-interfaces">Auxiliary Interfaces</a>
+### <a id="input-object-type-interfaces">Additional Interfaces</a>
 
 To extend the capabilities of InputObjectType, you may need to implement
 interfaces listed below.
