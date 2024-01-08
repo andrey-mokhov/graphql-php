@@ -1,13 +1,13 @@
 # Defining InputObjectType
 
-Defining incoming object types is possible:
+Defining InputObjectType is possible:
 - using the `Andi\GraphQL\Attribute\InputObjectType` attribute ([link](#input-object-type-via-attribute));
 - by implementing the interface `Andi\GraphQL\Definition\Type\InputObjectTypeInterface`
   ([link](#input-object-type-via-interface))
 
 ## <a id="input-object-type-via-attribute">Definition using an attribute</a>
 
-To define an input object type, use the `#[InputObjectType]` attribute, this attribute
+To define an InputObjectType, use the `#[InputObjectType]` attribute, this attribute
 applicable to classes:
 
 ```php
@@ -35,14 +35,14 @@ The `#[InputObjectType]` attribute can contain the following constructor paramet
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            The name of the incoming object type. If not specified, the short name of the class is used.
+            The name of the InputObjectType. If not specified, the short name of the class is used.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Description of the incoming object type as displayed in the GraphQL schema.
+            Description of the InputObjectType as displayed in the GraphQL schema.
             If not specified, the class description specified in docBlock is used.
         </td>
     </tr>
@@ -51,7 +51,7 @@ The `#[InputObjectType]` attribute can contain the following constructor paramet
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                The name of the class that transforms incoming data into another structure (for example
+                The name of the class factory that transforms incoming data into another structure (for example
                 to an instance of the class of the incoming object type).
             </p>
             <p>
@@ -162,15 +162,15 @@ The `InputObjectTypeInterface` interface requires implementation of the followin
 
 ### <a id="input-object-type-interfaces">Auxiliary Interfaces</a>
 
-To extend the capabilities of incoming GraphQL object types, you may need to implement
+To extend the capabilities of InputObjectType, you may need to implement
 interfaces listed below.
 
 <dl>
     <dt><a href="#fields-aware-interface">FieldsAwareInterface</a></dt>
     <dd>
-        Allows you to define a list of fields of an incoming object type. Interface
+        Allows you to define a field list of InputObjectType. Interface
         <code>InputObjectTypeInterface</code> already implements this interface. Will be useful when
-        extending fields of an incoming object type declared using an attribute<br />
+        extending fields of an InputObjectType declared using an attribute<br />
         <code>#[InputObjectType]</code>.
     </dd>
     <dt><a href="#parse-value-aware-interface">ParseValueAwareInterface</a></dt>
@@ -197,8 +197,8 @@ The `FieldsAwareInterface` interface requires the implementation of a single met
         <td valign="top">
             <p>
                 The method must return an iterable structure (<code>array</code> or
-                <code>\Traversable</code>) (an empty structure is not allowed) - list of incoming fields
-                object type.
+                <code>\Traversable</code>) (an empty structure is not allowed) - field list of
+                InputObjectType.
             </p>
             <p>Each element of the structure can be:</p>
             <ul>
@@ -208,7 +208,7 @@ The `FieldsAwareInterface` interface requires the implementation of a single met
                 </li>
                 <li>
                     an instance of a class that implements the <code>InputObjectFieldInterface</code> interface
-                    (See <a href="input-object-field.md#input-object-field-via-interface">Defining fields of an input object type by implementing an interface</a>).
+                    (see <a href="input-object-field.md#input-object-field-via-interface">Defining fields of an InputObjectType by implementing an interface</a>).
                 </li>
             </ul>
         </td>
