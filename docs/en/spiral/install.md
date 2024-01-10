@@ -1,48 +1,48 @@
-# GraphQL библиотека для SpiralFramework
+# GraphQL library for SpiralFramework
 
-## Установка
+## Installation
 
- Установка [composer](https://getcomposer.org/doc/00-intro.md) пакета:
+ Installation [composer](https://getcomposer.org/doc/00-intro.md) package:
 
 ```shell
 composer require andi-lab/graphql-php-spiral
 ```
 
-## <a id="bootloader">Настройка загрузчика</a>
+## <a id="bootloader">Loader setup</a>
 
-Добавьте `Andi\GraphQL\Spiral\Bootloader\GraphQLBootloader` в список загрузчиков
+Add `Andi\GraphQL\Spiral\Bootloader\GraphQLBootloader` to the list of bootloaders
 `App\Application\Kernel::LOAD`
 
-> :point_right: **Внимание!**
+> :point_right: **Attention!**
 >
-> `GraphQLBootloader::class` должен быть расположен после `RoutesBootloader::class`
-> (устанавливается по умолчанию для проекта [`spiral/app`](https://github.com/spiral/app)).
-> А если говорить точнее, то слой `GraphQLMiddleware::class` должен подключаться
-> после слоя `JsonPayloadMiddleware::class`.
+> `GraphQLBootloader::class` must be placed after `RoutesBootloader::class`
+> (set by default for project [`spiral/app`](https://github.com/spiral/app)).
+> To be more precise, the `GraphQLMiddleware::class` layer should be connected
+> after the `JsonPayloadMiddleware::class` layer.
 >
-> Если в вашем приложении не используется `RoutesBootloader::class` и/или в нём
-> отсутствует подключение слоя `JsonPayloadMiddleware::class`, то его следует
-> [подключить самостоятельно](https://spiral.dev/docs/http-middleware/current/en).
+> If your application does not use `RoutesBootloader::class` and/or
+> there is no connection of the `JsonPayloadMiddleware::class` layer, then it should be
+> [connect yourself](https://spiral.dev/docs/http-middleware/current/en).
 
-## Настройка конфигурационных файлов
-Для тонкой настройки GraphQL схемы и использования всех возможностей библиотеки рекомендуется
-создать конфигурационный файл:
+## Setting up configuration files
+To fine-tune the GraphQL schema and use all the capabilities of the library, it is recommended
+create a configuration file:
 
 ```shell
-# команда создаст файл конфигурации с настройками по умолчанию: config/graphql.php
+# the command will create a configuration file with default settings: config/graphql.php
 php app.php graphql:config
 ```
 
-Для объявления GraphQL перечислений [`EnumType`](https://webonyx.github.io/graphql-php/type-definitions/enums/)
-или интерфейсов [`InterfaceType`](https://webonyx.github.io/graphql-php/type-definitions/interfaces/)
-с помощью нативных php конструкций, следует [включить анализ](https://spiral.dev/docs/advanced-tokenizer/#class-listeners)
-соответствующих файлов.
+To declare GraphQL enumerations [`EnumType`](https://webonyx.github.io/graphql-php/type-definitions/enums/)
+or interfaces [`InterfaceType`](https://webonyx.github.io/graphql-php/type-definitions/interfaces/)
+using native PHP constructs, you should [enable analysis](https://spiral.dev/docs/advanced-tokenizer/#class-listeners)
+corresponding files.
 
-Для этого укажите следующие переменные окружения:
-- `TOKENIZER_LOAD_ENUMS=true` для анализа php перечислений
-- `TOKENIZER_LOAD_INTERFACES=true` для анализа php интерфейсов
+To do this, specify the following environment variables:
+- `TOKENIZER_LOAD_ENUMS=true` for analyzing php transfers
+- `TOKENIZER_LOAD_INTERFACES=true` for analyzing php interfaces
 
-Либо создайте/измените файл `config/tokenizer.php`:
+Or create/modify the file `config/tokenizer.php`:
 ```php
 return [
     'load' => [
@@ -52,12 +52,12 @@ return [
     ],
 ];
 ```
-Проверить текущие настройки можно с помощью команды:
+You can check the current settings using the command:
 ```shell
 php app.php tokenizer:info
 ```
 
-Должны быть включены все загрузчики:
+All bootloaders must be enabled:
 
 ```
 +------------+---------+
@@ -69,6 +69,6 @@ php app.php tokenizer:info
 +------------+---------+
 ```
 
-## Настройка GraphQL схемы
+## Setting up a GraphQL schema
 
-Подробная информация о настройке GraphQL схемы изложена в [документе configure.md](configure.md)
+Detailed information about setting up a GraphQL schema can be found in [document configure.md](configure.md)
