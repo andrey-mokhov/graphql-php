@@ -1,6 +1,6 @@
-# Defining GraphQL front-end type fields
+# Defining InterfaceType fields
 
-Defining a field of an interface GraphQL type is possible:
+Defining a field of an InterfaceType is possible:
 - using the `Andi\GraphQL\Attribute\InterfaceField` attribute ([link](#interface-field-via-attribute));
 - by implementing the interface `Andi\GraphQL\Definition\Field\ObjectFieldInterface` ([link](#interface-field-via-interface)).
   This is not a typo when implementing the [`getFields`](interface-type.md#interface-type-interface-get-fields) method
@@ -9,7 +9,7 @@ Defining a field of an interface GraphQL type is possible:
 
 ## <a id="interface-field-via-attribute">Defining fields using an attribute</a>
 
-Defining an interface type field using the `#[InterfaceField]` attribute is only possible for
+Defining an InterfaceType field using the `#[InterfaceField]` attribute is only possible for
 php interfaces/classes marked with the `#[InterfaceType]` attribute. The attribute can only be applied to
 methods.
 
@@ -83,7 +83,7 @@ The `#[InterfaceField]` attribute can have the following constructor parameters:
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Field type modifier. The constructor parameter is parsed by the library if
+            Field type modifier. The constructor parameter is parsed by the library
             if the field type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
@@ -101,7 +101,7 @@ The `#[InterfaceField]` attribute can have the following constructor parameters:
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     A modifier defining a list of values ​​(array), with <code>null</code>
-                    The field value is valid. So the field value could be:
+                    the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
