@@ -8,7 +8,7 @@
 composer require andi-lab/graphql-php-spiral
 ```
 
-## <a id="bootloader">Loader setup</a>
+## <a id="bootloader">Bootstrapping settings</a>
 
 Add `Andi\GraphQL\Spiral\Bootloader\GraphQLBootloader` to the list of bootloaders
 `App\Application\Kernel::LOAD`
@@ -39,7 +39,7 @@ using native PHP constructs, you should [enable analysis](https://spiral.dev/doc
 corresponding files.
 
 To do this, specify the following environment variables:
-- `TOKENIZER_LOAD_ENUMS=true` for analyzing php transfers
+- `TOKENIZER_LOAD_ENUMS=true` for analyzing php enums
 - `TOKENIZER_LOAD_INTERFACES=true` for analyzing php interfaces
 
 Or create/modify the file `config/tokenizer.php`:
@@ -57,7 +57,7 @@ You can check the current settings using the command:
 php app.php tokenizer:info
 ```
 
-All bootloaders must be enabled:
+All loaders must be enabled:
 
 ```
 +------------+---------+
