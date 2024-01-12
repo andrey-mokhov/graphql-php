@@ -1,30 +1,30 @@
-# Определение Mutation полей
+#Defining mutation fields
 
-По соглашению сообщества, `Mutation` поля предназначены для внесения изменений в состояние системы.
-GraphQL тип `Mutation` является объектным типом, следовательно, его можно определить тем же образом,
-как и любой другой [ObjectType](object-type.md).
+By community agreement, Mutation fields provide for changes in system state.
+The GraphQL `Mutation` type is an ObjectType, hence it can be defined in the same way,
+like any other [ObjectType](object-type.md).
 
-В библиотеке подготовлен `Mutation` тип, возможностей которого достаточно для определения полей.
-По умолчанию для `Mutation` типа используется класс `Andi\GraphQL\Type\MutationType`. Изменить класс,
-реализующий тип `Mutation` можно в [настройках библиотеки](configure.md).
+The library has a `Mutation` type, the capabilities of which are sufficient for defining fields.
+By default, the class `Andi\GraphQL\Type\MutationType` is used for the `Mutation` type. Change class,
+The implementing type `Mutation` can be found in [library settings](configure.md).
 
-По умолчанию `Mutation` отключен, его необходимо предварительно включить
-в [настройках библиотеки](configure.md).
+By default `Mutation` is disabled, it must be enabled first
+in [library settings](configure.md).
 
-Определение `Mutation` полей возможно с помощью:
-- php-атрибута `Andi\GraphQL\Attribute\MutationField`;
-- путем реализации интерфейса `Andi\GraphQL\Field\MutationFieldInterface`.
+Defining `Mutation` fields is possible using:
+- php attribute `Andi\GraphQL\Attribute\MutationField`;
+- by implementing the `Andi\GraphQL\Field\MutationFieldInterface` interface.
 
-> :point_right: **Внимание!!!** :point_left:
+> :point_right: **Attention!!!** :point_left:
 >
-> Определение `Mutation` и всё, что с ними связано, полностью совпадает с определением `Query`.
+> The definition of `Mutation` and everything connected with them completely coincides with the definition of `Query`.
 >
-> Разница заключается только в именах используемых атрибутов и интерфейсов: вместо
-> `#[QueryField]` потребуется атрибут<br />`#[MutationField]`; вместо `QueryFieldInterface`
-> потребуется реализация `MutationFieldInterface` интерфейса.
-> В остальном (аргументы поля или вспомогательные интерфейсы) полностью идентичны.
+> The only difference is in the names of the attributes and interfaces used: instead of
+> `#[QueryField]` will require attribute<br />`#[MutationField]`; instead of `QueryFieldInterface`
+> implementation of the `MutationFieldInterface` interface will be required.
+> Otherwise (field arguments or auxiliary interfaces) are completely identical.
 
-## <a id="mutation-field-via-attribute">Определение Mutation полей с помощью атрибута</a>
+## <a id="mutation-field-via-attribute">Defining Mutation Fields Using an Attribute</a>
 
 ```php
 namespace App\GraphQL\Field;
@@ -44,9 +44,9 @@ final class SimpleService
 }
 ```
 
-## Определение Mutation полей с помощью интерфейса
+## Defining Mutation fields using the interface
 
-Пример реализации интерфейса `MutationFieldInterface`:
+Example implementation of the `MutationFieldInterface` interface:
 ```php
 namespace App\GraphQL\Field;
 
