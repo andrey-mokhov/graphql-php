@@ -1,17 +1,17 @@
-# Определение ScalarType
+# Defining ScalarType
 
-Определение скалярных типов возможно путем реализации интерфейса
+Defining scalar types is possible by implementing an interface
 `Andi\GraphQL\Definition\Type\ScalarTypeInterface`.
 
-> :point_right: **Рекомендация!**
+> :point_right: **Recommendation!**
 >
-> Воспользуйтесь абстрактным классом [`Andi\GraphQL\Type\AbstractScalarType`](abstract-scalar-type.md).
-> В нём уже реализованы часть требуемых методов.
+> Use the abstract class [`Andi\GraphQL\Type\AbstractScalarType`](abstract-scalar-type.md).
+> it already implements some of the required methods.
 >
-> Библиотека позволяет определять GraphQL типы удобным для вас способом.
-> При этом, созданные структуры могут ссылаться друг на друга.
+> The library allows you to define GraphQL types in a way convenient for you.
+> At the same time, the created structures can refer to each other.
 
-Пример реализации интерфейса `ScalarTypeInterface`:
+Example implementation of the `ScalarTypeInterface` interface:
 
 ```php
 namespace App\GraphQL\Type;
@@ -59,49 +59,49 @@ final class Money implements ScalarTypeInterface
 }
 ```
 
-Интерфейс `ScalarTypeInterface` требует реализацию следующих методов:
+The `ScalarTypeInterface` interface requires the implementation of the following methods:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен вернуть имя скалярного типа.</td>
+        <td valign="top">Should return the name of the ScalarType.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание скалярного типа, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return a ScalarType description that is mapped to a GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>serialize</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Метод должен преобразовать полученную php-структуру <code>$value</code> в скалярное значение.
+            The method must convert the resulting php structure <code>$value</code> into a scalar value.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>parseValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Метод должен преобразовать переменные (variables) GraphQL запроса во внутреннюю php-структуру.
+            The method must convert the GraphQL request variables into the internal PHP structure.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>parseLiteral</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Метод должен преобразовать данные из тела GraphQL запроса во внутреннюю php-структуру.
+            The method must convert data from the GraphQL request body into an internal PHP structure.
         </td>
     </tr>
 </table>
 
-[Определение скалярных типов](https://webonyx.github.io/graphql-php/type-definitions/scalars/)
-идентично определению в опорной библиотеке `webonyx/graphql-php`.
+[Definitions of scalar types](https://webonyx.github.io/graphql-php/type-definitions/scalars/)
+identical to the definition in the `webonyx/graphql-php` core library.
