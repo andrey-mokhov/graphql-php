@@ -1,4 +1,4 @@
-#Defining mutation fields
+# Defining Mutation fields
 
 By community agreement, Mutation fields provide for changes in system state.
 The GraphQL `Mutation` type is an ObjectType, hence it can be defined in the same way,
@@ -6,7 +6,7 @@ like any other [ObjectType](object-type.md).
 
 The library has a `Mutation` type, the capabilities of which are sufficient for defining fields.
 By default, the class `Andi\GraphQL\Type\MutationType` is used for the `Mutation` type. Change class,
-The implementing type `Mutation` can be found in [library settings](configure.md).
+the implementing type `Mutation` can be found in [library settings](configure.md).
 
 By default `Mutation` is disabled, it must be enabled first
 in [library settings](configure.md).
@@ -24,7 +24,7 @@ Defining `Mutation` fields is possible using:
 > implementation of the `MutationFieldInterface` interface will be required.
 > Otherwise (field arguments or auxiliary interfaces) are completely identical.
 
-## <a id="mutation-field-via-attribute">Defining Mutation Fields Using an Attribute</a>
+## <a id="mutation-field-via-attribute">Defining Mutation fields using an attribute</a>
 
 ```php
 namespace App\GraphQL\Field;
