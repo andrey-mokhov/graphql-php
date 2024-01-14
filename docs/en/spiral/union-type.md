@@ -1,17 +1,17 @@
-# Определение UnionType
+# Defining UnionType
 
-Определение объединенных типов возможно путем реализации интерфейса
+Defining UnionType is possible by implementing an interface
 `Andi\GraphQL\Definition\Type\UnionTypeInterface`.
 
-> :point_right: **Рекомендация!**
+> :point_right: **Recommendation!**
 >
-> Воспользуйтесь абстрактным классом [`Andi\GraphQL\Type\AbstractUnionType`](abstract-union-type.md).
-> В нём уже реализованы требуемые методы.
+> Use the abstract class [`Andi\GraphQL\Type\AbstractUnionType`](abstract-union-type.md).
+> It already implements the required methods.
 >
-> Библиотека позволяет определять GraphQL типы удобным для вас способом.
-> При этом, созданные структуры могут ссылаться друг на друга.
+> The library allows you to define GraphQL types in a way convenient for you.
+> At the same time, the created structures can refer to each other.
 
-Пример реализации интерфейса `UnionTypeInterface`:
+Example implementation of the `UnionTypeInterface` interface:
 
 ```php
 namespace App\GraphQL\Type;
@@ -53,25 +53,25 @@ final class UserPetUnion implements UnionTypeInterface, ResolveTypeAwareInterfac
 }
 ```
 
-Интерфейс `UnionTypeInterface` требует реализации следующих методов:
+The `UnionTypeInterface` interface requires the following methods to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен вернуть имя объединенного типа.</td>
+        <td valign="top">Should return the name of the UnionType.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание объединенного типа, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return a description of the merged type that is rendered in the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
@@ -79,50 +79,50 @@ final class UserPetUnion implements UnionTypeInterface, ResolveTypeAwareInterfac
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
             <p>
-                Метод должен возвращать итерируемую структуру (<code>array</code> или
-                <code>\Traversable</code>) (пустая структура недопустима) - список имен объектных типов,
-                составляющих объединенный тип.
+                The method must return an iterable structure (<code>array</code> or
+                <code>\Traversable</code>) (an empty structure is not allowed) - a list of ObjectType names,
+                components of the UnionType.
             </p>
             <p>
-                Допустимыми значениями могут быть краткие имена
-                <a href="object-type.md">объектных GraphQL типов</a> или имена php классов,
-                реализующих соответствующий объектный GraphQL тип.
+                Valid values ​​can be short names
+                <a href="object-type.md">GraphQL object types</a> or php class names,
+                implementing the corresponding GraphQL ObjectType.
             </p>
         </td>
     </tr>
 </table>
 
-Класс, определяющий объединенный GraphQL тип, может реализовать интерфейс `ResolveTypeAwareInterface`
-(см. пример выше).
+A class defining a generic GraphQL type can implement the `ResolveTypeAwareInterface` interface
+(see example above).
 
-Интерфейс `ResolveTypeAwareInterface` требует реализации следующего метода:
+The `ResolveTypeAwareInterface` interface requires the following method to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>resolveType</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Метод должен проанализировать структуру первого параметра <code>$value</code> и вернуть
-            имя объектного GraphQL типа, ассоциированного с этой структурой. Допустимо краткое имя
-            объектного GraphQL типа или имя php-класса, реализующего соответствующий объектный тип.
+            The method should parse the structure of the first parameter <code>$value</code> and return
+            the name of the GraphQL ObjectType associated with this structure. Short name is acceptable
+            GraphQL ObjectType or the name of a php class that implements the corresponding ObjectType.
         </td>
     </tr>
 </table>
 
-> :point_right: **Обратите внимание!**
+> :point_right: **Note!**
 >
-> При использовании атрибутов для определения полей (Query, Mutation, ObjectType, InterfaceType),
-> там где явно не указан тип данных, библиотека старается самостоятельно определить тип поля.
+> When using attributes to define fields (Query, Mutation, ObjectType, InterfaceType),
+> where the data type is not explicitly specified, the library tries to independently determine the field type.
 >
-> В случае если указана дизъюнкция классов (каждый из которых определяет объектных GraphQL тип),
-> библиотека соберет краткие имена классов, отсортирует их, сконкатенирует имена, добавив
-> постфикс UnionType, и полученное имя постарается найти в реестре GraphQL типов. Если объединяющий
-> GraphQL тип с таким именем не будет найден, библиотека зарегистрирует его.
+> If a disjunction of classes is specified (each of which defines a GraphQL ObjectType),
+> the library will collect short class names, sort them, concatenate the names, adding
+> postfix UnionType, and the resulting name will try to be found in the GraphQL type registry. If unifying
+> GraphQL type with this name will not be found, the library will register it.
 >
 > ```php
 > #[ObjectField]
@@ -132,4 +132,4 @@ final class UserPetUnion implements UnionTypeInterface, ResolveTypeAwareInterfac
 > }
 > ```
 >
-> В примере выше будет создан и зарегистрирован объединяющий GraphQL тип с именем: `AdminSystemUserUnionType`.
+> In the example above, a GraphQL union type will be created and registered with the name: `AdminSystemUserUnionType`.
