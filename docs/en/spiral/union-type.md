@@ -85,7 +85,7 @@ The `UnionTypeInterface` interface requires the following methods to be implemen
             </p>
             <p>
                 Valid values ​​can be short names
-                <a href="object-type.md">GraphQL object types</a> or php class names,
+                <a href="object-type.md">GraphQL ObjectTypes</a> or php class names,
                 implementing the corresponding GraphQL ObjectType.
             </p>
         </td>
@@ -132,4 +132,4 @@ The `ResolveTypeAwareInterface` interface requires the following method to be im
 > }
 > ```
 >
-> In the example above, a GraphQL union type will be created and registered with the name: `AdminSystemUserUnionType`.
+> In the example above, a GraphQL UnionType will be created and registered with the name: `AdminSystemUserUnionType`.
