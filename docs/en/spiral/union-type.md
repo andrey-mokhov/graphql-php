@@ -70,7 +70,7 @@ The `UnionTypeInterface` interface requires the following methods to be implemen
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Should return a description of the merged type that is rendered in the GraphQL schema.
+            Should return a description of the UnionType that is rendered in the GraphQL schema.
             Should return <code>null</code> if no description is required.
         </td>
     </tr>
