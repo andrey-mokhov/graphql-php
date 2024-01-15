@@ -1,8 +1,8 @@
-# Реестр GraphQL типов
+# GraphQL TypeRegistry
 
-В библиотеке используется единый реестр GraphQL типов: `Andi\GraphQL\TypeRegistry`.
+The library uses a single registry of GraphQL types: `Andi\GraphQL\TypeRegistry`.
 
-Реестр реализует интерфейс `Andi\GraphQL\TypeRegistryInterface`:
+The registry implements the `Andi\GraphQL\TypeRegistryInterface` interface:
 
 ```php
 namespace Andi\GraphQL;
@@ -21,24 +21,24 @@ interface TypeRegistryInterface
 }
 ```
 
-Назначение методов интерфейса:
+Purpose of interface methods:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание метода</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Method description</th>
     </tr>
     <tr>
         <td valign="top"><code>has</code></td>
         <td valign="top"><code>bool</code></td>
         <td valign="top">
             <p>
-                Возвращает <code>true</code> если запрошенное имя GraphQL типа зарегистрировано в реестре,
-                и <code>false</code> в обратном случае.
+                Returns <code>true</code> if the requested GraphQL type name is registered in the registry,
+                and <code>false</code> otherwise.
             </p>
             <p>
-                Псевдонимы GraphQL типов тоже учитываются при поиске в реестре.
+                GraphQL type aliases are also taken into account when searching the registry.
             </p>
         </td>
     </tr>
@@ -46,8 +46,8 @@ interface TypeRegistryInterface
         <td valign="top"><code>get</code></td>
         <td valign="top"><code>Webonyx\Type & Webonyx\NamedType</code></td>
         <td valign="top">
-            Для запрошенного имени возвращает определение GraphQL типа. Если имя GraphQL типа отсутствует
-            в реестре - будет выброшено исключение.
+            For the requested name, returns a GraphQL type definition. If the GraphQL type name is missing
+            in the registry - an exception will be thrown.
         </td>
     </tr>
     <tr>
@@ -55,12 +55,12 @@ interface TypeRegistryInterface
         <td valign="top"><code>void</code></td>
         <td valign="top">
             <p>
-                Регистрация GraphQL типа в реестре. Вторым и последующими параметрами можно перечислить
-                псевдонимы регистрируемого типа, например: имя класса, определяющий GraphQL тип.
+                Registering a GraphQL type in the registry. The second and subsequent parameters can be listed
+                aliases of the registered type, for example: the name of the class that defines the GraphQL type.
             </p>
             <p>
-                В качестве примера: при регистрация скалярного типа <code>DateTime</code> целесообразно
-                перечислить следующие псевдонимы: <code>\DateTimeInterface::class</code>,
+                As an example: when registering a scalar type <code>DateTime</code> it makes sense
+                list the following aliases: <code>\DateTimeInterface::class</code>,
                 <code>\DateTimeImmutable::class</code>.
             </p>
         </td>
@@ -69,8 +69,8 @@ interface TypeRegistryInterface
         <td valign="top"><code>getTypes</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            Служебный метод. Возвращает зарегистрированные в реестре объектные типы, реализующие какой-либо
-            интерфейс. Требуется для отображения в GraphQL схеме объектных типов (см. опцию конфигурации
+            Service method. Returns object types registered in the registry that implement some
+            interface. Required to map object types to the GraphQL schema (see configuration option
             <code>types</code> <a href="https://webonyx.github.io/graphql-php/schema-definition/#configuration-options">Configuration Options</a>).
         </td>
     </tr>
