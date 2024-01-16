@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Application\Bootloader;
 
+use Andi\GraphQL\Spiral\Middleware\GraphQLMiddleware;
 use GraphQL\Upload\UploadMiddleware;
 use Spiral\Bootloader\Http\RoutesBootloader as BaseRoutesBootloader;
 use Spiral\Cookies\Middleware\CookiesMiddleware;
+use Spiral\Core\Container\Autowire;
 use Spiral\Csrf\Middleware\CsrfMiddleware;
 use Spiral\Debug\StateCollector\HttpCollector;
 use Spiral\Http\Middleware\ErrorHandlerMiddleware;
@@ -37,6 +39,8 @@ final class RoutesBootloader extends BaseRoutesBootloader
             ErrorHandlerMiddleware::class,
             JsonPayloadMiddleware::class,
             UploadMiddleware::class,
+            new Autowire(GraphQLMiddleware::class, ['scope' => 'public']),
+            new Autowire(GraphQLMiddleware::class, ['scope' => 'admin']),
             HttpCollector::class,
         ];
     }
