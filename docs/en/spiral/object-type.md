@@ -1,12 +1,12 @@
-# Определение ObjectType
+# Definition of ObjectType
 
-Определение объектных типов возможно:
-- с помощью атрибута `Andi\GraphQL\Attribute\ObjectType` ([ссылка](#object-type-via-attribute));
-- путем реализации интерфейса `Andi\GraphQL\Definition\Type\ObjectTypeInterface` ([ссылка](#object-type-via-interface)).
+Defining object types is possible:
+- using the `Andi\GraphQL\Attribute\ObjectType` attribute ([link](#object-type-via-attribute));
+- by implementing the interface `Andi\GraphQL\Definition\Type\ObjectTypeInterface` ([link](#object-type-via-interface)).
 
-## <a id="object-type-via-attribute">Определение с помощью атрибута</a>
+## <a id="object-type-via-attribute">Definition using attribute</a>
 
-Для определения объектного типа используйте атрибут `#[ObjectType]`, данный атрибут применим к классам:
+To define an object type, use the `#[ObjectType]` attribute, this attribute applies to classes:
 ```php
 namespace App\GraphQL\Type;
 
@@ -19,50 +19,50 @@ class User
 }
 ```
 
-Атрибут `#[ObjectType]` может содержать следующие параметры конструктора:
+The `#[ObjectType]` attribute can contain the following constructor parameters:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Имя объектного типа. Если не указано, используется краткое имя класса.</td>
+        <td valign="top">The name of the ObjectType. If not specified, the short name of the class is used.</td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание объектного типа, отображаемое в GraphQL схеме.
-            Если не указано, используется описание класса, указанное в docBlock.
+            Description of the ObjectType as displayed in the GraphQL schema.
+            If not specified, the class description specified in docBlock is used.
         </td>
     </tr>
 </table>
 
-В разделе [Определение полей объектного GraphQL типа](object-field.md) подробно изложены возможности
-библиотеки.
+The section [Defining GraphQL ObjectType fields](object-field.md) details the capabilities
+libraries.
 
-Класс с атрибутом `#[ObjectType]` может, в том числе, реализовывать вспомогательные интерфейсы:
-- [`FieldsAwareInterface`](#fields-aware-interface) для определения дополнительных полей;
-- [`InterfacesAwareInterface`](#interfaces-aware-interface) для определения реализованных интерфейсов;
-- [`ResolveFieldAwareInterface`](#resolve-field-aware-interface) для определения резолвера,
-  используемого объектным типом по умолчанию;
-- [`IsTypeOfAwareInterface`](#is-type-of-aware-interface) для идентификации объектного типа.
+A class with the `#[ObjectType]` attribute can, among other things, implement auxiliary interfaces:
+- [`FieldsAwareInterface`](#fields-aware-interface) to define additional fields;
+- [`InterfacesAwareInterface`](#interfaces-aware-interface) to define implemented interfaces;
+- [`ResolveFieldAwareInterface`](#resolve-field-aware-interface) to determine the resolver,
+  used by the default ObjectType;
+- [`IsTypeOfAwareInterface`](#is-type-of-aware-interface) to identify the ObjectType.
 
-## <a id="object-type-via-interface">Определение путем реализации интерфейса</a>
+## <a id="object-type-via-interface">Definition by implementing an interface</a>
 
-> :point_right: **Рекомендация!**
+> :point_right: **Recommendation!**
 >
-> Воспользуйтесь абстрактным классом [`Andi\GraphQL\Type\AbstractObjectType`](abstract-object-type.md).
-> В нём уже реализованы требуемые методы.
+> Use the abstract class [`Andi\GraphQL\Type\AbstractObjectType`](abstract-object-type.md).
+> It already implements the required methods.
 >
-> Библиотека позволяет определять GraphQL типы удобным для вас способом.
-> При этом, созданные структуры могут ссылаться друг на друга.
+> The library allows you to define GraphQL types in a way convenient for you.
+> At the same time, the created structures can refer to each other.
 
-Пример реализации интерфейса `ObjectTypeInterface`:
+Example implementation of the `ObjectTypeInterface` interface:
 
 ```php
 namespace App\GraphQL\Type;
@@ -93,25 +93,25 @@ class Pet implements ObjectTypeInterface
 }
 ```
 
-Интерфейс `ObjectTypeInterface` требует реализации следующих методов:
+The `ObjectTypeInterface` interface requires the implementation of the following methods:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен вернуть имя объектного типа.</td>
+        <td valign="top">Should return the name of the ObjectType.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание объектного типа, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return a description of the ObjectType that is mapped to the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
@@ -119,83 +119,83 @@ class Pet implements ObjectTypeInterface
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
             <p>
-                Метод должен возвращать итерируемую структуру (<code>array</code> или
-                <code>\Traversable</code>) (пустая структура недопустима) - список полей объектного
-                типа.
+                The method must return an iterable structure (<code>array</code> or
+                <code>\Traversable</code>) (an empty structure is not allowed) - a list of object fields
+                type.
             </p>
-            <p>Каждый элемент структуры может быть:</p>
+            <p>Each element of the structure can be:</p>
             <ul>
                 <li>
-                    экземпляром класса <code>FieldDefinition</code>
-                    (см. <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
+                    an instance of the <code>FieldDefinition</code> class
+                    (See <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
                 </li>
                 <li>
-                    экземпляром класса, реализующего интерфейс <code>ObjectFieldInterface</code>
-                    (см. <a href="object-field.md#object-field-via-interface">Определение полей объектного типа путем реализации интерфейса</a>).
+                    an instance of a class that implements the <code>ObjectFieldInterface</code> interface
+                    (See <a href="object-field.md#object-field-via-interface">Defining fields of an ObjectType by implementing an interface</a>).
                 </li>
             </ul>
         </td>
     </tr>
 </table>
 
-### <a id="object-type-interfaces">Вспомогательные интерфейсы</a>
+### <a id="object-type-interfaces">Auxiliary Interfaces</a>
 
-Для расширения возможностей объектных GraphQL типов, вам может потребоваться реализация интерфейсов,
-перечисленных ниже.
+To extend the capabilities of GraphQL object types, you may need to implement interfaces,
+listed below.
 
 <dl>
     <dt><a href="#fields-aware-interface">FieldsAwareInterface</a></dt>
     <dd>
-        Позволяет определить список полей объектного типа. Интерфейс <code>ObjectTypeInterface</code>
-        уже реализует данный интерфейс. Будет полезен при расширении полей объектного типа,
-        объявленного с помощью атрибута <code>#[ObjectType]</code>.
+        Allows you to define a list of fields of an ObjectType. Interface <code>ObjectTypeInterface</code>
+        already implements this interface. Will be useful when expanding ObjectType fields,
+        declared using the <code>#[ObjectType]</code> attribute.
     </dd>
     <dt><a href="#interfaces-aware-interface">InterfacesAwareInterface</a></dt>
     <dd>
-        Позволяет определить список <a href="interface-type.md">интерфейсных типов</a> реализованных
-        в объектном типе.
+        Allows you to define a list of <a href="interface-type.md">interface types</a> implemented
+        in an ObjectType.
     </dd>
     <dt><a href="#resolve-field-aware-interface">ResolveFieldAwareInterface</a></dt>
     <dd>
-        Позволяет указать метод, используемый в объектном типе по умолчанию для определения
-        значений полей.
+        Allows you to specify the default method used in an ObjectType to define
+        field values.
     </dd>
     <dt><a href="#is-type-of-aware-interface">IsTypeOfAwareInterface</a></dt>
-    <dd>Позволяет установить, относятся ли анализируемые данные к объектному типу.</dd>
+    <dd>Allows you to determine whether the data being analyzed is of an object type.</dd>
     <dt><a href="#dynamic-object-type-interface">DynamicObjectTypeInterface</a></dt>
     <dd>
-        Позволяет расширять объектный тип дополнительными полями, определенными вне класса.
+        Allows you to extend an ObjectType with additional fields defined outside the class.
     </dd>
 </dl>
 
 #### <a id="fields-aware-interface">FieldsAwareInterface</a>
 
-Интерфейс `FieldsAwareInterface` требует реализацию единственного метода (о нём уже упоминалось
-[выше](#object-type-interface-get-fields)):
+The `FieldsAwareInterface` interface requires the implementation of a single method (it has already been mentioned
+[above](#object-type-interface-get-fields)):
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><a id="fields-aware-interface-get-fields"><code>getFields</code></a></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
             <p>
-                Метод должен возвращать итерируемую структуру (<code>array</code> или
-                <code>\Traversable</code>) (пустая структура недопустима).
+                The method must return an iterable structure (<code>array</code> or
+                <code>\Traversable</code>) (an empty structure is not allowed).
             </p>
-            <p>Каждый элемент структуры может быть:</p>
+            <p>Each element of the structure can be:</p>
             <ul>
                 <li>
-                    экземпляром класса <code>FieldDefinition</code>
-                    (см. <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
+                    an instance of the <code>FieldDefinition</code> class
+                    (See <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
                 </li>
                 <li>
-                    экземпляром класса, реализующего интерфейс <code>ObjectFieldInterface</code>
-                    (см. <a href="object-field.md#object-field-via-interface">Определение полей объектного типа путем реализации интерфейса</a>).
+                    an instance of a class that implements the <code>ObjectFieldInterface</code> interface
+                    (See <a href="object-field.md#object-field-via-interface">Defining fields of an object type by implementing an interface</a>).
                 </li>
             </ul>
         </td>
@@ -204,8 +204,8 @@ class Pet implements ObjectTypeInterface
 
 #### <a id="interfaces-aware-interface">InterfacesAwareInterface</a>
 
-Интерфейс `Andi\GraphQL\Definition\Type\InterfacesAwareInterface` позволяет определить перечень
-интерфейсных GraphQL типов, которые реализует ваш объектный GraphQL тип.
+The `Andi\GraphQL\Definition\Type\InterfacesAwareInterface` interface allows you to define a list
+interface GraphQL types that your object GraphQL type implements.
 
 ```php
 namespace App\GraphQL\Type;
@@ -225,33 +225,33 @@ class User implements UserInterface, InterfacesAwareInterface
 }
 ```
 
-Интерфейс `InterfacesAwareInterface` требует реализацию единственного метода:
+The `InterfacesAwareInterface` interface requires the implementation of a single method:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getInterfaces</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
             <p>
-                Метод должен возвращать итерируемую структуру (<code>array</code> или
-                <code>\Traversable</code>) (допустима пустая структура).
+                The method must return an iterable structure (<code>array</code> or
+                <code>\Traversable</code>) (an empty structure is allowed).
             </p>
             <p>
-                Каждый элемент структуры может быть:
+                Each structure element can be:
             </p>
             <ul>
                 <li>
-                    кратким именем интерфейсного GraphQL типа
-                    (например: <code>'UserInterface'</code>)
+                    short name of the GraphQL interface type
+                    (for example: <code>'UserInterface'</code>)
                 </li>
                 <li>
-                    именем php класса, реализующего соответствующий интерфейсный GraphQL тип
-                    (например: <code>UserInterface::class</code>).
+                    the name of the php class that implements the corresponding GraphQL interface type
+                    (for example: <code>UserInterface::class</code>).
                 </li>
             </ul>
         </td>
@@ -260,8 +260,8 @@ class User implements UserInterface, InterfacesAwareInterface
 
 #### <a id="resolve-field-aware-interface">ResolveFieldAwareInterface</a>
 
-Интерфейс `Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface` требует реализации метода,
-используемого для вычисления значений полей объектного типа (если у поля не задан собственный резолвер):
+The `Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface` interface requires a method implementation,
+used to calculate the values ​​of fields of an ObjectType (if the field does not have its own resolver):
 
 ```php
 namespace App\GraphQL\Type;
@@ -285,25 +285,25 @@ class User implements UserInterface, ResolveFieldAwareInterface
 }
 ```
 
-Интерфейс `ResolveFieldAwareInterface` требует реализации единственного метода:
+The `ResolveFieldAwareInterface` interface requires the implementation of a single method:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>resolveField</code></td>
         <td valign="top"><code>mixed</code></td>
-        <td valign="top">Должен вернуть значение поля, указанного в параметре <code>$info</code>.</td>
+        <td valign="top">Must return the value of the field specified in the <code>$info</code> parameter.</td>
     </tr>
 </table>
 
 #### <a id="is-type-of-aware-interface">IsTypeOfAwareInterface</a>
 
-Интерфейс `Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface` требует определить метод,
-который должен вернуть `true`, если значение относится к объектному GraphQL типу.
+The `Andi\GraphQL\Definition\Type\IsTypeOfAwareInterface` interface requires defining a method,
+which should return `true` if the value is a GraphQL ObjectType.
 
 ```php
 namespace App\GraphQL\Type;
@@ -323,35 +323,35 @@ class User implements UserInterface, IsTypeOfAwareInterface
 }
 ```
 
-Интерфейс `IsTypeOfAwareInterface` требует реализации единственного метода:
+The `IsTypeOfAwareInterface` interface requires the implementation of a single method:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>isTypeOf</code></td>
         <td valign="top"><code>bool</code></td>
         <td valign="top">
-            Должен вернуть <code>true</code>, если первый параметр метода
-            ассоциирован с объектным типом.
+            Should return <code>true</code> if the first parameter of the method
+            associated with an ObjectType.
         </td>
     </tr>
 </table>
 
-Данный метод [будет использован](https://webonyx.github.io/graphql-php/type-definitions/interfaces/#interface-role-in-data-fetching)
-при идентификации объектного GraphQL типа, если интерфейсный тип не содержит собственного резолвера
-(на практике не удалось заставить работать заявленную в `webonyx/graphql-php` логику).
+This method [will be used](https://webonyx.github.io/graphql-php/type-definitions/interfaces/#interface-role-in-data-fetching)
+when identifying a GraphQL ObjectType if the interface type does not contain its own resolver
+(in practice, it was not possible to get the logic declared in `webonyx/graphql-php` to work).
 
 #### <a id="dynamic-object-type-interface">DynamicObjectTypeInterface</a>
 
-Интерфейс `Andi\GraphQL\Type\DynamicObjectTypeInterface` добавляет возможность расширения
-объектных GraphQL типов дополнительными полями, определенных в иных классах
-(данная механика подробно описана в [Расширение типов](additional-field.md)).
+The `Andi\GraphQL\Type\DynamicObjectTypeInterface` interface adds extensibility
+GraphQL object types with additional fields defined in other classes
+(this mechanic is described in detail in [Type expansion](additional-field.md)).
 
-Реализация данного интерфейса влияет на определение метода `getFields`, см. пример ниже:
+The implementation of this interface affects the definition of the `getFields` method, see the example below:
 
 ```php
 namespace App\GraphQL\Type;
@@ -394,6 +394,6 @@ class Pet implements ObjectTypeInterface, DynamicObjectTypeInterface
 }
 ```
 
-> :point_right: **Важно!**
+> :point_right: **Important!**
 >
-> Объектные GraphQL типы объявленные с помощью атрибута `#[ObjectType]` уже являются расширяемыми.
+> GraphQL object types declared using the `#[ObjectType]` attribute are already extensible.
