@@ -61,7 +61,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом GraphQL поля могут быть: <a href="scalar-type.md"><code>ScalarType</code></a>,
+                The GraphQL field type can be: <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="object-type.md"><code>ObjectType</code></a>,
                 <a href="interface-type.md"><code>InterfaceType</code></a>,
@@ -79,7 +79,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Field type modifier. The constructor parameter is parsed by the library if
+            Field type modifier. The constructor parameter is parsed by the library
             if the field type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
@@ -97,7 +97,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     A modifier defining a list of values ​​(array), with <code>null</code>
-                    The field value is valid. So the field value could be:
+                    the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
