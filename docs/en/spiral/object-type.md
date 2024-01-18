@@ -191,11 +191,11 @@ The `FieldsAwareInterface` interface requires the implementation of a single met
             <ul>
                 <li>
                     an instance of the <code>FieldDefinition</code> class
-                    (See <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
+                    (see <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
                 </li>
                 <li>
                     an instance of a class that implements the <code>ObjectFieldInterface</code> interface
-                    (See <a href="object-field.md#object-field-via-interface">Defining fields of an object type by implementing an interface</a>).
+                    (see <a href="object-field.md#object-field-via-interface">Defining fields of an object type by implementing an interface</a>).
                 </li>
             </ul>
         </td>
@@ -204,8 +204,8 @@ The `FieldsAwareInterface` interface requires the implementation of a single met
 
 #### <a id="interfaces-aware-interface">InterfacesAwareInterface</a>
 
-The `Andi\GraphQL\Definition\Type\InterfacesAwareInterface` interface allows you to define a list
-interface GraphQL types that your object GraphQL type implements.
+The `Andi\GraphQL\Definition\Type\InterfacesAwareInterface` interface allows you to define a list of
+InterfaceType that your object GraphQL type implements.
 
 ```php
 namespace App\GraphQL\Type;
