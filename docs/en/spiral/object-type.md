@@ -45,7 +45,7 @@ The `#[ObjectType]` attribute can contain the following constructor parameters:
 The section [Defining GraphQL ObjectType fields](object-field.md) details the capabilities
 libraries.
 
-A class with the `#[ObjectType]` attribute can, among other things, implement auxiliary interfaces:
+A class with the `#[ObjectType]` attribute can, among other things, implement additional interfaces:
 - [`FieldsAwareInterface`](#fields-aware-interface) to define additional fields;
 - [`InterfacesAwareInterface`](#interfaces-aware-interface) to define implemented interfaces;
 - [`ResolveFieldAwareInterface`](#resolve-field-aware-interface) to determine the resolver,
@@ -127,20 +127,20 @@ The `ObjectTypeInterface` interface requires the implementation of the following
             <ul>
                 <li>
                     an instance of the <code>FieldDefinition</code> class
-                    (See <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
+                    (see <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options">Field configuration options</a>).
                 </li>
                 <li>
                     an instance of a class that implements the <code>ObjectFieldInterface</code> interface
-                    (See <a href="object-field.md#object-field-via-interface">Defining fields of an ObjectType by implementing an interface</a>).
+                    (see <a href="object-field.md#object-field-via-interface">Defining fields of an ObjectType by implementing an interface</a>).
                 </li>
             </ul>
         </td>
     </tr>
 </table>
 
-### <a id="object-type-interfaces">Auxiliary Interfaces</a>
+### <a id="object-type-interfaces">Additional Interfaces</a>
 
-To extend the capabilities of GraphQL object types, you may need to implement interfaces,
+To extend the capabilities of GraphQL ObjectType, you may need to implement interfaces,
 listed below.
 
 <dl>
@@ -246,11 +246,11 @@ The `InterfacesAwareInterface` interface requires the implementation of a single
             </p>
             <ul>
                 <li>
-                    short name of the GraphQL interface type
+                    short name of the InterfaceType
                     (for example: <code>'UserInterface'</code>)
                 </li>
                 <li>
-                    the name of the php class that implements the corresponding GraphQL interface type
+                    the name of the php class that implements the corresponding InterfaceType
                     (for example: <code>UserInterface::class</code>).
                 </li>
             </ul>
@@ -342,13 +342,13 @@ The `IsTypeOfAwareInterface` interface requires the implementation of a single m
 </table>
 
 This method [will be used](https://webonyx.github.io/graphql-php/type-definitions/interfaces/#interface-role-in-data-fetching)
-when identifying a GraphQL ObjectType if the interface type does not contain its own resolver
+when identifying a GraphQL ObjectType if the InterfaceType does not contain its own resolver
 (in practice, it was not possible to get the logic declared in `webonyx/graphql-php` to work).
 
 #### <a id="dynamic-object-type-interface">DynamicObjectTypeInterface</a>
 
 The `Andi\GraphQL\Type\DynamicObjectTypeInterface` interface adds extensibility
-GraphQL object types with additional fields defined in other classes
+GraphQL ObjectType with additional fields defined in other classes
 (this mechanic is described in detail in [Type expansion](additional-field.md)).
 
 The implementation of this interface affects the definition of the `getFields` method, see the example below:
@@ -396,4 +396,4 @@ class Pet implements ObjectTypeInterface, DynamicObjectTypeInterface
 
 > :point_right: **Important!**
 >
-> GraphQL object types declared using the `#[ObjectType]` attribute are already extensible.
+> ObjectType declared using the `#[ObjectType]` attribute are already extensible.
