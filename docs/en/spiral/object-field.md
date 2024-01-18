@@ -1,6 +1,6 @@
 # Defining GraphQL ObjectType fields
 
-To define fields of GraphQL object types the `webonyx/graphql-php` library uses the class
+To define fields of GraphQL ObjectType the `webonyx/graphql-php` library uses the class
 [`FieldDefinion`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options).
 
 Defining a field of a GraphQL ObjectType is possible:
