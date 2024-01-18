@@ -1,17 +1,17 @@
-# Определение полей объектного GraphQL типа
+# Defining GraphQL ObjectType Fields
 
-В библиотеке `webonyx/graphql-php` для определения полей объектных GraphQL типов используется класс
+The `webonyx/graphql-php` library uses the class
 [`FieldDefinion`](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options).
 
-Определение поля объектного GraphQL типа возможно:
-- с помощью атрибута `Andi\GraphQL\Attribute\ObjectField` ([ссылка](#object-field-via-attribute));
-- путем реализации интерфейса `Andi\GraphQL\Definition\Field\ObjectFieldInterface` ([ссылка](#object-field-via-interface));
-- с помощью атрибута `Andi\GraphQL\Attribute\AdditionalField` ([ссылка](additional-field.md)).
+Defining a field of a GraphQL ObjectType is possible:
+- using the `Andi\GraphQL\Attribute\ObjectField` attribute ([link](#object-field-via-attribute));
+- by implementing the interface `Andi\GraphQL\Definition\Field\ObjectFieldInterface` ([link](#object-field-via-interface));
+- using the `Andi\GraphQL\Attribute\AdditionalField` attribute ([link](additional-field.md)).
 
-## <a id="object-field-via-attribute">Определение полей с помощью атрибутов</a>
+## <a id="object-field-via-attribute">Defining fields using attributes</a>
 
-Определить поле объектного типа с помощью атрибута `#[ObjectField]` возможно только для классов,<br />
-помеченных атрибутом `#[ObjectType]`. Атрибут может быть применен к свойствам и методам.
+Defining a field of an ObjectType using the `#[ObjectField]` attribute is only possible for classes<br />
+marked with the `#[ObjectType]` attribute. The attribute can be applied to properties and methods.
 
 ```php
 namespace App\GraphQL\Type;
@@ -40,29 +40,29 @@ class User
 }
 ```
 
-Атрибут `#[ObjectField]` может иметь следующие параметры конструктора:
+The `#[ObjectField]` attribute can have the following constructor parameters:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя поля. Если не указано, используется имя свойства или метода
-            без префикса <code>get</code>
+            Field name. If not specified, the name of the property or method is used
+            without <code>get</code> prefix
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание поля. Если не указано, используется описание свойства/метода,
-            указанное в docBlock. Для свойств, объявленных в конструкторе, в качестве
-            описания используется комментарий к соответствующему параметру из docBlock конструктора.
+            Description of the field. If not specified, the property/method description is used,
+            specified in docBlock. For properties declared in the constructor, as
+            descriptions, a comment is used for the corresponding parameter from the docBlock constructor.
         </td>
     </tr>
     <tr>
@@ -70,23 +70,23 @@ class User
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип поля. Допустимыми значениями могут быть краткие имена GraphQL типов
-                (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип
-                (<code>StringType::class</code>, <code>IntType::class</code> и другие).
+                Field type. Valid values ​​can be short names of GraphQL types
+                (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type
+                (<code>StringType::class</code>, <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом GraphQL поля могут быть: <a href="scalar-type.md"><code>ScalarType</code></a>,
+                The GraphQL field type can be: <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="object-type.md"><code>ObjectType</code></a>,
                 <a href="interface-type.md"><code>InterfaceType</code></a>,
                 <a href="union-type.md"><code>UnionType</code></a>.
             </p>
             <p>
-                Если параметр <code>type</code> не указан, библиотека постарается определить значение
-                самостоятельно (опираясь на определение свойства/метода). Для php типов
-                <code>array</code>, <code>iterable</code>, <code>mixed</code> и др. следует указать
-                значение параметра явно.
+                If the <code>type</code> parameter is not specified, the library will try to determine the value
+                independently (based on the definition of the property/method). For php types
+                <code>array</code>, <code>iterable</code>, <code>mixed</code>, etc. should be specified
+                the parameter value is explicit.
             </p>
         </td>
     </tr>
@@ -94,49 +94,49 @@ class User
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Модификатора типа поля. Параметр конструктора анализируется библиотекой в том случае,
-            если тип поля указан и не содержит модификаторов. Возможны следующие значения:
+            Field type modifier. The constructor parameter is parsed by the library if
+            if the field type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
-                    значения.<br />
-                    Эквивалент: <code>String</code>
+                    Without modifiers, i.e. for example strings or <code>null</code> are acceptable
+                    values.<br />
+                    Equivalent: <code>String</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значение поля будет
-                    строковым.<br />
-                    Эквивалент: <code>String!</code>
+                    Modifier excluding <code>null</code> value, i.e. the field value will be
+                    string.<br />
+                    Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо. Таким образом значением поля может быть:
-                    <code>null</code> значение, пустой массив, массив со строковыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[String]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    The field value is valid. So the field value could be:
+                    <code>null</code> value, empty array, array with string or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
-                    может быть: <code>null</code> значение или непустой список со строковыми
-                    значениями.<br />
-                    Эквивалент: <code>[String!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid but excluded in values. Thus, the field value
+                    could be: <code>null</code> value or non-empty list with strings
+                    values.<br />
+                    Equivalent: <code>[String!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение поля, но позволяющий пустой список или список содержащий строковые или
-                    <code>null</code> значения.<br />
-                    Эквивалент: <code>[String]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    field value, but allowing an empty list or a list containing strings or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
-                    Эквивалент: <code>[String!]!</code>
+                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
         </td>
@@ -145,29 +145,29 @@ class User
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если параметр задан, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
-            причины будет указано значение данного параметра. Если параметр не задан, но в
-            docBlock (свойства/метода) есть тэг <code>@deprecated</code>, то будет использован
-            комментарий этого тега.
+            If the parameter is specified, then in the GraphQL schema this field will be marked obsolete. As
+            the reason will be indicated by the value of this parameter. If the parameter is not specified, but in
+            docBlock (property/method) has a <code>@deprecated</code> tag, then it will be used
+            comment for this tag.
         </td>
     </tr>
 </table>
 
-Аргументы поля могут быть указаны для параметров метода с атрибутом `#[ObjectField]`, об этом подробно
-изложено в [Определение аргумента поля](argument.md#argument-via-attribute).
+Field arguments can be specified for method parameters with the `#[ObjectField]` attribute, more on that
+outlined in [Field Argument Definition](argument.md#argument-via-attribute).
 
-> :point_right: **Обратите внимание!**
+> :point_right: **Note!**
 >
-> Библиотека игнорируют область видимости свойств/методов, помеченные атрибутом свойства/методы будут
-> вызваны для определения значения полей.
+> The library ignores the scope of properties/methods, properties/methods marked with the attribute will
+> called to determine the values ​​of fields.
 
 
-> :point_right: **Важно!** :point_left:
+> :point_right: **Important!** :point_left:
 >
-> Для определения значения полей, помеченных атрибутом `#[ObjectField]`, должен быть
-> предоставлен экземпляр класса.
+> To determine the value of fields marked with the `#[ObjectField]` attribute, there must be
+> an instance of the class is provided.
 >
-> Например:
+> For example:
 > ```php
 > class UserService
 > {
@@ -189,14 +189,14 @@ class User
 > }
 > ```
 >
-> При этом, для полей, объявленных иным способом, таких ограничений нет.
+> However, for fields declared in a different way, there are no such restrictions.
 
-## <a id="object-field-via-interface">Определение поля путем реализации интерфейса</a>
+## <a id="object-field-via-interface">Defining a field by implementing an interface</a>
 
-Определение полей с помощью интерфейса `ObjectFieldInterface` потребуется при реализации
-интерфейса `FieldsAwareInterface`, об этом было написано
-[здесь](object-type.md#object-type-interface-get-fields) и
-[здесь](object-type.md#fields-aware-interface-get-fields).
+Defining fields using the `ObjectFieldInterface` interface will be required when implementing
+interface `FieldsAwareInterface`, this was written about
+[here](object-type.md#object-type-interface-get-fields) and
+[here](object-type.md#fields-aware-interface-get-fields).
 
 ```php
 namespace App\GraphQL\Type;
@@ -219,12 +219,12 @@ class User implements UserInterface, InterfacesAwareInterface, FieldsAwareInterf
 }
 ```
 
-> :point_right: **Рекомендация!**
+> :point_right: **Recommendation!**
 >
-> Воспользуйтесь абстрактным классом `Andi\GraphQL\Field\AbstractObjectField`, в нём уже реализованы
-> основные методы требуемые в интерфейсе.
+> Use the abstract class `Andi\GraphQL\Field\AbstractObjectField`, it already implements
+> the main methods required in the interface.
 
-Пример реализации интерфейса `ObjectFieldInterface`:
+Example implementation of the `ObjectFieldInterface` interface:
 
 ```php
 namespace App\GraphQL\Field;
@@ -261,34 +261,34 @@ final class UserFullName implements ObjectFieldInterface
 }
 ```
 
-Интерфейс `ObjectFieldInterface` требует реализации следующих методов:
+The `ObjectFieldInterface` interface requires the implementation of the following methods:
 
 <table>
     <tr>
-        <th>Имя метода</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание метода</th>
+        <th>Method name</th>
+        <th>Return type</th>
+        <th>Method description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возвращать имя поля.</td>
+        <td valign="top">Should return the field name.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание поля, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return the description of the field as displayed in the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>getDeprecationReason</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен возвращать описание причины, для отображения в GraphQL схеме, по которой
-            поле использовать не рекомендуется и <code>null</code> значение, если такая причина
-            отсутствует.
+            Should return a description of the reason for displaying in the GraphQL schema for which
+            field is not recommended to be used and <code>null</code> value if such a reason
+            absent.
         </td>
     </tr>
     <tr>
@@ -296,12 +296,12 @@ final class UserFullName implements ObjectFieldInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип данных поля. Допустимыми значениями могут быть краткие имена
-                GraphQL типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
-                <code>IntType::class</code> и другие).</p>
+                Should return the data type of the field. Valid values ​​can be short names
+                GraphQL types (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type (<code>StringType::class</code>,
+                <code>IntType::class</code> and others).</p>
             <p>
-                Типом поля могут быть:
+                The field type can be:
                 <a href="scalar-type.md">ScalarType</a>, <a href="enum-type.md">EnumType</a>,
                 <a href="object-type.md">ObjectType</a>, <a href="interface-type.md">InterfaceType</a>,
                 <a href="union-type.md">UnionType</a>.
@@ -312,75 +312,75 @@ final class UserFullName implements ObjectFieldInterface
         <td valign="top"><a id="get-type-mode"><code>getMode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Должен вернуть битовую маску для модификатора типа поля. Возможны следующие значения:
+            Should return the bitmask for the field type modifier. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
-                    значения.<br />
-                    Эквивалент: <code>String</code>
+                    Without modifiers, i.e. for example strings or <code>null</code> are acceptable
+                    values.<br />
+                    Equivalent: <code>String</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значение поля будет
-                    строковым.<br />
-                    Эквивалент: <code>String!</code>
+                    Modifier excluding <code>null</code> value, i.e. the field value will be
+                    string.<br />
+                    Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо. Таким образом значением поля может быть:
-                    <code>null</code> значение, пустой массив, массив со строковыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[String]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid. So the field value could be:
+                    <code>null</code> value, empty array, array with string or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
-                    может быть: <code>null</code> значение или непустой список со строковыми
-                    значениями.<br />
-                    Эквивалент: <code>[String!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid but excluded in values. Thus, the field value
+                    could be: <code>null</code> value or non-empty list with strings
+                    values.<br />
+                    Equivalent: <code>[String!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение поля, но позволяющий пустой список или список содержащий строковые или
-                    <code>null</code> значения.<br />
-                    Эквивалент: <code>[String]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    field value, but allowing an empty list or a list containing strings or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
-                    Эквивалент: <code>[String!]!</code>
+                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
         </td>
     </tr>
 </table>
 
-Для расширения возможностей поля потребуются реализация дополнительных интерфейсов:
+To expand the capabilities of the field, the implementation of additional interfaces will be required:
 
 <dl>
     <dt><a href="#arguments-aware-interface"><code>ArgumentsAwareInterface</code></a></dt>
     <dd>
-        Позволяет определить аргументы поля.
-        В абстрактном классе <code>AbstractObjectField</code> данный интерфейс уже реализован.
+        Allows you to define field arguments.
+        In the abstract class <code>AbstractObjectField</code> this interface is already implemented.
     </dd>
     <dt><a href="#resolve-aware-interface"><code>ResolveAwareInterface</code></a></dt>
-    <dd>Потребует реализацию метода, вычисляющую значение поля.</dd>
+    <dd>Requires a method implementation that calculates the value of the field.</dd>
     <dt><a href="#complexity-aware-interface"><code>ComplexityAwareInterface</code></a></dt>
     <dd>
-        Позволяет определить метод <code>complexity</code>, используемый для ограничения сложности
-        запроса. Подробнее в разделе
+        Allows you to define the <code>complexity</code> method used to limit complexity
+        request. More details in the section
         <a href="https://webonyx.github.io/graphql-php/security/#query-complexity-analysis">Security</a>.
     </dd>
 </dl>
 
 ### <a id="arguments-aware-interface">ArgumentsAwareInterface</a>
 
-Пример реализации интерфейса `ArgumentsAwareInterface`:
+Example implementation of the `ArgumentsAwareInterface` interface:
 
 ```php
 namespace App\GraphQL\Field;
@@ -406,33 +406,33 @@ final class UserFullName implements ObjectFieldInterface, ArgumentsAwareInterfac
 }
 ```
 
-Интерфейс `ArgumentsAwareInterface` требует реализации следующего метода:
+The `ArgumentsAwareInterface` interface requires the following method to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getArguments</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>Метод должен возвращать итерируемую структуру (<code>array</code> или <code>\Traversable</code>)
-            (допустима пустая структура - в этом случае поле будет без аргументов).</p>
-            <p>Возвращаемая структура может содержать элементы следующих типов:</p>
+            <p>The method must return an iterable structure (<code>array</code> or <code>\Traversable</code>)
+            (an empty structure is acceptable - in this case the field will have no arguments).</p>
+            <p>The returned structure can contain elements of the following types:</p>
             <dl>
-                <dt>Массив конфигурации аргумента</dt>
+                <dt>Array of argument configuration</dt>
                 <dd>
-                    Массив должен соответствовать требованиям к конфигурации аргументов
-                    <code>webonyx/graphql-php</code> библиотеки. Подробнее см.
-                    <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-argument-configuration-options">официальную документацию</a>.
+                    The array must meet the argument configuration requirements
+                    <code>webonyx/graphql-php</code> libraries. See more details.
+                    <a href="https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-argument-configuration-options">official documentation</a>.
                 </dd>
-                <dt>Объект, реализующий интерфейс <code>ArgumentInterface</code></dt>
+                <dt>An object that implements the <code>ArgumentInterface</code></dt> interface
                 <dd>
-                    В примере выше, класс <code>Argument</code> реализует требуемый интерфейс,
-                    требования которого изложены в разделе
-                    <a href="argument.md#argument-via-interface">Определение аргумента с помощью интерфейса</a>.
+                    In the example above, the <code>Argument</code> class implements the required interface,
+                    the requirements of which are set out in section
+                    <a href="argument.md#argument-via-interface">Defining an argument using an interface</a>.
                 </dd>
             </dl>
         </td>
@@ -442,7 +442,7 @@ final class UserFullName implements ObjectFieldInterface, ArgumentsAwareInterfac
 
 ### <a id="resolve-aware-interface">ResolveAwareInterface</a>
 
-Пример реализации интерфейса `ResolveAwareInterface`:
+Example implementation of the `ResolveAwareInterface` interface:
 
 ```php
 namespace App\GraphQL\Field;
@@ -474,15 +474,15 @@ final class UserFullName implements ObjectFieldInterface, ArgumentsAwareInterfac
 }
 ```
 
-Интерфейс требует реализации единственного метода `resolve`. Возвращаемое значение будет
-результирующим значением поля.
+The interface requires the implementation of a single `resolve` method. The return value will be
+the resulting field value.
 
-Сигнатура метода `resolve` соответствует требованиям для опции `resolve` в
-[конфигурации поля](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options).
+The `resolve` method signature matches the requirements for the `resolve` option in
+[field configurations](https://webonyx.github.io/graphql-php/type-definitions/object-types/#field-configuration-options).
 
 ### <a id="complexity-aware-interface">ComplexityAwareInterface</a>
 
-Пример реализации интерфейса `ComplexityAwareInterface`:
+An example implementation of the `ComplexityAwareInterface` interface:
 
 ```php
 namespace App\GraphQL\Field;
@@ -511,7 +511,7 @@ final class UserFullName implements
 }
 ```
 
-Интерфейс требует реализации единственного метода `complexity`. Возвращаемое методом значение
-определяет сложность вычисления поля.
+The interface requires the implementation of a single `complexity` method. Return value of the method
+determines the complexity of field calculation.
 
-Подробнее в разделе [Security](https://webonyx.github.io/graphql-php/security/#query-complexity-analysis).
+More details in the [Security](https://webonyx.github.io/graphql-php/security/#query-complexity-analysis) section.
