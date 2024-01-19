@@ -1,73 +1,73 @@
-# Разработка middleware слоев
+# Development of middleware layers
 
-Процесс загрузки приложения и обработка пользовательского запроса представлена на схеме ниже:
+The process of downloading the application and processing the user request is presented in the diagram below:
 
-![Загрузка приложения](../../images/graphql-process.png)
+![Loading application](../../images/graphql-process.png)
 
-При запуске worker'а происходит инициализация приложения с последующим ожиданием пользовательского запроса,
-подробнее об этапах инициализации приложения можно ознакомится в
-[официальной документации SpiralFramework](https://spiral.dev/docs/framework-kernel/current/en).
+When the worker starts, the application is initialized and then waits for a user request,
+More details about the application initialization stages can be found in
+[official SpiralFramework documentation](https://spiral.dev/docs/framework-kernel/current/en).
 
-Рассмотрим подробнее инициализацию GraphQL сервера:
+Let's take a closer look at initializing the GraphQL server:
 
-1. Запуск worker'а
-2. Инициализация `GraphQLBootloader`
-   - регистрация `GraphQLMiddleware` в `HttpBootloader`. Следует убедиться, что `GraphQLMiddleware` будет
-     зарегистрирован после `JsonPayloadMiddleware` (об этом уже [было написано ранее](install.md#bootloader));
-   - регистрация `Query`, `Mutation` и дополнительных GraphQL типов (см. [опцию `additionalTypes`](configure.md))
-     в реестре (`TypeRegistry`);
-   - регистрация слушателей в `TokenizerListenerRegistryInterface` для статического анализа приложения с целью
-     автоматической регистрации GraphQL типов, Query и Mutation полей, а также для расширения объектных и
-     интерфейсных GraphQL типов. Более подробную информацию о статическом анализе приложения
-     [смотрите в официальной документации SpiralFramework](https://spiral.dev/docs/advanced-tokenizer/current);
-   - регистрация `SchemaWarmupper` для последующего запуска процесса самоанализа
-     (об этом [чуть ниже](#introspection));
-3. Вызов зарегистрированных `booted` замыканий
-   - осуществляется статический анализ приложения;
-   - анализируются классы, перечисления и интерфейсы. Если их определения подходят под критерии GraphQL типов -
-     осуществляется преобразование определения к соответствующему GraphQL типу (подробнее
-     [ниже](#type-resolver)). Анализ и регистрация GraphQL типов осуществляется в методе `listen` слушателей
-     ([см. подробнее](https://spiral.dev/docs/advanced-tokenizer/current#crafting-a-listener));
-   - анализируются классы. Если их определения подходят под критерии определения полей объектных типов -
-     осуществляется расширение соответствующих типов (см. [QueryField](query-filed.md),
-     [MutationField](mutation-field.md) и [AdditionalField](additional-field.md)).
-     Анализ и расширение GraphQL типов осуществляется в методе `finalize` слушателей
-     ([см. подробнее](https://spiral.dev/docs/advanced-tokenizer/current#crafting-a-listener)). Ввиду того,
-     что регистрация в реестре GraphQL типов осуществляется в методе `listen`, на момент вызова `finalize` все
-     GraphQL типы уже будут зарегистрированы;
-4. Вызов зарегистрированных `bootstrapped` замыканий
-   - выполняется <a id="introspection">самоанализ GraphQL схемы</a>. При этом:
-     - для `ObjectType` и `InterfaceType` извлекаются поля. Каждое поле обрабатывается с помощью middleware
-       конвейера `ObjectFieldResolver` (подробнее [ниже](#object-field-resolver)). Аргументы полей также
-       извлекаются и обрабатываются middleware конвейером `ArgumentResolver` (подробнее
-       [ниже](#argument-resolver));
-     - для `EnumType` извлекаются возможные значения;
-     - для `InputObjectType` извлекаются поля. Каждое поле обрабатывается с помощью middleware конвейера
-       `InputObjectFieldResolver` (подробнее [ниже](#input-object-field-resolver));
-     - для `UnionType` извлекаются типы, входящие в объединенный тип.
-   - разогрев схемы завершен.
-5. worker ожидает пользовательский запрос, после получения приступает к его обработке.
+1. Starting a worker
+2. Initialization of `GraphQLBootloader`
+   - registering `GraphQLMiddleware` in `HttpBootloader`. You should make sure that `GraphQLMiddleware` will be
+     registered after `JsonPayloadMiddleware` (this was already [written earlier](install.md#bootloader));
+   - registration of `Query`, `Mutation` and additional GraphQL types (see [option `additionalTypes`](configure.md))
+     in the registry (`TypeRegistry`);
+   - registering listeners in `TokenizerListenerRegistryInterface` for static analysis of the application for the purpose
+     automatic registration of GraphQL types, Query and Mutation fields, as well as for extending object and
+     interface GraphQL types. More information about static application analysis
+     [see official SpiralFramework documentation](https://spiral.dev/docs/advanced-tokenizer/current);
+   - registering `SchemaWarmupper` to subsequently run the introspection process
+     (more about this [just below](#introspection));
+3. Calling registered `booted` closures
+   - static analysis of the application is carried out;
+   - classes, enumerations and interfaces are analyzed. If their definitions fit the criteria of GraphQL types -
+     the definition is converted to the corresponding GraphQL type (more details
+     [below](#type-resolver)). Analysis and registration of GraphQL types is carried out in the `listen` method of listeners
+     ([see details](https://spiral.dev/docs/advanced-tokenizer/current#crafting-a-listener));
+   - classes are analyzed. If their definitions fit the criteria for defining fields of ObjectTypes -
+     the corresponding types are expanded (see [QueryField](query-filed.md),
+     [MutationField](mutation-field.md) and [AdditionalField](additional-field.md)).
+     Analysis and extension of GraphQL types is carried out in the `finalize` method of the listeners
+     ([see more](https://spiral.dev/docs/advanced-tokenizer/current#crafting-a-listener)). In view of the fact
+     that registration in the GraphQL registry of types is carried out in the `listen` method, at the time of calling `finalize` everything
+     GraphQL types will already be registered;
+4. Calling registered `bootstrapped` closures
+   - <a id="introspection">introspection of the GraphQL schema is performed</a>. Wherein:
+     - fields are extracted for `ObjectType` and `InterfaceType`. Each field is processed using middleware
+       pipeline `ObjectFieldResolver` (more details [below](#object-field-resolver)). Field arguments also
+       are retrieved and processed by the middleware pipeline `ArgumentResolver` (more details
+       [below](#argument-resolver));
+     - for `EnumType` possible values ​​are retrieved;
+     - fields are retrieved for `InputObjectType`. Each field is processed using a middleware pipeline
+       `InputObjectFieldResolver` (more details [below](#input-object-field-resolver));
+     - for `UnionType`, the types included in the UnionType are retrieved.
+   - heating of the circuit is completed.
+5. The worker waits for a user request and, after receiving it, begins processing it.
 
-## Middleware конвейеры
+## Middleware pipelines
 
-Библиотека в своей работе использует middleware конвейеры. Данное решение позволяет расширять функциональность
-библиотеки.
+The library uses middleware pipelines in its work. This solution allows you to expand functionality
+libraries.
 
-В работе библиотека использует следующие конвейеры:
-- `TypeResolver` - предназначен для [определения GraphQL типа](#type-resolver);
-- `ObjectFieldResolver` - предназначен для [определения поля](#object-field-resolver) объектного и
-  интерфейсного GraphQL типа;
-- `InputObjectFieldResolver` - предназначен для [определения поля](#input-object-field-resolver)
-  входящего объектного GraphQL типа;
-- `ArgumentResolver` - предназначен для [определения аргумента](#argument-resolver) поля.
+The library uses the following pipelines in its work:
+- `TypeResolver` - intended for [defining GraphQL type](#type-resolver);
+- `ObjectFieldResolver` - intended for [field definition](#object-field-resolver) object and
+  interface GraphQL type;
+- `InputObjectFieldResolver` - intended for [field definition](#input-object-field-resolver)
+  incoming GraphQL ObjectType;
+- `ArgumentResolver` - intended for [argument definition](#argument-resolver) field.
 
 ### <a id="type-resolver">Middleware конвейер для определения GraphQL типа</a>
 
-Конвейер `TypeResolver` реализует два основных метода:
-- `pipe` - предназначен для регистрации middleware слоя в конвейере с указанным приоритетом исполнения.
-  Чем приоритет больше - тем раньше будет вызван middleware слой. Слои с одинаковым приоритетом будут
-  вызваны в порядке их регистрации в конвейере;
-- `resolve` - осуществляет запуск конвейера. Метод возвращает GraphQL тип соответствующий входящему параметру.
+The `TypeResolver` pipeline implements two main methods:
+- `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
+  The higher the priority, the earlier the middleware layer will be called. Layers with the same priority will be
+  called in the order they were registered in the pipeline;
+- `resolve` - launches the pipeline. The method returns the GraphQL type corresponding to the incoming parameter.
 
 ```php
 namespace Andi\GraphQL\TypeResolver;
@@ -90,7 +90,7 @@ final class TypeResolver implements PipelineInterface
 }
 ```
 
-Регистрируемый в конвейере middleware слой должен реализовывать следующий интерфейс:
+The middleware layer registered in the pipeline must implement the following interface:
 
 ```php
 namespace Andi\GraphQL\TypeResolver\Middleware;
@@ -104,10 +104,10 @@ interface MiddlewareInterface
 }
 ```
 
-Если входящий параметр `$type` может быть ассоциирован с GraphQL типом, метод `process` должен вернуть
-соответствующий GraphQL тип, в обратном случае передать управление последующему middleware слою.
+If the incoming parameter `$type` can be associated with a GraphQL type, the `process` method should return
+corresponding GraphQL type; otherwise, transfer control to the subsequent middleware layer.
 
-Пример реализации middleware слоя:
+Example implementation of a middleware layer:
 
 ```php
 use GraphQL\Type\Definition as Webonyx;
@@ -128,27 +128,27 @@ final class ObjectTypeConfigurationMiddleware implements MiddlewareInterface
 }
 ```
 
-В примере выше middleware слой анализирует входящий параметр `$type`, если он является массивом содержащий
-опции `name` и `fields` логика принимает решение о том, что параметр может быть интерпретирован как
-объектный GraphQL тип.
+In the example above, the middleware layer parses the incoming parameter `$type` if it is an array containing
+options `name` and `fields` logic decides that the parameter can be interpreted as
+GraphQL ObjectType.
 
-> :point_right: Обратите внимание!
+> :point_right: Please note!
 >
-> Приведенный выше пример реализации middleware слоя не следует использовать в приложении, т.к.
-> конфигурация входящего объектного GraphQL типа содержит аналогичные опции конфигурации.
+> The above example of implementing a middleware layer should not be used in the application, because
+> the configuration of the incoming GraphQL ObjectType contains similar configuration options.
 
-Для регистрации middleware слоя в конвейере, укажите его в опции `typeResolverMiddlewares`
-[конфигурации](configure.md) библиотеки. Где ключем должно быть имя класса, а значением - приоритет
-исполнения.
+To register a middleware layer in the pipeline, specify it in the `typeResolverMiddlewares` option
+[configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
+execution.
 
-### <a id="object-field-resolver">Middleware конвейер для определения поля объектного или интерфейсного типа</a>
+### <a id="object-field-resolver">Middleware pipeline for defining a field of an object or interface type</a>
 
-Конвейер `ObjectFieldResolver` реализует два основных метода:
-- `pipe` - предназначен для регистрации middleware слоя в конвейере с указанным приоритетом исполнения.
-  Чем приоритет больше - тем раньше будет вызван middleware слой. Слои с одинаковым приоритетом будут
-  вызваны в порядке их регистрации в конвейере;
-- `resolve` - осуществляет запуск конвейера. Метод возвращает определение поля соответствующее входящему
-  параметру.
+The `ObjectFieldResolver` pipeline implements two main methods:
+- `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
+  The higher the priority, the earlier the middleware layer will be called. Layers with the same priority will be
+  called in the order they were registered in the pipeline;
+- `resolve` - launches the pipeline. The method returns the field definition corresponding to the input one
+  parameter.
 
 ```php
 namespace Andi\GraphQL\ObjectFieldResolver;
@@ -171,7 +171,7 @@ final class ObjectFieldResolver implements PipelineInterface
 }
 ```
 
-Регистрируемый в конвейере middleware слой должен реализовывать следующий интерфейс:
+The middleware layer registered in the pipeline must implement the following interface:
 
 ```php
 namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
@@ -185,11 +185,11 @@ interface MiddlewareInterface
 }
 ```
 
-Если входящий параметр `$field` может быть ассоциирован с полем объектного или интерфейсного типа,
-метод `process` должен вернуть определение поля, в обратном случае передать управление последующему
-middleware слою.
+If the incoming parameter `$field` can be associated with a field of an object or InterfaceType,
+the `process` method must return the field definition, otherwise transfer control to the next one
+middleware layer.
 
-Пример реализации middleware слоя:
+Example implementation of a middleware layer:
 
 ```php
 namespace Andi\GraphQL\ObjectFieldResolver\Middleware;
@@ -210,18 +210,18 @@ final class WebonyxObjectFieldMiddleware implements MiddlewareInterface
 }
 ```
 
-Для регистрации middleware слоя в конвейере, укажите его в опции `objectFieldResolverMiddlewares`
-[конфигурации](configure.md) библиотеки. Где ключем должно быть имя класса, а значением - приоритет
-исполнения.
+To register a middleware layer in the pipeline, specify it in the `objectFieldResolverMiddlewares` option
+[configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
+execution.
 
-### <a id="input-object-field-resolver">Middleware конвейер для определения поля входящего объектного GraphQL типа</a>
+### <a id="input-object-field-resolver">Middleware pipeline for determining a field of an incoming GraphQL ObjectType</a>
 
-Конвейер `InputObjectFieldResolver` реализует два основных метода:
-- `pipe` - предназначен для регистрации middleware слоя в конвейере с указанным приоритетом исполнения.
-  Чем приоритет больше - тем раньше будет вызван middleware слой. Слои с одинаковым приоритетом будут
-  вызваны в порядке их регистрации в конвейере;
-- `resolve` - осуществляет запуск конвейера. Метод возвращает определение поля соответствующее входящему
-  параметру.
+The `InputObjectFieldResolver` pipeline implements two main methods:
+- `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
+  The higher the priority, the earlier the middleware layer will be called. Layers with the same priority will be
+  called in the order they were registered in the pipeline;
+- `resolve` - launches the pipeline. The method returns the field definition corresponding to the input one
+  parameter.
 
 ```php
 namespace Andi\GraphQL\InputObjectFieldResolver;
@@ -244,7 +244,7 @@ final class InputObjectFieldResolver implements PipelineInterface
 }
 ```
 
-Регистрируемый в конвейере middleware слой должен реализовывать следующий интерфейс:
+The middleware layer registered in the pipeline must implement the following interface:
 
 ```php
 namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
@@ -258,11 +258,11 @@ interface MiddlewareInterface
 }
 ```
 
-Если входящий параметр `$field` может быть ассоциирован с полем входящего объектного типа,
-метод `process` должен вернуть определение поля, в обратном случае передать управление последующему
-middleware слою.
+If the incoming parameter `$field` can be associated with a field of the incoming ObjectType,
+the `process` method must return the field definition, otherwise transfer control to the next one
+middleware layer.
 
-Пример реализации middleware слоя:
+Example implementation of a middleware layer:
 
 ```php
 namespace Andi\GraphQL\InputObjectFieldResolver\Middleware;
@@ -283,18 +283,18 @@ final class WebonyxInputObjectFieldMiddleware implements MiddlewareInterface
 }
 ```
 
-Для регистрации middleware слоя в конвейере, укажите его в опции `inputObjectFieldResolverMiddlewares`
-[конфигурации](configure.md) библиотеки. Где ключем должно быть имя класса, а значением - приоритет
-исполнения.
+To register a middleware layer in the pipeline, specify it in the `inputObjectFieldResolverMiddlewares` option
+[configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
+execution.
 
-### <a id="argument-resolver">Middleware конвейер для определения аргумента поля</a>
+### <a id="argument-resolver">Middleware pipeline for field argument determination</a>
 
-Конвейер `ArgumentResolver` реализует два основных метода:
-- `pipe` - предназначен для регистрации middleware слоя в конвейере с указанным приоритетом исполнения.
-  Чем приоритет больше - тем раньше будет вызван middleware слой. Слои с одинаковым приоритетом будут
-  вызваны в порядке их регистрации в конвейере;
-- `resolve` - осуществляет запуск конвейера. Метод возвращает конфигурацию аргумента соответствующее
-  входящему параметру.
+The `ArgumentResolver` pipeline implements two main methods:
+- `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
+  The higher the priority, the earlier the middleware layer will be called. Layers with the same priority will be
+  called in the order they were registered in the pipeline;
+- `resolve` - launches the pipeline. The method returns the configuration of the argument corresponding
+  incoming parameter.
 
 ```php
 namespace Andi\GraphQL\ArgumentResolver;
@@ -316,7 +316,7 @@ final class ArgumentResolver implements PipelineInterface
 }
 ```
 
-Регистрируемый в конвейере middleware слой должен реализовывать следующий интерфейс:
+The middleware layer registered in the pipeline must implement the following interface:
 
 ```php
 namespace Andi\GraphQL\ArgumentResolver\Middleware;
@@ -329,10 +329,10 @@ interface MiddlewareInterface
 }
 ```
 
-Если входящий параметр `$argument` может быть ассоциирован с аргументом поля, метод `process` должен
-вернуть конфигурацию аргумента, в обратном случае передать управление последующему middleware слою.
+If the incoming parameter `$argument` can be associated with a field argument, the `process` method must
+return the argument configuration, otherwise transfer control to the next middleware layer.
 
-Пример реализации middleware слоя:
+Example implementation of a middleware layer:
 
 ```php
 namespace Andi\GraphQL\ArgumentResolver\Middleware;
@@ -358,6 +358,6 @@ final class ArgumentConfigurationMiddleware implements MiddlewareInterface
 }
 ```
 
-Для регистрации middleware слоя в конвейере, укажите его в опции `argumentResolverMiddlewares`
-[конфигурации](configure.md) библиотеки. Где ключем должно быть имя класса, а значением - приоритет
-исполнения.
+To register a middleware layer in the pipeline, specify it in the `argumentResolverMiddlewares` option
+[configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
+execution.
