@@ -1,6 +1,6 @@
 # Development of middleware layers
 
-The process of downloading the application and processing the user request is presented in the diagram below:
+The process of initializing the application and processing the user request is presented in the diagram below:
 
 ![Loading application](../../images/graphql-process.png)
 
@@ -58,10 +58,10 @@ The library uses the following pipelines in its work:
 - `ObjectFieldResolver` - intended for [field definition](#object-field-resolver) object and
   interface GraphQL type;
 - `InputObjectFieldResolver` - intended for [field definition](#input-object-field-resolver)
-  incoming GraphQL ObjectType;
+  GraphQL InputObjectType;
 - `ArgumentResolver` - intended for [argument definition](#argument-resolver) field.
 
-### <a id="type-resolver">Middleware конвейер для определения GraphQL типа</a>
+### <a id="type-resolver">Middleware pipeline for determining GraphQL type</a>
 
 The `TypeResolver` pipeline implements two main methods:
 - `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
@@ -135,13 +135,13 @@ GraphQL ObjectType.
 > :point_right: Please note!
 >
 > The above example of implementing a middleware layer should not be used in the application, because
-> the configuration of the incoming GraphQL ObjectType contains similar configuration options.
+> the configuration of the GraphQL InputObjectType contains similar configuration options.
 
 To register a middleware layer in the pipeline, specify it in the `typeResolverMiddlewares` option
 [configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
 execution.
 
-### <a id="object-field-resolver">Middleware pipeline for defining a field of an object or interface type</a>
+### <a id="object-field-resolver">Middleware pipeline for resolving a field of an object or interface type</a>
 
 The `ObjectFieldResolver` pipeline implements two main methods:
 - `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
@@ -185,7 +185,7 @@ interface MiddlewareInterface
 }
 ```
 
-If the incoming parameter `$field` can be associated with a field of an object or InterfaceType,
+If the incoming parameter `$field` can be associated with a field of an ObjectType or an InterfaceType,
 the `process` method must return the field definition, otherwise transfer control to the next one
 middleware layer.
 
@@ -214,7 +214,7 @@ To register a middleware layer in the pipeline, specify it in the `objectFieldRe
 [configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
 execution.
 
-### <a id="input-object-field-resolver">Middleware pipeline for determining a field of an incoming GraphQL ObjectType</a>
+### <a id="input-object-field-resolver">Middleware pipeline for resolving a field of an GraphQL InputObjectType</a>
 
 The `InputObjectFieldResolver` pipeline implements two main methods:
 - `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
@@ -258,7 +258,7 @@ interface MiddlewareInterface
 }
 ```
 
-If the incoming parameter `$field` can be associated with a field of the incoming ObjectType,
+If the incoming parameter `$field` can be associated with a field of the InputObjectType,
 the `process` method must return the field definition, otherwise transfer control to the next one
 middleware layer.
 
@@ -287,7 +287,7 @@ To register a middleware layer in the pipeline, specify it in the `inputObjectFi
 [configuration](configure.md) libraries. Where the key should be the class name and the value should be the priority
 execution.
 
-### <a id="argument-resolver">Middleware pipeline for field argument determination</a>
+### <a id="argument-resolver">Middleware pipeline for field argument resolvement</a>
 
 The `ArgumentResolver` pipeline implements two main methods:
 - `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
