@@ -61,7 +61,7 @@ The library uses the following pipelines in its work:
   GraphQL InputObjectType;
 - `ArgumentResolver` - intended for [argument definition](#argument-resolver) field.
 
-### <a id="type-resolver">Middleware pipeline for determining GraphQL type</a>
+### <a id="type-resolver">Middleware pipeline for resolving GraphQL type</a>
 
 The `TypeResolver` pipeline implements two main methods:
 - `pipe` - is intended for registering the middleware layer in the pipeline with the specified execution priority.
