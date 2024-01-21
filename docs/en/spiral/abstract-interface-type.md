@@ -2,7 +2,7 @@
 
 The abstract class `Andi\GraphQL\Type\AbstractInterfaceType` allows you to define GraphQL InterfaceType
 without the need to implement methods of additional interfaces. Most interfaces are already
-implemented in an abstract class, you just need to set the values ​​of its properties to determine
+implemented in an abstract class, you just need to set the values of its properties to determine
 the result of the implemented methods.
 
 An example of an abstract class implementation:
@@ -39,7 +39,7 @@ final class ExampleAbstractInterfaceType extends AbstractInterfaceType implement
 ```
 
 When implementing a GraphQL InterfaceType using the abstract class `AbstractInterfaceType` you must
-determine the values ​​of the following properties:
+determine the values of the following properties:
 
 <table>
     <tr>
@@ -199,7 +199,7 @@ Field configuration options can be as follows:
                 <b>Required option</b> that defines the field type.
             </p>
             <p>
-                Valid values ​​can be short names of GraphQL types
+                Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
@@ -217,7 +217,7 @@ Field configuration options can be as follows:
         <td valign="top"><a id="fields-type-mode"><code>mode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Field type modifier bitmask. The following values ​​are possible:
+            Field type modifier bitmask. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -233,15 +233,15 @@ Field configuration options can be as follows:
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
-                    the field value is valid. Thus, the field values ​​can be:
+                    A modifier defining a list of values (array), with <code>null</code>
+                    the field value is valid. Thus, the field values can be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, the meanings
                     fields can be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -250,14 +250,14 @@ Field configuration options can be as follows:
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing
                     string or <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
@@ -317,7 +317,7 @@ Argument configuration options can be as follows:
                 <b>Required option</b> that specifies the argument type.
             </p>
             <p>
-                Valid values ​​can be short names of GraphQL types
+                Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
@@ -334,7 +334,7 @@ Argument configuration options can be as follows:
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Field type modifier bitmask. Possible values ​​for <a href="#fields-type-mode">are described above</a>.
+            Field type modifier bitmask. Possible values for <a href="#fields-type-mode">are described above</a>.
         </td>
     </tr>
     <tr>
@@ -354,7 +354,7 @@ Argument configuration options can be as follows:
         <td valign="top"><code>defaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Default argument value. Scalar and Enum php values ​​are allowed,
+            Default argument value. Scalar and Enum php values are allowed,
             and also <code>null</code>.
         </td>
     </tr>

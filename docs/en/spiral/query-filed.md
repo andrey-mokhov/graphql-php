@@ -43,7 +43,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Field name. If not specified, the method name without prefix is ​​used <code>get</code></td>
+        <td valign="top">Field name. If not specified, the method name without prefix is used <code>get</code></td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
@@ -55,7 +55,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Field type. Valid values ​​can be short names of GraphQL types
+                Field type. Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
@@ -80,7 +80,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Field type modifier. The constructor parameter is parsed by the library
-            if the field type is specified and does not contain modifiers. The following values ​​are possible:
+            if the field type is specified and does not contain modifiers. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -96,7 +96,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
@@ -104,7 +104,7 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, the field value
                     could be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -113,14 +113,14 @@ The php attribute `#[QueryField]` is applicable to class methods and has the fol
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing strings or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
@@ -217,7 +217,7 @@ The `QueryFieldInterface` interface requires the implementation of the following
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Should return the data type of the field. Valid values ​​can be short names
+                Should return the data type of the field. Valid values can be short names
                 GraphQL types (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type (<code>StringType::class</code>,
                 <code>IntType::class</code> and others).</p>
@@ -233,7 +233,7 @@ The `QueryFieldInterface` interface requires the implementation of the following
         <td valign="top"><a id="get-type-mode"><code>getMode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Should return the bitmask for the field's Query type modifier. The following values ​​are possible:
+            Should return the bitmask for the field's Query type modifier. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -249,7 +249,7 @@ The `QueryFieldInterface` interface requires the implementation of the following
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     The field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
@@ -257,7 +257,7 @@ The `QueryFieldInterface` interface requires the implementation of the following
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, the field value
                     could be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -266,14 +266,14 @@ The `QueryFieldInterface` interface requires the implementation of the following
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing strings or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>

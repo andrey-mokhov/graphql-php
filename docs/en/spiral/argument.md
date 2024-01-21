@@ -61,7 +61,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                The type of the field argument. Valid values ​​can be short names of GraphQL types
+                The type of the field argument. Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type (<code>StringType::class</code>,
                 <code>IntType::class</code> and others).
@@ -87,7 +87,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Argument type modifier. The constructor parameter is parsed by the library if
-            if the argument type is specified and does not contain modifiers. The following values ​​are possible:
+            if the argument type is specified and does not contain modifiers. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -103,7 +103,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     The field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
@@ -111,7 +111,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, by assigning the field
                     could be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -120,14 +120,14 @@ The `#[Argument]` attribute can have the following constructor parameters:
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing strings or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
@@ -145,7 +145,7 @@ The `#[Argument]` attribute can have the following constructor parameters:
         <td valign="top"><code>defaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Default argument value. Scalar and Enum php values ​​are allowed,
+            Default argument value. Scalar and Enum php values are allowed,
             and also <code>null</code>. If the parameter is not specified, the library will try to determine
             default value yourself (based on the parameter definition).
         </td>
@@ -155,10 +155,10 @@ The `#[Argument]` attribute can have the following constructor parameters:
 > :point_right: **Note!**
 >
 > When processing a GraphQL request, the corresponding php class method will be called. For parameters with
-> the `#[Argument]` attribute will use the values ​​from the GraphQL request, for the remaining parameters
-> values ​​from the DI container.
+> the `#[Argument]` attribute will use the values from the GraphQL request, for the remaining parameters
+> values from the DI container.
 >
-> You must be sure that the DI container can determine the values ​​of the method parameters.
+> You must be sure that the DI container can determine the values of the method parameters.
 >
 > ```php
 > final class SimpleService
@@ -239,7 +239,7 @@ arguments for fields such as:
 >
 > To define field arguments instead of implementing the `ArgumentInterface` interface
 > use the `Andi\GraphQL\Argument\Argument` class, it already implements auxiliary
-> interfaces, and the required values ​​can be set in the constructor.
+> interfaces, and the required values can be set in the constructor.
 
 An example implementation of the `ArgumentInterface` interface (see the `getArguments` method):
 
@@ -322,7 +322,7 @@ The <a id="argument-interface">`ArgumentInterface`</a> interface requires the im
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Must return the type of the argument. Valid values ​​can be GraphQL short names
+                Must return the type of the argument. Valid values can be GraphQL short names
                 types (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type (<code>StringType::class</code>,
                 <code>IntType::class</code> and others).
@@ -339,7 +339,7 @@ The <a id="argument-interface">`ArgumentInterface`</a> interface requires the im
         <td valign="top"><code>getMode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Must return a bitmask for the argument type modifier. The following values ​​are possible:
+            Must return a bitmask for the argument type modifier. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -355,15 +355,15 @@ The <a id="argument-interface">`ArgumentInterface`</a> interface requires the im
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
-                    the argument value is valid. Thus, the argument values ​​can be:
+                    A modifier defining a list of values (array), with <code>null</code>
+                    the argument value is valid. Thus, the argument values can be:
                     <code>null</code> value, empty array, array with numeric or
                     <code>null</code> values.<br />
                     Equivalent: <code>[Int]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the argument value is valid, but excluded in values. Thus, the meanings
                     arguments can be: <code>null</code> value or non-empty list with numeric values
                     values.<br />
@@ -372,14 +372,14 @@ The <a id="argument-interface">`ArgumentInterface`</a> interface requires the im
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     argument value, but allowing an empty list or a list containing
                     numeric or <code>null</code> values.<br />
                     Equivalent: <code>[Int]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier that defines a non-empty list of numeric values ​​(an array of numbers).<br />
+                    A modifier that defines a non-empty list of numeric values (an array of numbers).<br />
                     Equivalent: <code>[Int!]!</code>
                 </dd>
             </dl>
@@ -390,7 +390,7 @@ The <a id="argument-interface">`ArgumentInterface`</a> interface requires the im
         <td valign="top"><code>bool</code></td>
         <td valign="top">
             Should return <code>true</code> if the argument has a default value. For determining
-            default values ​​should implement the interface <code>DefaultValueAwareInterface</code>
+            default values should implement the interface <code>DefaultValueAwareInterface</code>
             (see <a href="#default-value-aware-interface">below</a>).
         </td>
     </tr>

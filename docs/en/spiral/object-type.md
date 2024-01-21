@@ -261,7 +261,7 @@ The `InterfacesAwareInterface` interface requires the implementation of a single
 #### <a id="resolve-field-aware-interface">ResolveFieldAwareInterface</a>
 
 The `Andi\GraphQL\Definition\Type\ResolveFieldAwareInterface` interface requires a method implementation,
-used to calculate the values ​​of fields of an ObjectType (if the field does not have its own resolver):
+used to calculate the values of fields of an ObjectType (if the field does not have its own resolver):
 
 ```php
 namespace App\GraphQL\Type;

@@ -21,7 +21,7 @@ return [
 ];
 ```
 
-The `'additionalTypes'` configuration option must be an array and contain values ​​with numeric or
+The `'additionalTypes'` configuration option must be an array and contain values with numeric or
 string keys. If the key is a number, then the value is expected to be a string - the name of the class,
 defining a GraphQL type. If the key is a string, then the key is interpreted by the library as a class name,
 defining a GraphQL type, and the key value(s) as an alias(s) of the GraphQL type, and aliases can
@@ -55,14 +55,14 @@ in class `Andi\GraphQL\Type\DateTime`.
 
 The library includes a scalar GraphQL type `DateTime` defined in the class
 `Andi\GraphQL\Type\DateTime`. When using this type in a GraphQL request (as an argument
-or fields of an InputObjectType), it is acceptable to use string values ​​in the following formats:
+or fields of an InputObjectType), it is acceptable to use string values in the following formats:
 - `Y-m-d` - record the day in ISO-8601 format, in this case the hours, minutes and seconds will be set in
   zero value, and time zone `UTC`;
 - `Y-m-d\TH:i:s` - record date-time in ISO-8601 format without time zone, in this case time zone
   will be set to `UTC`;
 - `Y-m-d\TH:i:sP` - full record of the date and time with the specified time zone in ISO-8601 format.
 
-At the same time, for parameters of php methods, values ​​of class properties, the string passed in the GraphQL request
+At the same time, for parameters of php methods, values of class properties, the string passed in the GraphQL request
 the value will be converted to a `\DateTimeImmutable` object.
 
 > :point_right: **Important!** :point_left:
@@ -78,9 +78,9 @@ connect using one of the methods indicated at the beginning of this article.
 
 The library includes a scalar GraphQL type `Date` defined in the class
 `Andi\GraphQL\Type\Date`. When using this type in a GraphQL request (as an argument
-or fields of an incoming object type), string values ​​of the `Y-m-d` format are acceptable.
+or fields of an incoming object type), string values of the `Y-m-d` format are acceptable.
 
-At the same time, for parameters of php methods, values ​​of class properties, the string passed in the GraphQL request
+At the same time, for parameters of php methods, values of class properties, the string passed in the GraphQL request
 the value will be converted to a `\DateTimeImmutable` object. In this case, hours, minutes and seconds will have
 zero values, and the time zone is `UTC`.
 

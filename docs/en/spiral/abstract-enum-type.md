@@ -2,7 +2,7 @@
 
 The abstract class `Andi\GraphQL\Type\AbstractEnumType` allows you to define GraphQL enum types
 without the need to implement methods of auxiliary interfaces. Most interfaces are already
-implemented in an abstract class, you just need to set the values ​​of its properties to determine
+implemented in an abstract class, you just need to set the values of its properties to determine
 the result of the implemented methods.
 
 An example of an abstract class implementation:
@@ -27,7 +27,7 @@ final class CoinSides extends AbstractEnumType
 ```
 
 When implementing a GraphQL enum type using the abstract class `AbstractEnumType` you must
-determine the values ​​of the following properties: 
+determine the values of the following properties:
 
 <table>
     <tr>
@@ -52,7 +52,7 @@ determine the values ​​of the following properties:
         <td valign="top"><code>$values</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>List of enum items ​​of an enumerated type. <b>Required</b>, must be defined.</p>sc
+            <p>List of enum items of an enumerated type. <b>Required</b>, must be defined.</p>sc
             <p>Requirements for elements of an iterable property are below.</p>
         </td>
     </tr>

@@ -50,10 +50,10 @@ The `#[EnumType]` attribute can contain the following constructor parameters:
 
 > :point_right: **Note!**
 >
-> Values ​​for a GraphQL EnumType are **all** (without exception) values
+> Values for a GraphQL EnumType are **all** (without exception) values
 > corresponding php enum.
 
-Enum values ​​can have the `Andi\GraphQL\Attribute\EnumValue` attribute set.
+Enum values can have the `Andi\GraphQL\Attribute\EnumValue` attribute set.
 
 The `#[EnumValue]` attribute can contain the following constructor parameters:
 
@@ -84,7 +84,7 @@ The `#[EnumValue]` attribute can contain the following constructor parameters:
         <td valign="top">
             If the parameter is specified, then in the GraphQL schema this value will be marked as deprecated. As
             the reason will be indicated by the value of this parameter. If the parameter is not specified, but in docBlock
-            php values ​​contain the <code>@deprecated</code> tag, then the comment of this tag will be used.
+            php values contain the <code>@deprecated</code> tag, then the comment of this tag will be used.
         </td>
     </tr>
 </table>
@@ -173,10 +173,10 @@ The `EnumTypeInterface` interface requires the following methods to be implement
     </tr>
 </table>
 
-Values ​​of a GraphQL enum type must be implemented using an interface<br />
+Values of a GraphQL enum type must be implemented using an interface<br />
 ` Andi\GraphQL\Definition\Field\EnumValueInterface`.
 
-> :point_right: **Рекомендация!**
+> :point_right: **Recommendation!**
 >
 > To define the enum type value, use the class
 > [`Andi\GraphQL\Field\EnumValue`](abstract-enum-type.md#enum-value). It has already been implemented

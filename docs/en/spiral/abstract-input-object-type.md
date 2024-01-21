@@ -1,6 +1,6 @@
 # Abstract class AbstractInputObjectType
 
-The abstract class Andi\GraphQL\Type\AbstractInputObjectType allows you to define Input Object Type
+The abstract class `Andi\GraphQL\Type\AbstractInputObjectType` allows you to define InputObjectType
 without having to implement helper interface methods.
 Most interfaces are already implemented in the abstract class, so you just need to define its properties,
 to determine the results of implemented methods.
@@ -43,8 +43,8 @@ final class RegistrationRequest extends AbstractInputObjectType implements Parse
 }
 ```
 
-When implementing a GraphQL Input Object Type using the abstract class `AbstractInputObjectType`
-you need to define the values ​​of the following properties:
+When implementing a GraphQL InputObjectType using the abstract class `AbstractInputObjectType`
+you need to define the values of the following properties:
 
 <table>
     <tr>
@@ -61,7 +61,7 @@ you need to define the values ​​of the following properties:
         <td valign="top"><code>$description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Description of the Input Object Type as displayed in the GraphQL schema.
+            Description of the InputObjectType as displayed in the GraphQL schema.
             Don't define a value unless a description is needed.
         </td>
     </tr>
@@ -69,7 +69,7 @@ you need to define the values ​​of the following properties:
         <td valign="top"><code>$fields</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>List of fields of the Input Object Type.</p>
+            <p>List of fields of the InputObjectType.</p>
             <p>
                 Requirements for elements of an iterable property
                 <a href="#field-definition">described below</a>.
@@ -80,11 +80,11 @@ you need to define the values ​​of the following properties:
 
 ### Additional Interfaces
 
-A GraphQL Input Object Type, declared using the abstract class `AbstractInputObjectType`,
+A GraphQL InputObjectType, declared using the abstract class `AbstractInputObjectType`,
 already implements [auxiliary interface](input-object-type.md#input-object-type-interfaces)
 [`FieldsAwareInterface`](Input-Object-Type.md#fields-aware-interface).
 
-To extend the capabilities of an GraphQL Input Object Type implemented using an abstract class
+To extend the capabilities of an GraphQL InputObjectType implemented using an abstract class
 `AbstractInputObjectType`, you may need to implement the following interface:
 
 <dl>
@@ -167,7 +167,7 @@ Field configuration options can be as follows:
                 <b>Required option</b>that defines the field type.
             </p>
             <p>
-                Valid values ​​can be short names of GraphQL types
+                Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code> etc) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
@@ -200,15 +200,15 @@ Field configuration options can be as follows:
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
-                    field value being valid. Thus, the field values ​​can be:
+                    A modifier defining a list of values (array), with <code>null</code>
+                    field value being valid. Thus, the field values can be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     field value being valid but excluded in values. Thus, the meanings
                     fields can be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -217,14 +217,14 @@ Field configuration options can be as follows:
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing
                     string or <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
@@ -247,7 +247,7 @@ Field configuration options can be as follows:
         <td valign="top"><code>defaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Default field value. Scalar and Enum php values ​​are allowed,
+            Default field value. Scalar and Enum php values are allowed,
             and also <code>null</code>.
         </td>
     </tr>

@@ -70,7 +70,7 @@ The `#[ObjectField]` attribute can have the following constructor parameters:
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Field type. Valid values ​​can be short names of GraphQL types
+                Field type. Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
@@ -95,7 +95,7 @@ The `#[ObjectField]` attribute can have the following constructor parameters:
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Field type modifier. The constructor parameter is parsed by the library if
-            the field type is specified and does not contain modifiers. The following values ​​are possible:
+            the field type is specified and does not contain modifiers. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -111,7 +111,7 @@ The `#[ObjectField]` attribute can have the following constructor parameters:
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
@@ -119,7 +119,7 @@ The `#[ObjectField]` attribute can have the following constructor parameters:
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, the field value
                     could be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -128,14 +128,14 @@ The `#[ObjectField]` attribute can have the following constructor parameters:
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing strings or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
@@ -159,7 +159,7 @@ outlined in [Field Argument Definition](argument.md#argument-via-attribute).
 > :point_right: **Note!**
 >
 > The library ignores the scope of properties/methods, properties/methods marked with the attribute will
-> called to determine the values ​​of fields.
+> called to determine the values of fields.
 
 
 > :point_right: **Important!** :point_left:
@@ -296,7 +296,7 @@ The `ObjectFieldInterface` interface requires the implementation of the followin
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Should return the data type of the field. Valid values ​​can be short names
+                Should return the data type of the field. Valid values can be short names
                 GraphQL types (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type (<code>StringType::class</code>,
                 <code>IntType::class</code> and others).</p>
@@ -312,7 +312,7 @@ The `ObjectFieldInterface` interface requires the implementation of the followin
         <td valign="top"><a id="get-type-mode"><code>getMode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Should return the bitmask for the field type modifier. The following values ​​are possible:
+            Should return the bitmask for the field type modifier. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -328,7 +328,7 @@ The `ObjectFieldInterface` interface requires the implementation of the followin
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
@@ -336,7 +336,7 @@ The `ObjectFieldInterface` interface requires the implementation of the followin
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, the field value
                     could be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -345,14 +345,14 @@ The `ObjectFieldInterface` interface requires the implementation of the followin
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing strings or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
