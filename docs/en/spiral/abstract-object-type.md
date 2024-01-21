@@ -1,11 +1,11 @@
-# Абстрактный класс AbstractObjectType
+# Abstract class AbstractObjectType
 
-Абстрактный класс `Andi\GraphQL\Type\AbstractObjectType` позволяет определять объектные GraphQL типы
-без необходимости реализации методов вспомогательных интерфейсов. Большинство интерфейсов уже
-реализовано в абстрактном классе, вам достаточно задать значения его свойств, чтобы определить
-результат реализованных методов.
+The abstract class `Andi\GraphQL\Type\AbstractObjectType` allows you to define GraphQL object types
+without the need to implement methods of auxiliary interfaces. Most interfaces are already
+implemented in an abstract class, you just need to set the values ​​of its properties to determine
+the result of the implemented methods.
 
-Пример реализации абстрактного класса:
+An example of an abstract class implementation:
 
 ```php
 namespace App\GraphQL\Type;
@@ -47,40 +47,40 @@ final class ExampleAbstractObjectType extends AbstractObjectType implements Reso
 }
 ```
 
-При реализации объектного GraphQL типа с помощью абстрактного класса `AbstractObjectType` необходимо
-определить значения следующих свойств:
+When implementing a GraphQL ObjectType using the abstract class `AbstractObjectType` you must
+determine the values ​​of the following properties:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>$name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Имя объектного типа, <b>обязательно</b> должно быть определено.</td>
+        <td valign="top">The name of the ObjectType, <b>required</b> must be defined.</td>
     </tr>
     <tr>
         <td valign="top"><code>$description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание объектного типа, отображаемое в GraphQL схеме.
-            Не определяйте значение, если описание не требуется.
+            Description of the ObjectType as displayed in the GraphQL schema.
+            Do not define a value unless a description is required.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>$fields</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>Список полей объектного типа.</p>
+            <p>List of fields of an ObjectType.</p>
             <p>
-                Требования к элементам итерируемой структуры свойства
-                <a href="#field-definition">изложены ниже</a>.
+                Requirements for elements of an iterable property structure
+                <a href="#field-definition">are set out below</a>.
             </p>
             <p>
-                Значение свойства допустимо не определять в том случае, если вы уверены, что объектный
-                тип будет расширен (см. <a href="additional-field.md">Расширение типов</a>).
+                It is permissible not to define a property value if you are sure that the object
+                the type will be expanded (see <a href="additional-field.md">Type expansion</a>).
             </p>
         </td>
     </tr>
@@ -88,141 +88,141 @@ final class ExampleAbstractObjectType extends AbstractObjectType implements Reso
         <td valign="top"><code>$interfaces</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            <p>Список реализованных объектным типом интерфейсных GraphQL типов.</p>
-            <p>Каждый элемент итерируемой структуры может быть:</p>
+            <p>List of GraphQL InterfaceType implemented by the ObjectType.</p>
+            <p>Each element of the iterable structure can be:</p>
             <ul>
                 <li>
-                    кратким именем интерфейсного GraphQL типа
-                    (например: <code>'UserInterface'</code>)
+                    short name of the GraphQL InterfaceType
+                    (for example: <code>'UserInterface'</code>)
                 </li>
                 <li>
-                    именем php класса, реализующего соответствующий интерфейсный GraphQL тип
-                    (например: <code>UserInterface::class</code>).
+                    the name of the php class that implements the corresponding GraphQL InterfaceType
+                    (for example: <code>UserInterface::class</code>).
                 </li>
             </ul>
-            <p>Не определяйте значение свойства, если объектный тип не реализует интерфейсные типы.</p>
+            <p>Do not define a property value unless the ObjectType implements InterfaceType.</p>
         </td>
     </tr>
 </table>
 
-### Вспомогательные интерфейсы
+### Additional interfaces
 
-Объектный GraphQL тип, объявленный с помощью абстрактного класса `AbstractObjectType` уже реализует
-[вспомогательные интерфейсы](object-type.md#object-type-interfaces)
+A GraphQL ObjectType declared using the abstract class `AbstractObjectType` already implements
+[auxiliary interfaces](object-type.md#object-type-interfaces)
 [`FieldsAwareInterface`](object-type.md#fields-aware-interface),
 [`InterfacesAwareInterface`](object-type.md#interfaces-aware-interface),
 [`DynamicObjectTypeInterface`](object-type.md#dynamic-object-type-interface).
 
-Для расширения возможностей объектного GraphQL типа, реализованного с помощью абстрактного класса
-`AbstractObjectType`, вам может потребоваться реализация следующих интерфейсов:
+To extend the capabilities of a GraphQL ObjectType implemented using an abstract class
+`AbstractObjectType`, you may need to implement the following interfaces:
 
 <dl>
     <dt><a href="object-type.md#resolve-field-aware-interface">ResolveFieldAwareInterface</a></dt>
     <dd>
-        Позволяет указать метод, используемый в объектном типе по умолчанию для определения
-        значений полей.
+        Allows you to specify the default method used in an ObjectType to define
+        field values.
     </dd>
     <dt><a href="object-type.md#is-type-of-aware-interface">IsTypeOfAwareInterface</a></dt>
-    <dd>Позволяет установить, относятся ли анализируемые данные к объектному типу.</dd>
+    <dd>Allows you to determine whether the data being analyzed is of an object type.</dd>
 </dl>
 
-## <a id="field-definition">Определение итерируемой структуры `$fields`</a>
+## <a id="field-definition">Definition of the iterable structure `$fields`</a>
 
 ```php
-// Каждый элемент итерируемой структуры $fields может быть:
+// Each element of the $fields iterable structure can be:
 $this->fields = [
-    // экземпляром класса Webonyx\FieldDefinition
+    // an instance of the Webonyx\FieldDefinition class
     new Webonyx\FieldDefinition([...]),
 
-    // экземпляром класса, реализующего интерфейс ObjectFieldInterface
+    // an instance of a class that implements the ObjectFieldInterface interface
     new class implements ObjectFieldInterface {...},
 
-    // ключ => значение. Данная структура интерпретируется следующим образом:
-    // ключ - имя поля; значение - тип поля.
+    // key => value. This structure is interpreted as follows:
+    // key - field name; value - field type.
     'firstname' => 'String',
 
-    // ассоциативным массивом в виде конфигурации поля
+    // associative array in the form of a field configuration
     'fieldName' => [
-        // Если опция конфигурации 'name' опущена (как в этом примере), в качестве имени поля будет
-        // использован ключ структуры, в данном случае 'fieldName'.
+        // If the 'name' configuration option is omitted (as in this example), the field name will be
+        // structure key used, in this case 'fieldName'.
         // 'name' => 'displayName',
 
-        // Обязательная опция, определяющая тип поля. Допустимо краткое имя GraphQL типа,
-        // или имя класса, реализующего соответствующий GraphQL тип.
+        // Required option that determines the field type. The short name of the GraphQL type is acceptable,
+        // or the name of a class that implements the corresponding GraphQL type.
         'type' => 'String',
 
-        // Модификатор типа.
+        // Type modifier.
         'mode' => TypeAwareInterface::IS_REQUIRED,
 
-        // Описание поля, используется для отображения в GraphQL схеме. Данная опция не обязательна.
+        // Description of the field used for display in the GraphQL schema. This option is optional.
         'description' => 'Field description',
 
-        // Данная опция не обязательна. Следует определить значение опции, если в GraphQL схеме
-        // необходимо указать причину по которой данное поле использовать не рекомендуется.
-        'deprecationReason' => 'This field is deprecated. Do not use it.',
+        // This option is optional. You should define the value of the option if the GraphQL schema
+        // you must indicate the reason why this field is not recommended.
+        'deprecationReason' => 'This field is deprecated. Don't use it.',
 
-        // Определяет callable структуру, ответственную за вычисление значения поля.
-        // Может быть:
-        //   - Closure объектом
-        //   - строка вида `ClassName::publicStaticMethod`
-        //   - массив вида ['ClassName', 'publicStaticMethod']
-        //   - массив вида [$object, 'publicMethod']
-        //   - массив вида [self::class, 'anyMethod']
-        //   - массив вида [$this, 'anyMethod']
-        //   - строка вида 'SelfClassName::methodName'
-        //   - строка вида 'methodName'
+        // Defines a callable structure responsible for calculating the value of the field.
+        // May be:
+        //   - Closure object
+        // - a string like `ClassName::publicStaticMethod`
+        // - array of the form ['ClassName', 'publicStaticMethod']
+        // - array of the form [$object, 'publicMethod']
+        // - array of the form [self::class, 'anyMethod']
+        // - array of the form [$this, 'anyMethod']
+        // - a string like 'SelfClassName::methodName'
+        // - a string like 'methodName'
         //
-        // AbstractObjectType игнорирует ограничение видимости методов, из предложенной
-        // структуры будет создано замыкание, которое используется для вычисления значения поля.
+        // AbstractObjectType ignores the limitation of visibility of methods from the proposed
+        // the structure will create a closure that is used to calculate the value of the field.
         //
-        // При определении значения поля замыкание будут вызвано со следующими параметрами:
+        // When defining the field's value, the closure will be called with the following parameters:
         // mixed $objectValue, array $args, mixed $context, Webonyx\ResolveInfo $info
         'resolve' => [$this, 'methodName'],
 
-        // Определяет callable структуру, ответственную за определение сложности вычисления данных.
-        // Возможные значения аналогичны определению resolve.
+        // Defines a callable structure responsible for determining the complexity of data computation.
+        // Possible values ​​are the same as the definition of resolve.
         //
-        // При определении сложности вычисления поля замыкание будут вызвано со следующими параметрами:
+        // When determining the complexity of field calculation, the closure will be called with the following parameters:
         // int $childrenComplexity, array $args
         'complexity' => [$this, 'methodName'],
 
-        // Список аргументов поля. Допустим iterable тип данных. Данная опция не обязательна.
-        // Каждый аргумент может быть:
+        // List of field arguments. Let's assume iterable data type. This option is optional.
+        // Each argument can be:
         'arguments' => [
-            // объектом, реализующим интерфейс ArgumentInterface
+            // an object that implements the ArgumentInterface interface
             new class implements ArgumentInterface {...},
 
-            // объектом, наследующий класс Webonyx\Type, при этом ключ будет использован как имя
-            // аргумента, а значение - тип аргумента
+            // an object that inherits the Webonyx\Type class, and the key will be used as a name
+            // argument, and the value is the argument type
             'name' => new Webonyx\Type::string(),
 
-            // ключ => значение, Данная структура интерпретируется следующим образом:
-            // ключ - имя аргумента; значение - тип аргумента.
+            // key => value. This structure is interpreted as follows:
+            // key - argument name; value - argument type.
             'separator' => 'String',
 
-            // ассоциативным массивом в виде конфигурации аргумента
+            // associative array as argument configuration
             'argumentName' => [
-                // Если опция конфигурации 'name' опущена (как в этом примере), в качестве имени аргумента
-                // будет использован ключ структуры, в данном случае 'argumentName'.
+                // If the 'name' configuration option is omitted (as in this example), as the argument name
+                // the structure key will be used, in this case 'argumentName'.
                 // 'name' => 'input',
 
-                // Обязательная опция, определяющая тип аргумента. Допустимо краткое имя GraphQL типа,
-                // или имя класса, реализующего соответствующий GraphQL тип, либо экземпляр класса,
-                // реализующий абстрактный класс Webonyx\Type.
+                // Required option that determines the type of the argument. The short name of the GraphQL type is acceptable,
+                // or the name of a class that implements the corresponding GraphQL type, or an instance of a class,
+                // implementing the abstract class Webonyx\Type.
                 'type' => 'String',
 
-                // Модификатор типа.
+                // Type modifier.
                 'mode' => TypeAwareInterface::IS_REQUIRED,
 
-                // Описание аргумента, используется для отображения в GraphQL схеме. Данная опция не обязательна.
+                // Description of the argument, used for display in the GraphQL schema. This option is optional.
                 'description' => 'Field description',
 
-                // Данная опция не обязательна. Следует определить значение опции, если в GraphQL схеме
-                // необходимо указать причину по которой данный аргумент использовать не рекомендуется.
-                'deprecationReason' => 'This field is deprecated. Do not use it.',
+                // This option is optional. You should define the value of the option if the GraphQL schema
+                // you must indicate the reason why this argument is not recommended.
+                'deprecationReason' => 'This field is deprecated. Don't use it.',
 
-                // Значение аргумента, используемое по умолчанию. Если аргумент не имеет значения по умолчанию,
-                // не определяйте данную опцию. т.к. null значение, это тоже значение по умолчанию.
+                // Default argument value. If the argument does not have a default value,
+                // do not define this option. because null value is also the default value.
                 'defaultValue' => 'hello',
             ],
         ],
@@ -230,25 +230,25 @@ $this->fields = [
 ];
 ```
 
-Итого: защищенное свойство `$fields`, имеет итерируемую структуру. Может содержать следующие элементы:
-- экземпляр класса `Webonyx\FieldDefinition`;
-- экземпляр класса, реализующего интерфейс `ObjectFieldInterface`;
-- строковые `'ключ' => 'значение'`, где ключ будет использован как имя поля, а значение - как тип поля;
-- ассоциативный массив опций конфигурации поля.
+Total: the protected property `$fields` has an iterable structure. May contain the following elements:
+- an instance of the class `Webonyx\FieldDefinition`;
+- an instance of a class that implements the `ObjectFieldInterface` interface;
+- string `'key' => 'value'`, where the key will be used as the field name, and the value as the field type;
+- associative array of field configuration options.
 
-Опции конфигурации поля могут быть следующими:
+Field configuration options can be as follows:
 
 <table>
     <tr>
-        <th>Опция</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Option</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя поля. Если не указано, в качестве имени будет использован ключ итерируемой структуры.
+            Field name. If not specified, the key of the iterable structure will be used as the name.
         </td>
     </tr>
     <tr>
@@ -256,16 +256,16 @@ $this->fields = [
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                <b>Обязательная опция</b>, определяющая тип поля.
+                <b>Required option</b>that defines the field type.
             </p>
             <p>
-                Допустимыми значениями могут быть краткие имена GraphQL типов
-                (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип
-                (<code>StringType::class</code>, <code>IntType::class</code> и другие).
+                Valid values ​​can be short names of GraphQL types
+                (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type
+                (<code>StringType::class</code>, <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом GraphQL поля могут быть: <a href="scalar-type.md"><code>ScalarType</code></a>,
+                The GraphQL field type can be: <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="object-type.md"><code>ObjectType</code></a>,
                 <a href="interface-type.md"><code>InterfaceType</code></a>,
@@ -277,48 +277,48 @@ $this->fields = [
         <td valign="top"><a id="fields-type-mode"><code>mode</code></a></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Битовая маска модификатора типа поля. Возможны следующие значения:
+            Field type modifier bitmask. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
-                    значения поля.<br />
-                    Эквивалент: <code>String</code>
+                    Without modifiers, i.e. for example strings or <code>null</code> are acceptable
+                    field values.<br />
+                    Equivalent: <code>String</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значением поля будет
-                    строка.<br />
-                    Эквивалент: <code>String!</code>
+                    Modifier excluding <code>null</code> value, i.e. the field value will be
+                    line.<br />
+                    Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо. Таким образом значениями поля могут быть:
-                    <code>null</code> значение, пустой массив, массив со строковыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[String]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    The field value is valid. Thus, the field values ​​can be:
+                    <code>null</code> value, empty array, array with string or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачениями
-                    поля могут быть: <code>null</code> значение или непустой список со строковыми
-                    значениями.<br />
-                    Эквивалент: <code>[String!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid but excluded in values. Thus, the meanings
+                    fields can be: <code>null</code> value or non-empty list with strings
+                    values.<br />
+                    Equivalent: <code>[String!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение поля, но позволяющий пустой список или список содержащий
-                    строковые или <code>null</code> значения.<br />
-                    Эквивалент: <code>[String]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    field value, but allowing an empty list or a list containing
+                    string or <code>null</code> values.<br />
+                    Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
-                    Эквивалент: <code>[String!]!</code>
+                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
         </td>
@@ -326,14 +326,14 @@ $this->fields = [
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Описание поля объектного типа.</td>
+        <td valign="top">Description of the ObjectType field.</td>
     </tr>
     <tr>
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если опция задана, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
-            причины будет указано значение данной опции.
+            If the option is set, then in the GraphQL schema this field will be marked deprecated. As
+            The reasons for this will indicate the value of this option.
         </td>
     </tr>
     <tr>
@@ -341,29 +341,29 @@ $this->fields = [
         <td valign="top"><code>callable</code> | <code>array</code> | <code>string</code></td>
         <td valign="top">
             <p>
-                Рекомендуется определять <code>callable</code> структуру, даже в том случае, если
-                <code>callable</code> структура видна только внутри класса.
+                It is recommended to define a <code>callable</code> structure, even if
+                The <code>callable</code> structure is visible only within the class.
             </p>
-            <p>Допустимо определять как:</p>
+            <p>It is acceptable to define it as:</p>
             <ul>
                 <li>
-                    массив, имитирующий <code>callable</code> структуру.<br />
-                    Например: <code>[self::class, 'method']</code>, где <code>method</code> не является
-                    статичным методом;
+                    an array simulating a <code>callable</code> structure.<br />
+                    For example: <code>[self::class, 'method']</code>, where <code>method</code> is not
+                    static method;
                 </li>
                 <li>
-                    строка - имя метода класса.
+                    string - the name of the class method.
                 </li>
             </ul>
             <p>
-                Абстрактный класс постарается создать замыкание из предложенной структуры. При вычислении
-                значения поля замыкание будет вызвано со следующими параметрами:
+                The abstract class will try to create a closure from the proposed structure. When calculating
+                field values, the closure will be called with the following parameters:
             </p>
             <ul>
-                <li><code>mixed $objectValue</code> - структура, ассоциированная с объектным типом;</li>
-                <li><code>array $args</code> - список аргументов, указанных в GraphQL запросе;</li>
-                <li><code>mixed $context</code> - контекст запроса;</li>
-                <li><code>Webonyx\ResolveInfo $info</code> - информация о запрашиваемых данных.</li>
+                <li><code>mixed $objectValue</code> - structure associated with the ObjectType;</li>
+                <li><code>array $args</code> - list of arguments specified in the GraphQL request;</li>
+                <li><code>mixed $context</code> - request context;</li>
+                <li><code>Webonyx\ResolveInfo $info</code> - information about the requested data.</li>
             </ul>
         </td>
     </tr>
@@ -372,15 +372,15 @@ $this->fields = [
         <td valign="top"><code>callable</code> | <code>array</code> | <code>string</code></td>
         <td valign="top">
             <p>
-                Допустимы определения аналогичные опции <code>resolve</code>.
+                Valid definitions are similar to the <code>resolve</code> option.
             </p>
             <p>
-                Абстрактный класс постарается создать замыкание из предложенной структуры. При определении
-                сложности вычисления поля замыкание будет вызвано со следующими параметрами:
+                The abstract class will try to create a closure from the proposed structure. When determining
+                field calculation complexity, the closure will be called with the following parameters:
             </p>
             <ul>
-                <li><code>int $childrenComplexity</code> - сложность, рассчитанная для дочерних элементов;</li>
-                <li><code>array $args</code> - список аргументов, указанных в GraphQL запросе.</li>
+                <li><code>int $childrenComplexity</code> - complexity calculated for child elements;</li>
+                <li><code>array $args</code> - list of arguments specified in the GraphQL request.</li>
             </ul>
         </td>
     </tr>
@@ -388,33 +388,33 @@ $this->fields = [
         <td valign="top"><code>arguments</code></td>
         <td valign="top"><code>iterable</code></td>
         <td valign="top">
-            Список аргументов поля. Итерируемая структура может быть пустой. Возможные способы конфигурации
-            списка аргументов <a href="#field-arguments">описаны ниже</a>.
+            List of field arguments. The iterable structure may be empty. Possible configuration methods
+            lists of <a href="#field-arguments">arguments are described below</a>.
         </td>
     </tr>
 </table>
 
-### <a id="field-arguments">Опция конфигурации `arguments`</a>
+### <a id="field-arguments">Configuration option `arguments`</a>
 
-Опция `arguments` может иметь итерируемую структуру. Каждый элемент которой может быть:
-- экземпляром класса `ArgumentInterface`;
-- экземпляром класса, наследующего `Webonyx\Type`, где ключ определит имя аргумента, а значение его тип;
-- вида `'ключ' => 'значение'`, где ключ будет использован как имя аргумента, а значение - тип аргумента;
-- ассоциативный массив опций конфигурации аргумента.
+The `arguments` option can have an iterable structure. Each element of which can be:
+- an instance of the `ArgumentInterface` class;
+- an instance of a class that inherits `Webonyx\Type`, where the key determines the name of the argument, and the value its type;
+- the form `'key' => 'value'`, where the key will be used as the name of the argument, and the value - the type of the argument;
+- an associative array of argument configuration options.
 
-Опции конфигурации аргумента могут быть следующими:
+Argument configuration options can be as follows:
 
 <table>
     <tr>
-        <th>Опция</th>
-        <th>Тип</th>
-        <th>Описание</th>
+        <th>Option</th>
+        <th>Type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя аргумента. Если не указано, в качестве имени будет использован ключ итерируемой структуры.
+            Argument name. If not specified, the key of the iterable structure will be used as the name.
         </td>
     </tr>
     <tr>
@@ -422,16 +422,16 @@ $this->fields = [
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                <b>Обязательная опция</b>, определяющая тип аргумента.
+                <b>Required option</b> that specifies the argument type.
             </p>
             <p>
-                Допустимыми значениями могут быть краткие имена GraphQL типов
-                (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип
-                (<code>StringType::class</code>, <code>IntType::class</code> и другие).
+                Valid values ​​can be short names of GraphQL types
+                (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type
+                (<code>StringType::class</code>, <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом аргумента могут быть:
+                The argument type can be:
                 <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="input-object-type.md"><code>InputObjectType</code></a>.
@@ -442,28 +442,28 @@ $this->fields = [
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Битовая маска модификатора типа поля. Возможные значения <a href="#fields-type-mode">описаны выше</a>.
+            Field type modifier bitmask. Possible values ​​for <a href="#fields-type-mode">are described above</a>.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Описание аргумента.</td>
+        <td valign="top">Description of the argument.</td>
     </tr>
     <tr>
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если опция задана, то в GraphQL схеме аргумент будет помечен устаревшим. В качестве
-            причины будет указано значение данной опции.
+            If the option is set, the argument will be marked as deprecated in the GraphQL schema. As
+            The reasons for this will indicate the value of this option.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>defaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Значение аргумента по умолчанию. Допустимы скалярные и Enum php-значения,
-            а также <code>null</code>.
+            Default argument value. Scalar and Enum php values ​​are allowed,
+            and also <code>null</code>.
         </td>
     </tr>
 </table>
