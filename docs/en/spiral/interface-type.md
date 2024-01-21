@@ -216,7 +216,7 @@ associated with the analyzed structure (the first parameter of the method).
 
 #### <a id="dynamic-object-type-interface">DynamicObjectTypeInterface</a>
 
-Interface Andi\GraphQL\Type\DynamicObjectTypeInterface allows you to extend InterfaceType an additional fields
+Interface `Andi\GraphQL\Type\DynamicObjectTypeInterface` allows you to extend InterfaceType an additional fields
 Interface GraphQL generic complex elements known in other classes
 (this mechanic is described in detail in [Type extending](additional-field.md)).
 
