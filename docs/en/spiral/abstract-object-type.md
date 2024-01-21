@@ -80,7 +80,7 @@ determine the values ​​of the following properties:
             </p>
             <p>
                 It is permissible not to define a property value if you are sure that the object
-                the type will be extending (see <a href="additional-field.md">Type expansion</a>).
+                the type will be extending (see <a href="additional-field.md">Type extension</a>).
             </p>
         </td>
     </tr>
@@ -163,7 +163,7 @@ $this->fields = [
 
         // Defines a callable structure responsible for calculating the value of the field.
         // May be:
-        //   -Closure object
+        // - Closure object
         // - a string like `ClassName::publicStaticMethod`
         // - array of the form ['ClassName', 'publicStaticMethod']
         // - array of the form [$object, 'publicMethod']
