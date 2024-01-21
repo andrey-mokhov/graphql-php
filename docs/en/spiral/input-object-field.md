@@ -1,14 +1,14 @@
-# Определение полей входящего объектного GraphQL типа
+# Defining fields of an InputObjectType
 
-Определение поля объектного GraphQL типа возможно:
-- с помощью атрибута `Andi\GraphQL\Attribute\InputObjectField` ([ссылка](#input-object-field-via-attribute));
-- путем реализации интерфейса `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` ([ссылка](#input-object-field-via-interface));
+Defining a field of a GraphQL ObjectType is possible:
+- using the `Andi\GraphQL\Attribute\InputObjectField` attribute ([link](#input-object-field-via-attribute));
+- by implementing the interface `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` ([link](#input-object-field-via-interface));
 
-## <a id="input-object-field-via-attribute">Определение с помощью атрибута</a>
+## <a id="input-object-field-via-attribute">Definition via attribute</a>
 
-Определить поле входящего объектного типа с помощью атрибута `#[InputObjectField]` возможно только для
-классов,<br />помеченных атрибутом `#[InputObjectType]`. Атрибут может быть применен к свойствам и
-методам. При этом, метод, определяющий поле, должен иметь единственный параметр.
+Defining a field of an input ObjectType using the `#[InputObjectField]` attribute is only possible for
+classes<br />marked with the `#[InputObjectType]` attribute. The attribute can be applied to properties and
+methods. In this case, the method defining the field must have a single parameter.
 
 ```php
 namespace App\GraphQL\Type;
@@ -34,28 +34,28 @@ final class CreateUserRequest implements ParseValueAwareInterface
 }
 ```
 
-Атрибут `#[InputObjectField]` может иметь следующие параметры конструктора:
+The `#[InputObjectField]` attribute can have the following constructor parameters:
 
 <table>
-    <tr>
-        <th>Имя</th>
-        <th>Тип</th>
-        <th>Описание</th>
+     <tr>
+         <th>Name</th>
+         <th>Type</th>
+         <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Имя поля. Если не указано, используется имя свойства или метода без префикса <code>set</code>
+            Field name. If not specified, the property or method name is used without the <code>set</code> prefix
         </td>
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Описание поля. Если не указано, используется описание свойства/метода,
-            указанное в docBlock. Для свойств, объявленных в конструкторе, в качестве
-            описания используется комментарий к соответствующему параметру из docBlock конструктора.
+            Description of the field. If not specified, the property/method description is used,
+            specified in docBlock. For properties declared in the constructor, as
+            descriptions, a comment is used for the corresponding parameter from the docBlock constructor.
         </td>
     </tr>
     <tr>
@@ -63,22 +63,22 @@ final class CreateUserRequest implements ParseValueAwareInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Тип поля. Допустимыми значениями могут быть краткие имена GraphQL типов
-                (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
-                <code>IntType::class</code> и другие).
+                Field type. Valid values ​​can be short names of GraphQL types
+                (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type (<code>StringType::class</code>,
+                <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом поля могут быть:
+                The field type can be:
                 <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="input-object-type.md"><code>InputObjectType</code></a>.
             </p>
             <p>
-                Если параметр <code>type</code> не указан, библиотека постарается определить
-                значение самостоятельно (опираясь на определение свойства или единственного параметра
-                метода). Для php типов <code>array</code>, <code>iterable</code>, <code>mixed</code>
-                и др. следует указать значение данного параметра явно.
+                If the <code>type</code> parameter is not specified, the library will try to determine
+                value independently (based on the definition of a property or a single parameter
+                method). For php types <code>array</code>, <code>iterable</code>, <code>mixed</code>
+                etc. you should specify the value of this parameter explicitly.
             </p>
         </td>
     </tr>
@@ -86,49 +86,49 @@ final class CreateUserRequest implements ParseValueAwareInterface
         <td valign="top"><code>mode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Модификатора типа поля. Параметр конструктора анализируется библиотекой в том случае,
-            если тип поля указан и не содержит модификаторов. Возможны следующие значения:
+            Field type modifier. The constructor parameter is parsed by the library if
+            if the field type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
-                    значения.<br />
-                    Эквивалент: <code>String</code>
+                    Without modifiers, i.e. for example strings or <code>null</code> are acceptable
+                    values.<br />
+                    Equivalent: <code>String</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значение поля будет
-                    строковым.<br />
-                    Эквивалент: <code>String!</code>
+                    Modifier excluding <code>null</code> value, i.e. the field value will be
+                    string.<br />
+                    Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо. Таким образом значением поля может быть:
-                    <code>null</code> значение, пустой массив, массив со строковыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[String]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    The field value is valid. So the field value could be:
+                    <code>null</code> value, empty array, array with string or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом значением поля
-                    может быть: <code>null</code> значение или непустой список со строковыми
-                    значениями.<br />
-                    Эквивалент: <code>[String!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid but excluded in values. Thus, the field value
+                    could be: <code>null</code> value or non-empty list with strings
+                    values.<br />
+                    Equivalent: <code>[String!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение поля, но позволяющий пустой список или список содержащий строковые или
-                    <code>null</code> значения.<br />
-                    Эквивалент: <code>[String]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    field value, but allowing an empty list or a list containing strings or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
-                    Эквивалент: <code>[String!]!</code>
+                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
         </td>
@@ -137,49 +137,49 @@ final class CreateUserRequest implements ParseValueAwareInterface
         <td valign="top"><code>deprecationReason</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            Если параметр задан, то в GraphQL схеме данное поле будет помечено устаревшим. В качестве
-            причины будет указано значение данного параметра. Если параметр не задан, но в
-            docBlock (свойства/метода) есть тэг <code>@deprecated</code>, то будет использован
-            комментарий этого тега.
+            If the parameter is specified, then in the GraphQL schema this field will be marked deprecated. As
+            the reason will be indicated by the value of this parameter. If the parameter is not specified, but in
+            docBlock (property/method) has a <code>@deprecated</code> tag, then it will be used
+            comment for this tag.
         </td>
     </tr>
     <tr>
         <td valign="top"><code>defaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
         <td valign="top">
-            Значение поля по умолчанию. Допустимы скалярные и Enum php-значения,
-            а также <code>null</code>. Если параметр не задан, библиотека постарается определить
-            значение по умолчанию самостоятельно (опираясь на определение свойства класса или параметра
-            метода).
+            Default field value. Scalar and Enum php values ​​are allowed,
+            and also <code>null</code>. If the parameter is not specified, the library will try to determine
+            default value yourself (based on the definition of a class property or parameter
+            method).
         </td>
     </tr>
 </table>
 
-> :point_right: **Обратите внимание!**
+> :point_right: **Note!**
 >
-> [Используемая по умолчанию фабрика](input-object-type.md#input-object-type-via-attribute-factory)
-> `Andi\GraphQL\Common\InputObjectFactory` (создающая экземпляр входящего объектного типа) игнорируют
-> область видимости свойств/методов, помеченные атрибутом свойства/методы будут вызваны для
-> определения значения полей.
+> [Default factory](input-object-type.md#input-object-type-via-attribute-factory)
+> `Andi\GraphQL\Common\InputObjectFactory` (which instantiates the InputObjectType) is ignored
+> the scope of properties/methods, marked with the properties/methods attribute will be called for
+> defining the values ​​of the fields.
 >
-> При этом фабрика `InputObjectFactory` создает экземпляр класса без использования конструктор,
-> а значения параметров будут присвоены с использованием рефлексии, как и вызов методов,
-> описывающих поля входящего объектного типа.
+> In this case, the `InputObjectFactory` creates an instance of the class without using a constructor,
+> and parameter values ​​will be assigned using reflection, just like calling methods,
+> describing the fields of the InputObjectType.
 
-## <a id="input-object-field-via-interface">Определение путем реализации интерфейса</a>
+## <a id="input-object-field-via-interface">Definition by implementing an interface</a>
 
-Реализация интерфейса `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` может потребоваться
-при реализации метода `getFields`, требуемого в интерфейсе
-[`InputObjectTypeInterface`](input-object-type.md#fields-aware-interface). Который позволяет задать
-поля для входящего объектного типа.
+Implementation of the `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` interface may be required
+when implementing the `getFields` method required in the interface
+[`InputObjectTypeInterface`](input-object-type.md#fields-aware-interface). Which allows you to set
+fields for the InputObjectType.
 
-> :point_right: **Рекомендация!** :point_left:
+> :point_right: **Recommendation!** :point_left:
 >
-> Для определения полей входящего объектного типа вместо реализации интерфейса
-> `InputObjectFieldInterface` используйте класс `Andi\GraphQL\Field\InputObjectField`, в нём уже
-> реализованы вспомогательные интерфейсы, а требуемые значения можно задать в конструкторе.
+> To define fields of an InputObjectType instead of implementing an interface
+> `InputObjectFieldInterface` use the `Andi\GraphQL\Field\InputObjectField` class, it already contains
+> additional interfaces are implemented, and the required values ​​can be set in the constructor.
 
-Пример реализации интерфейса `InputObjectFieldInterface` (см. метод `getFields`):
+An example implementation of the `InputObjectFieldInterface` interface (see the `getFields` method):
 
 ```php
 namespace App\GraphQL\Type;
@@ -238,26 +238,26 @@ final class LoginRequest implements InputObjectTypeInterface
 }
 ```
 
-Интерфейс <a id="argument-interface">`InputObjectFieldInterface`</a> требует реализации следующих
-методов:
+The <a id="argument-interface">`InputObjectFieldInterface`</a> interface requires the implementation of the following
+methods:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getName</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Должен возвращать имя поля, отображаемое в GraphQL схеме.</td>
+        <td valign="top">Should return the name of the field as it appears in the GraphQL schema.</td>
     </tr>
     <tr>
         <td valign="top"><code>getDescription</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен вернуть описание поля, отображаемое в GraphQL схеме.
-            Следует вернуть <code>null</code>, если описание не требуется.
+            Should return the description of the field as displayed in the GraphQL schema.
+            Should return <code>null</code> if no description is required.
         </td>
     </tr>
     <tr>
@@ -265,13 +265,13 @@ final class LoginRequest implements InputObjectTypeInterface
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Должен вернуть тип поля. Допустимыми значениями могут быть краткие имена GraphQL
-                типов (<code>'String'</code>, <code>'Int'</code> и т.д.) или имена php классов,
-                реализующих соответствующий GraphQL тип (<code>StringType::class</code>,
-                <code>IntType::class</code> и другие).
+                Should return the field type. Valid values ​​can be GraphQL short names
+                types (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
+                implementing the corresponding GraphQL type (<code>StringType::class</code>,
+                <code>IntType::class</code> and others).
             </p>
             <p>
-                Типом поля могут быть:
+                The field type can be:
                 <a href="scalar-type.md"><code>ScalarType</code></a>,
                 <a href="enum-type.md"><code>EnumType</code></a>,
                 <a href="input-object-type.md"><code>InputObjectType</code></a>.
@@ -282,48 +282,48 @@ final class LoginRequest implements InputObjectTypeInterface
         <td valign="top"><code>getMode</code></td>
         <td valign="top"><code>int</code></td>
         <td valign="top">
-            Должен вернуть битовую маску для модификатора типа поля. Возможны следующие значения:
+            Should return the bitmask for the field type modifier. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
-                    Без модификаторов, т.е. допустимы например строковые или <code>null</code>
-                    значения поля.<br />
-                    Эквивалент: <code>String</code>
+                    Without modifiers, i.e. for example strings or <code>null</code> are acceptable
+                    field values.<br />
+                    Equivalent: <code>String</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор исключающий <code>null</code> значение, т.е. значением поля будет
-                    строка.<br />
-                    Эквивалент: <code>String!</code>
+                    Modifier excluding <code>null</code> value, i.e. the field value will be
+                    line.<br />
+                    Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо. Таким образом значениями поля могут быть:
-                    <code>null</code> значение, пустой массив, массив со строковыми или
-                    <code>null</code> значениями.<br />
-                    Эквивалент: <code>[String]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    The field value is valid. Thus, the field values ​​can be:
+                    <code>null</code> value, empty array, array with string or
+                    <code>null</code> values.<br />
+                    Equivalent: <code>[String]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий список значений (массив), при этом <code>null</code>
-                    значение поля допустимо, но исключено в значениях. Таким образом зачениями
-                    поля могут быть: <code>null</code> значение или непустой список со строковыми
-                    значениями.<br />
-                    Эквивалент: <code>[String!]</code>
+                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    the field value is valid but excluded in values. Thus, the meanings
+                    fields can be: <code>null</code> value or non-empty list with strings
+                    values.<br />
+                    Equivalent: <code>[String!]</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    Допустимо объединение модификаторов путем побитового ИЛИ.<br />
-                    Модификатор определяющий список значений (массив), исключающий <code>null</code>
-                    значение поля, но позволяющий пустой список или список содержащий
-                    строковые или <code>null</code> значения.<br />
-                    Эквивалент: <code>[String]!</code>
+                    Combining modifiers using bitwise OR is acceptable.<br />
+                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    field value, but allowing an empty list or a list containing
+                    string or <code>null</code> values.<br />
+                    Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    Модификатор определяющий непустой список строковых значений (массив строк).<br />
-                    Эквивалент: <code>[String!]!</code>
+                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
         </td>
@@ -332,66 +332,66 @@ final class LoginRequest implements InputObjectTypeInterface
         <td valign="top"><code>hasDefaultValue</code></td>
         <td valign="top"><code>bool</code></td>
         <td valign="top">
-            Должен вернуть <code>true</code> если поле имеет значение по умолчанию. Для определения
-            значения по умолчанию следует реализовать интерфейс <code>DefaultValueAwareInterface</code>
-            (см. <a href="#default-value-aware-interface">ниже</a>).
+            Should return <code>true</code> if the field has a default value. For determining
+            default values ​​should implement the interface <code>DefaultValueAwareInterface</code>
+            (see <a href="#default-value-aware-interface">below</a>).
         </td>
     </tr>
 </table>
 
-Вспомогательные интерфейсы при определении аргумента поля:
+Additional interfaces when defining a field argument:
 
 <dl>
     <dt><a href="#default-value-aware-interface">DefaultValueAwareInterface</a></dt>
-    <dd>Позволяет определить значение поля, используемого по умолчанию.</dd>
+    <dd>Allows you to define the default field value.</dd>
     <dt><a href="#deprecation-reason-aware-interface">DeprecationReasonAwareInterface</a></dt>
-    <dd>Позволяет в GraphQL схеме указать причину, по которой поле использовать не рекомендуется.</dd>
+    <dd>Allows you to specify in the GraphQL schema a reason why a field is not recommended to be used.</dd>
 </dl>
 
 ### <a id="default-value-aware-interface">DefaultValueAwareInterface</a>
 
-Чтобы указать для поля значение по умолчанию следует реализовать интерфейс
-`DefaultValueAwareInterface`, который требует реализации следующего метода:
+To specify a default value for a field, you must implement the interface
+`DefaultValueAwareInterface`, which requires the following method to be implemented:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getDefaultValue</code></td>
         <td valign="top"><code>mixed</code></td>
-        <td valign="top">Должен возвращать значение, используемое полем по умолчанию.</td>
+        <td valign="top">Should return the default value used by the field.</td>
     </tr>
 </table>
 
 ### <a id="deprecation-reason-aware-interface">DeprecationReasonAwareInterface</a>
 
-Если в GraphQL схеме необходимо указать причины, по которой поле не рекомендуется использовать,
-необходимо реализовать интерфейс `DeprecationReasonAwareInterface`, который требует реализации
-следующего метода:
+If your GraphQL schema needs to specify reasons why a field is not recommended for use,
+it is necessary to implement the `DeprecationReasonAwareInterface` interface, which requires implementation
+following method:
 
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Возвращаемый тип</th>
-        <th>Описание</th>
+        <th>Name</th>
+        <th>Return type</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td valign="top"><code>getDeprecationReason</code></td>
         <td valign="top"><code>string | null</code></td>
         <td valign="top">
-            Должен возвращать описание причины, для отображения в GraphQL схеме, по которой
-            поле использовать не рекомендуется и <code>null</code> значение, если такая причина
-            отсутствует.
+            Should return a description of the reason for displaying in the GraphQL schema for which
+            field is not recommended to be used and <code>null</code> value if such a reason
+            absent.
         </td>
     </tr>
 </table>
 
-> :point_right: **Рекомендация!** :point_left:
+> :point_right: **Recommendation!** :point_left:
 >
-> При использовании класса `InputObjectField` пример выше выглядел бы следующим образом:
+> Using the `InputObjectField` class, the example above would look like this:
 >
 > ```php
 > namespace App\GraphQL\Type;
