@@ -1,7 +1,7 @@
 # Abstract class AbstractObjectType
 
-The abstract class `Andi\GraphQL\Type\AbstractObjectType` allows you to define GraphQL object types
-without the need to implement methods of auxiliary interfaces. Most interfaces are already
+The abstract class `Andi\GraphQL\Type\AbstractObjectType` allows you to define ObjectType
+without the need to implement methods of additional interfaces. Most interfaces are already
 implemented in an abstract class, you just need to set the values ​​of its properties to determine
 the result of the implemented methods.
 
@@ -80,7 +80,7 @@ determine the values ​​of the following properties:
             </p>
             <p>
                 It is permissible not to define a property value if you are sure that the object
-                the type will be expanded (see <a href="additional-field.md">Type expansion</a>).
+                the type will be extending (see <a href="additional-field.md">Type expansion</a>).
             </p>
         </td>
     </tr>
@@ -108,7 +108,7 @@ determine the values ​​of the following properties:
 ### Additional interfaces
 
 A GraphQL ObjectType declared using the abstract class `AbstractObjectType` already implements
-[auxiliary interfaces](object-type.md#object-type-interfaces)
+[additional interfaces](object-type.md#object-type-interfaces)
 [`FieldsAwareInterface`](object-type.md#fields-aware-interface),
 [`InterfacesAwareInterface`](object-type.md#interfaces-aware-interface),
 [`DynamicObjectTypeInterface`](object-type.md#dynamic-object-type-interface).
@@ -119,11 +119,11 @@ To extend the capabilities of a GraphQL ObjectType implemented using an abstract
 <dl>
     <dt><a href="object-type.md#resolve-field-aware-interface">ResolveFieldAwareInterface</a></dt>
     <dd>
-        Allows you to specify the default method used in an ObjectType to define
+        Allows you to specify the default method used in an ObjectType to resolve
         field values.
     </dd>
     <dt><a href="object-type.md#is-type-of-aware-interface">IsTypeOfAwareInterface</a></dt>
-    <dd>Allows you to determine whether the data being analyzed is of an object type.</dd>
+    <dd>Allows you to determine whether the data being analyzed is of an ObjectType.</dd>
 </dl>
 
 ## <a id="field-definition">Definition of the iterable structure `$fields`</a>
@@ -163,7 +163,7 @@ $this->fields = [
 
         // Defines a callable structure responsible for calculating the value of the field.
         // May be:
-        //   - Closure object
+        //   -Closure object
         // - a string like `ClassName::publicStaticMethod`
         // - array of the form ['ClassName', 'publicStaticMethod']
         // - array of the form [$object, 'publicMethod']
@@ -222,7 +222,7 @@ $this->fields = [
                 'deprecationReason' => 'This field is deprecated. Don't use it.',
 
                 // Default argument value. If the argument does not have a default value,
-                // do not define this option. because null value is also the default value.
+                // do not define this option, because null value is also the default value.
                 'defaultValue' => 'hello',
             ],
         ],
@@ -288,13 +288,13 @@ Field configuration options can be as follows:
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
                     Modifier excluding <code>null</code> value, i.e. the field value will be
-                    line.<br />
+                    string.<br />
                     Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     A modifier defining a list of values ​​(array), with <code>null</code>
-                    The field value is valid. Thus, the field values ​​can be:
+                    the field value is valid. Thus, the field values ​​can be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
@@ -333,7 +333,7 @@ Field configuration options can be as follows:
         <td valign="top"><code>string</code></td>
         <td valign="top">
             If the option is set, then in the GraphQL schema this field will be marked deprecated. As
-            The reasons for this will indicate the value of this option.
+            the reasons for this will indicate the value of this option.
         </td>
     </tr>
     <tr>
@@ -342,7 +342,7 @@ Field configuration options can be as follows:
         <td valign="top">
             <p>
                 It is recommended to define a <code>callable</code> structure, even if
-                The <code>callable</code> structure is visible only within the class.
+                the <code>callable</code> structure is visible only within the class.
             </p>
             <p>It is acceptable to define it as:</p>
             <ul>
