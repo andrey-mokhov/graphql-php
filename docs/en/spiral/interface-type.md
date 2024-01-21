@@ -56,7 +56,7 @@ The `#[InterfaceType]` attribute can contain the following constructor parameter
         <td valign="top"><code>resolveType</code></td>
         <td valign="top"><code>string</code></td>
         <td valign="top">
-            <p>The name of a class that defines a specific implementation of an InterfaceType.</p>
+            <p>The name of a class that resolves a specific implementation of an InterfaceType.</p>
             <p>
                 The class must implement the following method:<br />
                 <code>__invoke(mixed $value, mixed $context, ResolveInfo $info): ?string</code>
@@ -69,15 +69,15 @@ The `#[InterfaceType]` attribute can contain the following constructor parameter
             </ul>
             <p>
                 The method must parse the <code>$value</code> structure and return the name of the object
-                The GraphQL type associated with this structure. A short object name is allowed
-                GraphQL type or the name of a PHP class that implements an ObjectType.
+                The GraphQL type associated with this structure. A name of ObjectType is allowed
+                or the name of a PHP class that implements an ObjectType.
             </p>
             <p>
                 If the constructor parameter is not specified, the class will be used by default
                 <code>Andi\GraphQL\Common\ResolveType</code>. If the analyzed structure is
                 object, <code>ResolveType</code> will try to match the object's class with
                 registered GraphQL ObjectType. If matching fails, try again
-                will be implemented with the ancestor class (and so on up the inheritance hierarchy).
+                will be implemented with the parent class (and so on up the inheritance hierarchy).
             </p>
         </td>
     </tr>
@@ -87,7 +87,7 @@ The section [Defining fields of an InterfaceType](interface-field.md) details th
 libraries.
 
 If the `#[InterfaceType]` attribute is applied to a class, then that class may, among other things, implement
-auxiliary interface:
+additional interface:
 - [`ResolveTypeAwareInterface`](#resolve-type-aware-interface) to identify the data structure.
 
 ## <a id="interface-type-via-interface">Definition by implementing an interface</a>
@@ -216,9 +216,9 @@ associated with the analyzed structure (the first parameter of the method).
 
 #### <a id="dynamic-object-type-interface">DynamicObjectTypeInterface</a>
 
-Interface `Andi\GraphQL\Type\DynamicObjectTypeInterface` added extensibility
+Interface Andi\GraphQL\Type\DynamicObjectTypeInterface allows you to extend InterfaceType an additional fields
 Interface GraphQL generic complex elements known in other classes
-(this mechanic is described in detail in [Type expansion](additional-field.md)).
+(this mechanic is described in detail in [Type extending](additional-field.md)).
 
 The implementation of this interface affects the definition of the `getFields` method, see the example below:
 
