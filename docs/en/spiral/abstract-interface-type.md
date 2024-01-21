@@ -1,6 +1,6 @@
 # Abstract class AbstractInterfaceType
 
-The abstract class `Andi\GraphQL\Type\AbstractInterfaceType` allows you to define GraphQL interface types
+The abstract class `Andi\GraphQL\Type\AbstractInterfaceType` allows you to define GraphQL InterfaceType
 without the need to implement methods of additional interfaces. Most interfaces are already
 implemented in an abstract class, you just need to set the values ​​of its properties to determine
 the result of the implemented methods.
@@ -71,17 +71,17 @@ determine the values ​​of the following properties:
             </p>
             <p>
                 It is permissible not to define the property value if you are sure that the interface
-                the type will be expanded (see <a href="additional-field.md">Type expansion</a>).
+                the type will be extended (see <a href="additional-field.md">Type extension</a>).
             </p>
         </td>
     </tr>
 </table>
 
 A GraphQL InterfaceType declared using the abstract class `AbstractInterfaceType` already implements
-[auxiliary interface](interface-type.md#interface-type-interfaces)
+[additional interface](interface-type.md#interface-type-interfaces)
 [`DynamicObjectTypeInterface`](interface-type.md#dynamic-object-type-interface).
 
-To extend the capabilities of a front-end GraphQL type implemented using an abstract class
+To extend the capabilities of a InterfaceType implemented using an abstract class
 `AbstractInterfaceType`, you may need to implement the following interface:
 
 <dl>
@@ -234,7 +234,7 @@ Field configuration options can be as follows:
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     A modifier defining a list of values ​​(array), with <code>null</code>
-                    The field value is valid. Thus, the field values ​​can be:
+                    the field value is valid. Thus, the field values ​​can be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
@@ -273,7 +273,7 @@ Field configuration options can be as follows:
         <td valign="top"><code>string</code></td>
         <td valign="top">
             If the option is set, then in the GraphQL schema this field will be marked deprecated. As
-            The reasons for this will indicate the value of this option.
+            the reasons for this will indicate the value of this option.
         </td>
     </tr>
     <tr>
@@ -347,7 +347,7 @@ Argument configuration options can be as follows:
         <td valign="top"><code>string</code></td>
         <td valign="top">
             If the option is set, the argument will be marked as deprecated in the GraphQL schema. As
-            The reasons for this will indicate the value of this option.
+            the reasons for this will indicate the value of this option.
         </td>
     </tr>
     <tr>
