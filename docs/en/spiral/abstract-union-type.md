@@ -2,7 +2,7 @@
 
 The abstract class `Andi\GraphQL\Type\AbstractUnionType` allows you to define GraphQL union types
 without the need to implement methods. The main methods are already implemented in the abstract class, all you need is
-set the values ​​of its properties to determine the result of the implemented methods.
+set the values of its properties to determine the result of the implemented methods.
 
 An example of an abstract class implementation:
 
@@ -38,7 +38,7 @@ final class ExampleAbstractUnionType extends AbstractUnionType implements Resolv
 ```
 
 When implementing a GraphQL union type using the abstract class `AbstractUnionType` you must
-determine the values ​​of the following properties:
+determine the values of the following properties:
 
 <table>
     <tr>

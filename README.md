@@ -44,7 +44,9 @@ default values, and much more.
 
 ## Documentation
 
-Documentation is currently available in [Russian](docs/ru/index.md).
+Documentation is currently available in:
+- [English](docs/en/index.md)
+- [Russian](docs/ru/index.md)
 
 An English version is also planned, will come later.
 

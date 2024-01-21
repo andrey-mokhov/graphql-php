@@ -2,7 +2,7 @@
 
 Abstract class `Andi\GraphQL\Type\AbstractScalarType` allows you to define scalar GraphQL types
 without the need to implement the `getName` and `getDescription` methods. These methods are already implemented in the abstract
-class, you just need to set the values ​​of the corresponding properties to determine the result of these methods.
+class, you just need to set the values of the corresponding properties to determine the result of these methods.
 
 The `Money` type definition ([example from related document](scalar-type.md)) might look like this
 way:

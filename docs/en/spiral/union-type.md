@@ -84,7 +84,7 @@ The `UnionTypeInterface` interface requires the following methods to be implemen
                 components of the UnionType.
             </p>
             <p>
-                Valid values ​​can be short names
+                Valid values can be short names
                 <a href="object-type.md">GraphQL ObjectTypes</a> or php class names,
                 implementing the corresponding GraphQL ObjectType.
             </p>

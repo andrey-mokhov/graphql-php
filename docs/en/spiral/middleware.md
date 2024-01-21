@@ -41,7 +41,7 @@ Let's take a closer look at initializing the GraphQL server:
        pipeline `ObjectFieldResolver` (more details [below](#object-field-resolver)). Field arguments also
        are retrieved and processed by the middleware pipeline `ArgumentResolver` (more details
        [below](#argument-resolver));
-     - for `EnumType` possible values ​​are retrieved;
+     - for `EnumType` possible values are retrieved;
      - fields are retrieved for `InputObjectType`. Each field is processed using a middleware pipeline
        `InputObjectFieldResolver` (more details [below](#input-object-field-resolver));
      - for `UnionType`, the types included in the UnionType are retrieved.

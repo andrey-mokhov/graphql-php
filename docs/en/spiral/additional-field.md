@@ -50,14 +50,14 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
                 <b>Required parameter</b>. The name of the GraphQL object or interface type to extend.
             </p>
             <p>
-                Valid values ​​can be short names of GraphQL object or interface types
+                Valid values can be short names of GraphQL object or interface types
                 or the names of php classes that implement the corresponding GraphQL type.
             </p>
     </tr>
     <tr>
         <td valign="top"><code>name</code></td>
         <td valign="top"><code>string</code></td>
-        <td valign="top">Field name. If not specified, the method name without the <code>get</code></td> prefix is ​​used
+        <td valign="top">Field name. If not specified, the method name without the <code>get</code></td> prefix is used
     </tr>
     <tr>
         <td valign="top"><code>description</code></td>
@@ -69,7 +69,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
         <td valign="top"><code>string</code></td>
         <td valign="top">
             <p>
-                Field type. Valid values ​​can be short names of GraphQL types
+                Field type. Valid values can be short names of GraphQL types
                 (<code>'String'</code>, <code>'Int'</code>, etc.) or php class names,
                 implementing the corresponding GraphQL type
                 (<code>StringType::class</code>, <code>IntType::class</code> and others).
@@ -94,7 +94,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Field type modifier. The constructor parameter is parsed by the library
-            if the field type is specified and does not contain modifiers. The following values ​​are possible:
+            if the field type is specified and does not contain modifiers. The following values are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -110,7 +110,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid. So the field value could be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
@@ -118,7 +118,7 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
                 </dd>
                 <dt><code>TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a list of values ​​(array), with <code>null</code>
+                    A modifier defining a list of values (array), with <code>null</code>
                     the field value is valid but excluded in values. Thus, by assigning the field
                     could be: <code>null</code> value or non-empty list with strings
                     values.<br />
@@ -127,14 +127,14 @@ The `#[AdditionalField]` attribute is applicable to class methods and has the fo
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     Combining modifiers using bitwise OR is acceptable.<br />
-                    Modifier defining a list of values ​​(array), excluding <code>null</code>
+                    Modifier defining a list of values (array), excluding <code>null</code>
                     field value, but allowing an empty list or a list containing strings or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_REQUIRED | TypeAwareInterface::ITEM_IS_REQUIRED</code></dt>
                 <dd>
-                    A modifier defining a non-empty list of string values ​​(array of strings).<br />
+                    A modifier defining a non-empty list of string values (array of strings).<br />
                     Equivalent: <code>[String!]!</code>
                 </dd>
             </dl>
