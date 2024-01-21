@@ -48,8 +48,6 @@ Documentation is currently available in:
 - [English](docs/en/index.md)
 - [Russian](docs/ru/index.md)
 
-An English version is also planned, will come later.
-
 ## Examples
 
 The library [includes examples](examples) of defining a GraphQL schema. All definitions mentioned
