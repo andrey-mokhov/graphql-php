@@ -1,12 +1,12 @@
 # Defining fields of an InputObjectType
 
-Defining a field of a GraphQL ObjectType is possible:
+Defining a field of a GraphQL InputObjectType is possible:
 - using the `Andi\GraphQL\Attribute\InputObjectField` attribute ([link](#input-object-field-via-attribute));
 - by implementing the interface `Andi\GraphQL\Definition\Field\InputObjectFieldInterface` ([link](#input-object-field-via-interface));
 
 ## <a id="input-object-field-via-attribute">Definition via attribute</a>
 
-Defining a field of an input ObjectType using the `#[InputObjectField]` attribute is only possible for
+Defining a field of an InputObjectType using the `#[InputObjectField]` attribute is only possible for
 classes<br />marked with the `#[InputObjectType]` attribute. The attribute can be applied to properties and
 methods. In this case, the method defining the field must have a single parameter.
 
@@ -87,7 +87,7 @@ The `#[InputObjectField]` attribute can have the following constructor parameter
         <td valign="top"><code>int</code></td>
         <td valign="top">
             Field type modifier. The constructor parameter is parsed by the library if
-            if the field type is specified and does not contain modifiers. The following values ​​are possible:
+            the field type is specified and does not contain modifiers. The following values ​​are possible:
             <dl>
                 <dt><code>TypeAwareInterface::NONE</code></dt>
                 <dd>
@@ -293,13 +293,13 @@ methods:
                 <dt><code>TypeAwareInterface::IS_REQUIRED</code></dt>
                 <dd>
                     Modifier excluding <code>null</code> value, i.e. the field value will be
-                    line.<br />
+                    string.<br />
                     Equivalent: <code>String!</code>
                 </dd>
                 <dt><code>TypeAwareInterface::IS_LIST</code></dt>
                 <dd>
                     A modifier defining a list of values ​​(array), with <code>null</code>
-                    The field value is valid. Thus, the field values ​​can be:
+                    the field value is valid. Thus, the field values ​​can be:
                     <code>null</code> value, empty array, array with string or
                     <code>null</code> values.<br />
                     Equivalent: <code>[String]</code>
