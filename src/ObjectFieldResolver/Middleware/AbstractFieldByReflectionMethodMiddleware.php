@@ -9,13 +9,13 @@ use Andi\GraphQL\Attribute\AbstractField;
 use Andi\GraphQL\Attribute\Argument;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\ObjectFieldResolver\ObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
 use GraphQL\Type\Definition as Webonyx;
 use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use phpDocumentor\Reflection\DocBlockFactory;
-use ReflectionMethod;
 use Spiral\Attributes\ReaderInterface;
 
 /**
@@ -39,27 +39,25 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
     public function process(mixed $field, ObjectFieldResolverInterface $fieldResolver): Webonyx\FieldDefinition
     {
-        if (! $field instanceof ReflectionMethod) {
+        if (! $field instanceof ReflectionMethodWithAttribute) {
             return $fieldResolver->resolve($field);
         }
 
-        $attribute = $this->reader->firstFunctionMetadata($field, $this->targetAttribute);
-
-        if (null === $attribute) {
+        if (! $field->attribute instanceof $this->targetAttribute) {
             return $fieldResolver->resolve($field);
         }
 
         $config = [
-            'name' => $this->getFieldName($field, $attribute),
-            'description' => $this->getFieldDescription($field, $attribute),
-            'type' => $this->getFieldType($field, $attribute),
-            'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
+            'name' => $this->getFieldName($field->method, $field->attribute),
+            'description' => $this->getFieldDescription($field->method, $field->attribute),
+            'type' => $this->getFieldType($field->method, $field->attribute),
+            'deprecationReason' => $this->getFieldDeprecationReason($field->method, $field->attribute),
         ];
 
-        return $this->buildField($config, $field);
+        return $this->buildField($config, $field->method);
     }
 
-    private function getFieldName(ReflectionMethod $method, AbstractField $attribute): ?string
+    private function getFieldName(\ReflectionMethod $method, AbstractField $attribute): ?string
     {
         if ($attribute->name) {
             return $attribute->name;
@@ -74,7 +72,7 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         return \lcfirst($name);
     }
 
-    private function getFieldDescription(ReflectionMethod $method, AbstractField $attribute): ?string
+    private function getFieldDescription(\ReflectionMethod $method, AbstractField $attribute): ?string
     {
         if ($attribute->description) {
             return $attribute->description;
@@ -88,7 +86,7 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
     }
 
-    private function getFieldType(ReflectionMethod $method, AbstractField $attribute): callable
+    private function getFieldType(\ReflectionMethod $method, AbstractField $attribute): callable
     {
         if ($attribute->type) {
             return new LazyParserType($attribute->type, $attribute->mode ?? 0, $this->typeRegistry);
@@ -108,7 +106,7 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
         );
     }
 
-    protected function getFieldArguments(ReflectionMethod $method): \Generator
+    protected function getFieldArguments(\ReflectionMethod $method): \Generator
     {
         $map = [];
         foreach ($method->getParameters() as $parameter) {
@@ -125,13 +123,13 @@ abstract class AbstractFieldByReflectionMethodMiddleware implements MiddlewareIn
 
     /**
      * @param FieldDefinitionConfig $config
-     * @param ReflectionMethod $method
+     * @param \ReflectionMethod $method
      *
      * @return Webonyx\FieldDefinition
      */
-    abstract protected function buildField(array $config, ReflectionMethod $method): Webonyx\FieldDefinition;
+    abstract protected function buildField(array $config, \ReflectionMethod $method): Webonyx\FieldDefinition;
 
-    private function getFieldDeprecationReason(ReflectionMethod $method, AbstractField $attribute): ?string
+    private function getFieldDeprecationReason(\ReflectionMethod $method, AbstractField $attribute): ?string
     {
         if ($attribute->deprecationReason) {
             return $attribute->deprecationReason;

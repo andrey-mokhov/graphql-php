@@ -17,6 +17,7 @@ use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
 use Andi\GraphQL\Common\LazyTypeIterator;
 use Andi\GraphQL\Common\LazyTypeResolver;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Common\ResolveType;
 use Andi\GraphQL\Field\ObjectField;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolver;
@@ -90,6 +91,7 @@ use Spiral\Core\Container;
 #[UsesClass(Attribute\InputObjectField::class)]
 #[UsesClass(InputObjectFactory::class)]
 #[UsesClass(InputObjectType::class)]
+#[UsesClass(ReflectionMethodWithAttribute::class)]
 final class AttributedGraphQLTypeMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;

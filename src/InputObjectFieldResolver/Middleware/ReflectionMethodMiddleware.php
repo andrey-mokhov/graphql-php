@@ -8,6 +8,7 @@ use Andi\GraphQL\Attribute\InputObjectField;
 use Andi\GraphQL\Common\InputObjectFieldNameTrait;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\TypeRegistryInterface;
@@ -32,23 +33,25 @@ final class ReflectionMethodMiddleware implements MiddlewareInterface
 
     public function process(mixed $field, InputObjectFieldResolverInterface $fieldResolver): Webonyx\InputObjectField
     {
-        if (! $field instanceof ReflectionMethod) {
+        if (! $field instanceof ReflectionMethodWithAttribute) {
             return $fieldResolver->resolve($field);
         }
 
-        $attribute = $this->reader->firstFunctionMetadata($field, InputObjectField::class);
+        if (! $field->attribute instanceof InputObjectField) {
+            return $fieldResolver->resolve($field);
+        }
 
         $config = [
-            'name' => $this->getInputObjectFieldName($field, $attribute),
-            'description' => $this->getFieldDescription($field, $attribute),
-            'type' => $this->getFieldType($field, $attribute),
-            'deprecationReason' => $this->getFieldDeprecationReason($field, $attribute),
+            'name' => $this->getInputObjectFieldName($field->method, $field->attribute),
+            'description' => $this->getFieldDescription($field->method, $field->attribute),
+            'type' => $this->getFieldType($field->method, $field->attribute),
+            'deprecationReason' => $this->getFieldDeprecationReason($field->method, $field->attribute),
         ];
 
-        $parameter = $field->getParameters()[0];
+        $parameter = $field->method->getParameters()[0];
 
-        if ($this->hasDefaultValue($parameter, $attribute)) {
-            $config['defaultValue'] = $this->getDefaultValue($parameter, $attribute);
+        if ($this->hasDefaultValue($parameter, $field->attribute)) {
+            $config['defaultValue'] = $this->getDefaultValue($parameter, $field->attribute);
         }
 
         return new Webonyx\InputObjectField($config);
