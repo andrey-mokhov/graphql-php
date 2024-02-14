@@ -11,9 +11,11 @@ use Andi\GraphQL\Attribute\AbstractDefinition;
 use Andi\GraphQL\Attribute\AbstractField;
 use Andi\GraphQL\Attribute\AdditionalField;
 use Andi\GraphQL\Attribute\Argument;
+use Andi\GraphQL\Attribute\ObjectField;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Common\ResolverArguments;
 use Andi\GraphQL\Definition\Field\TypeAwareInterface;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
@@ -50,6 +52,7 @@ use Spiral\Core\Container;
 #[UsesClass(Next::class)]
 #[UsesClass(Argument::class)]
 #[UsesClass(ResolverArguments::class)]
+#[UsesClass(ReflectionMethodWithAttribute::class)]
 final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -78,7 +81,6 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
             $this->container,
             $this->container,
         );
-
     }
 
     public function testInstanceOf(): void
@@ -104,12 +106,12 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
         };
 
         $classReflection = new \ReflectionClass($object);
-        $field = null;
-        foreach ($classReflection->getMethods() as $field) {
+        $method = null;
+        foreach ($classReflection->getMethods() as $method) {
             break;
         }
 
-        $this->middleware->process($field, $nextResolver);
+        $this->middleware->process(new ReflectionMethodWithAttribute($method, new ObjectField()), $nextResolver);
     }
 
     #[DataProvider('getDataForProcess')]
@@ -119,11 +121,19 @@ final class AdditionalFieldByReflectionMethodMiddlewareTest extends TestCase
         $nextResolver = \Mockery::mock(ObjectFieldResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->never();
 
-        $field = null;
+        $method = null;
         $reflectionClass = new \ReflectionClass($object);
-        foreach ($reflectionClass->getMethods() as $field) {
+        foreach ($reflectionClass->getMethods() as $method) {
             break;
         }
+
+        $attribute = null;
+        foreach ($method->getAttributes(AdditionalField::class) as $reflectionAttribute) {
+            $attribute = $reflectionAttribute->newInstance();
+            break;
+        }
+
+        $field = new ReflectionMethodWithAttribute($method, $attribute);
 
         if (null !== $exception) {
             $this->expectException($exception);

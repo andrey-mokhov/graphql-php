@@ -11,9 +11,11 @@ use Andi\GraphQL\Attribute\AbstractDefinition;
 use Andi\GraphQL\Attribute\AbstractField;
 use Andi\GraphQL\Attribute\Argument;
 use Andi\GraphQL\Attribute\ObjectField;
+use Andi\GraphQL\Attribute\QueryField;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Common\ResolverArguments;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\Field;
@@ -49,6 +51,7 @@ use Spiral\Core\Container;
 #[UsesClass(Next::class)]
 #[UsesClass(Argument::class)]
 #[UsesClass(ResolverArguments::class)]
+#[UsesClass(ReflectionMethodWithAttribute::class)]
 final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -100,12 +103,12 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         };
 
         $classReflection = new \ReflectionClass($object);
-        $field = null;
-        foreach ($classReflection->getMethods() as $field) {
+        $method = null;
+        foreach ($classReflection->getMethods() as $method) {
             break;
         }
 
-        $this->middleware->process($field, $nextResolver);
+        $this->middleware->process(new ReflectionMethodWithAttribute($method, new QueryField()), $nextResolver);
     }
 
     #[DataProvider('getDataForProcess')]
@@ -114,15 +117,23 @@ final class ObjectFieldByReflectionMethodMiddlewareTest extends TestCase
         $nextResolver = \Mockery::mock(ObjectFieldResolverInterface::class);
         $nextResolver->shouldReceive('resolve')->never();
 
-        $field = null;
+        $method = null;
         $reflectionClass = new \ReflectionClass($object);
-        foreach ($reflectionClass->getMethods() as $field) {
+        foreach ($reflectionClass->getMethods() as $method) {
             break;
         }
 
         if (null !== $exception) {
             $this->expectException($exception);
         }
+
+        $attribute = null;
+        foreach ($method->getAttributes(ObjectField::class) as $reflectionAttribute) {
+            $attribute = $reflectionAttribute->newInstance();
+            break;
+        }
+
+        $field = new ReflectionMethodWithAttribute($method, $attribute);
 
         $objectField = $this->middleware->process($field, $nextResolver);
 

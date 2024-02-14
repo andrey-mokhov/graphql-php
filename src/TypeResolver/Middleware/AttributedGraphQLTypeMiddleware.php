@@ -11,6 +11,7 @@ use Andi\GraphQL\Common\LazyInputObjectFields;
 use Andi\GraphQL\Common\LazyObjectFields;
 use Andi\GraphQL\Common\LazyTypeIterator;
 use Andi\GraphQL\Common\LazyTypeResolver;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Common\ResolveType;
 use Andi\GraphQL\Definition\Type\FieldsAwareInterface;
 use Andi\GraphQL\Definition\Type\InterfacesAwareInterface;
@@ -194,8 +195,8 @@ final class AttributedGraphQLTypeMiddleware implements MiddlewareInterface
         string $targetAttribute,
     ): void {
         foreach ($class->getMethods() as $method) {
-            if (null !== $this->reader->firstFunctionMetadata($method, $targetAttribute)) {
-                $type->addAdditionalField($method);
+            if ($attribute = $this->reader->firstFunctionMetadata($method, $targetAttribute)) {
+                $type->addAdditionalField(new ReflectionMethodWithAttribute($method, $attribute));
             }
         }
     }

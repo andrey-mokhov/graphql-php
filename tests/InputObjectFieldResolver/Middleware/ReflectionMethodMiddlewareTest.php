@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Andi\Tests\GraphQL\InputObjectFieldResolver\Middleware;
 
+use Andi\GraphQL\Attribute\AbstractDefinition;
+use Andi\GraphQL\Attribute\AbstractField;
 use Andi\GraphQL\Attribute\InputObjectField;
 use Andi\GraphQL\Common\InputObjectFieldNameTrait;
 use Andi\GraphQL\Common\LazyParserType;
 use Andi\GraphQL\Common\LazyTypeByReflectionParameter;
 use Andi\GraphQL\Common\LazyTypeByReflectionType;
+use Andi\GraphQL\Common\ReflectionMethodWithAttribute;
 use Andi\GraphQL\Exception\CantResolveGraphQLTypeException;
 use Andi\GraphQL\InputObjectFieldResolver\InputObjectFieldResolverInterface;
 use Andi\GraphQL\InputObjectFieldResolver\Middleware\MiddlewareInterface;
@@ -20,6 +23,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Spiral\Attributes\Internal\NativeAttributeReader;
 use Spiral\Attributes\ReaderInterface;
 
 #[CoversClass(ReflectionMethodMiddleware::class)]
@@ -29,6 +33,9 @@ use Spiral\Attributes\ReaderInterface;
 #[UsesClass(LazyTypeByReflectionType::class)]
 #[UsesClass(LazyParserType::class)]
 #[UsesClass(InputObjectField::class)]
+#[UsesClass(ReflectionMethodWithAttribute::class)]
+#[UsesClass(AbstractDefinition::class)]
+#[UsesClass(AbstractField::class)]
 final class ReflectionMethodMiddlewareTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -56,20 +63,26 @@ final class ReflectionMethodMiddlewareTest extends TestCase
     public function testProcess(
         array $expected,
         object $object,
-        ?InputObjectField $attribute,
         string $exception = null,
     ): void {
-        $reader = \Mockery::mock(ReaderInterface::class);
-        $reader->shouldReceive('firstFunctionMetadata')->once()->andReturn($attribute);
+        $reader = new NativeAttributeReader();
         $nextResolver = \Mockery::mock(InputObjectFieldResolverInterface::class);
 
         $middleware = new ReflectionMethodMiddleware($reader, new TypeRegistry());
 
         $object = new \ReflectionClass($object);
-        $field = null;
-        foreach ($object->getMethods() as $field) {
+        $method = null;
+        foreach ($object->getMethods() as $method) {
             break;
         }
+
+        $attribute = null;
+        foreach ($method->getAttributes(InputObjectField::class) as $reflectionAttribute) {
+            $attribute = $reflectionAttribute->newInstance();
+            break;
+        }
+
+        $field = new ReflectionMethodWithAttribute($method, $attribute);
 
         if (null !== $exception) {
             $this->expectException($exception);
@@ -112,9 +125,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                 'type' => Webonyx\Type::int(),
             ],
             'object' => new class {
+                #[InputObjectField]
                 public function setFoo(int $i) {}
             },
-            'attribute' => null,
         ];
 
         yield 'isActive' => [
@@ -124,9 +137,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                 'defaultValue' => true,
             ],
             'object' => new class {
+                #[InputObjectField]
                 public function isActive(bool $active = true) {}
             },
-            'attribute' => null,
         ];
 
         yield 'bar-with-attribute' => [
@@ -138,15 +151,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                 'defaultValue' => 123,
             ],
             'object' => new class {
+                #[InputObjectField('bar', 'bar description', 'ID', 0, 'bar deprecated', 123)]
                 public function setFoo(int $i) {}
             },
-            'attribute' => new InputObjectField(
-                name: 'bar',
-                description: 'bar description',
-                type: 'ID',
-                deprecationReason: 'bar deprecated',
-                defaultValue: 123,
-            ),
         ];
 
         yield 'foo-with-annotation' => [
@@ -166,9 +173,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                  *
                  * @deprecated Can't use this method.
                  */
+                #[InputObjectField]
                 public function setFoo(int $i) {}
             },
-            'attribute' => null,
         ];
 
         yield 'bar-with-mixed-definition' => [
@@ -189,9 +196,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                  *
                  * @deprecated Can't use this method.
                  */
+                #[InputObjectField(name: 'bar', type: 'Int')]
                 public function setFoo($i = 43) {}
             },
-            'attribute' => new InputObjectField(name: 'bar', type: 'Int'),
         ];
 
         yield 'raise-exception-when-type-not-defined' => [
@@ -200,9 +207,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                 'type' => Webonyx\Type::int(),
             ],
             'object' => new class {
+                #[InputObjectField]
                 public function setFoo($i) {}
             },
-            'attribute' => null,
             'exception' => CantResolveGraphQLTypeException::class,
         ];
 
@@ -212,9 +219,9 @@ final class ReflectionMethodMiddlewareTest extends TestCase
                 'type' => Webonyx\Type::int(),
             ],
             'object' => new class {
+                #[InputObjectField]
                 public function setFoo(int $i, int $j) {}
             },
-            'attribute' => null,
             'exception' => CantResolveGraphQLTypeException::class,
         ];
     }
